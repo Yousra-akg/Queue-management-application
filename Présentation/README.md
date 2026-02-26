@@ -166,9 +166,9 @@ style: |
   <div class="dt-card" style="border-top-color: #f39c12;">
     <h4>Comprendre l'utilisateur</h4>
     <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
-      <p>- La formatrice Fatine souhaite un système simple pour créer et gérer des QCM personnalisables, avec correction automatique et affichage du score final.</p>
-      <p>- Le formateur Youssef souhaite un QCM structuré par session et objectif, lié au professeur, avec un calcul automatique des résultats.</p>
-      <p>- L’administrateur Hamouda souhaite une plateforme fiable avec des données validées, un QCM structuré et sécurisé, ainsi qu’une interface simple pour faciliter la gestion des candidats.</p>
+      <p>- Le candidat souhaite un ticket numérique, voir sa position et le temps d’attente en temps réel, et pouvoir annuler ou reporter son passage.</p>
+      <p>-L’équipe SoliCode souhaite gérer facilement les sessions, réorganiser les files en cas de retard ou absence, et suivre l’ordre des candidats.</p>
+      <p>- L’administrateur Hamouda souhaite une interface simple et intuitive, avec visibilité globale sur les tickets, notifications automatiques et statistiques pour optimiser les sessions.</p>
     </blockquote>
   </div>
 </div>
