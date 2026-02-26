@@ -182,9 +182,9 @@ style: |
   <div class="dt-card" style="border-top-color: #f39c12;">
     <h4>Cadrage du problème</h4>
     <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
-     <p> - Comment pourrions-nous permettre aux formateurs de générer des QCM par objectif en quelques clics, tout en garantissant une correction instantanée pour l'étudiant ? </p>
-      <p>- Comment pourrions-nous structurer l'interface pour que la liaison entre une question, un professeur et un objectif de session soit totalement transparente ? </p>
-      <p>-Comment pourrions-nous concevoir une interface administrateur simple, claire et ergonomique permettant une gestion efficace des candidats et des QCM ? </p>
+     <p> - Comment pourrions-nous permettre aux candidats de prendre un ticket numérique et de voir leur position et temps d’attente en temps réel, pour réduire le stress et l’incertitude ?</p>
+      <p>- Comment pourrions-nous structurer l’application pour que l’administration puisse gérer facilement les sessions, réorganiser les files en cas de retard ou d’absence, et suivre l’ordre des candidats ? </p>
+      <p>- Comment pourrions-nous concevoir une interface administrateur simple, claire et dynamique, permettant de gérer efficacement les tickets, notifications et statistiques ?  </p>
     </blockquote>
   </div>
 </div>
