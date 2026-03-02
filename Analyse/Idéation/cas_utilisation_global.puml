@@ -1,41 +1,46 @@
 @startuml
-' Titre du diagramme
-title Cas d'utilisation global - Gestion des files d'attente
+left to right direction
 
-' Définition des acteurs
-actor Candidat as "Candidat"
-actor SoliCode as "Équipe SoliCode"
-actor Admin as "Administrateur"
+title Cas d utilisation global - Gestion des files d attente
 
-' Définition des cas d'utilisation
-usecase "Prendre un ticket" as UC1
-usecase "Consulter sa position" as UC2
-usecase "Recevoir notifications" as UC3
-usecase "Annuler ou reporter ticket" as UC4
-usecase "Gérer sessions" as UC5
-usecase "Réorganiser file" as UC6
-usecase "Mettre à jour statut tickets" as UC7
-usecase "Superviser sessions" as UC8
-usecase "Consulter statistiques" as UC9
-usecase "Optimiser organisation" as UC10
+' Acteurs alignés verticalement
+actor Candidat
+actor "Equipe SoliCode" as SoliCode
+actor Administrateur as Admin
 
-' Relations entre acteurs et cas d'utilisation
+rectangle "Systeme de gestion des files d attente" {
+
+  ' --- Cas Candidat ---
+  usecase "Prendre un ticket" as UC1
+  usecase "Consulter sa position" as UC2
+  usecase "Recevoir notifications" as UC3
+  usecase "Annuler / Reporter ticket" as UC4
+
+  ' --- Cas Equipe ---
+  usecase "Gerer sessions" as UC5
+  usecase "Reorganiser file" as UC6
+  usecase "Mettre a jour statut tickets" as UC7
+
+  ' --- Cas Admin ---
+  usecase "Superviser sessions" as UC8
+  usecase "Consulter statistiques" as UC9
+  usecase "Optimiser organisation" as UC10
+}
+
+' Relations Candidat
 Candidat --> UC1
 Candidat --> UC2
 Candidat --> UC3
 Candidat --> UC4
 
+' Relations Equipe
 SoliCode --> UC5
 SoliCode --> UC6
 SoliCode --> UC7
 
+' Relations Admin
 Admin --> UC8
 Admin --> UC9
 Admin --> UC10
-
-' Relations supplémentaires entre cas (optionnel)
-UC1 <-- UC5
-UC2 <-- UC7
-UC10 <-- UC9
 
 @enduml
