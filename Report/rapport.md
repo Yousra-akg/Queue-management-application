@@ -194,6 +194,9 @@ Exemple : « Comment pourrions-nous aider l’utilisateur à… ? »
 
 ![Maquette application](images/carte-empathie2.jpeg) 
 
+- **Formateur Souqlabi**
+
+![Maquette application](images/carte-empathie3.png) 
 ---
 
 # Définition de problème
