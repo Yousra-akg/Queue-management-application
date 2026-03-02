@@ -1,4 +1,4 @@
-@startuml Sprint1_QueueManagement
+@startuml QueueManagement_Sprint1
 skinparam actorStyle awesome
 left to right direction
 
@@ -15,42 +15,49 @@ skinparam usecase {
 
 actor "Candidat" as C
 actor "Formateur" as F
+actor "Administrateur" as Admin
 
-package "Sprint 1 – MVP (Queue Management)" {
+package "Sprint 1 – MVP" {
 
-    ' Authentification obligatoire
-    usecase "UC0 : Authentification (Candidat / Formateur)" as UC0
-    C -- UC0
-    F -- UC0
-
+    ' ========================
     ' Espace Candidat
-    usecase "UC1 : Accès à l'application après QCM réussi" as UC1
-    usecase "UC2 : Réception du numéro de passage" as UC2
-    usecase "UC3 : Voir ordre de passage approximatif" as UC3
-    usecase "UC4 : Annuler ou reporter passage" as UC4
+    ' ========================
+    usecase "Accès après QCM réussi" as UC1
+    usecase "Réception du numéro de passage" as UC2
+    usecase "Voir ordre de passage approximatif" as UC3
+    usecase "Annuler ou reporter son passage" as UC4
 
     C -- UC1
     C -- UC2
     C -- UC3
     C -- UC4
 
-    UC1 ..> UC0 : <<include>>
-    UC2 ..> UC0 : <<include>>
-    UC3 ..> UC0 : <<include>>
-    UC4 ..> UC0 : <<include>>
-
+    ' ========================
     ' Espace Formateur
-    usecase "UC5 : Suivi manuel de la file" as UC5
-    usecase "UC6 : Gestion des changements" as UC6
-    usecase "UC7 : Interface simple de suivi" as UC7
+    ' ========================
+    usecase "Authentification Formateur" as UC5
+    usecase "Gestion des changements" as UC7
 
-    F -- UC5
-    F -- UC6
+    
+   
     F -- UC7
+    
+    UC7 ..> UC5 : <<include>>
 
-    UC5 ..> UC0 : <<include>>
-    UC6 ..> UC0 : <<include>>
-    UC7 ..> UC0 : <<include>>
+    ' ========================
+    ' Espace Administrateur
+    ' ========================
+    usecase "Authentification Admin" as UCA1
+    usecase "Création et gestion des sessions" as UCA2
+    usecase "Suivi de la file d’attente globale" as UCA3
+    usecase "Gestion manuelle des tickets" as UCA4
+
+    Admin -- UCA2
+    Admin -- UCA3
+    Admin -- UCA4
+    UCA2 ..> UCA1 : <<include>>
+    UCA3 ..> UCA1 : <<include>>
+    UCA4 ..> UCA1 : <<include>>
 }
 
 @enduml
