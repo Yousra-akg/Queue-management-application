@@ -24,12 +24,26 @@ Ce document présente la planification agile du projet **Queue Management App**,
    Permet de gérer les imprévus (ex. retard ou indisponibilité).
 
 #### Espace Formateur
-1. **UC6 : Suivi manuel de la file d’attente**  
+1. **UC5 : Suivi manuel de la file d’attente**  
    Savoir qui est passé et qui attend.
-2. **UC7 : Gestion des changements**  
+2. **UC6 : Gestion des changements**  
    Ajuster manuellement l’ordre de passage si nécessaire.
-4. **UC8 : Interface simple pour visualiser la progression**  
+4. **UC7 : Interface simple pour visualiser la progression**  
    Vue rapide sur les candidats présents et l’état de chaque ticket.
+
+#### Espace Administrateur
+
+1. **UCA1 : Authentification Admin**
+Se connecter pour accéder à l’interface de gestion.
+
+2. **UCA2 : Création et gestion des sessions**
+Définir date, heure, capacité des sessions.
+
+3. **UCA3 : Suivi de la file d’attente globale**
+Voir tous les candidats inscrits pour chaque session.
+
+4. **UCA4 : Gestion manuelle des tickets**
+Modifier ou réinitialiser les tickets si nécessaire.
 
 ---
 
@@ -55,6 +69,17 @@ Ce document présente la planification agile du projet **Queue Management App**,
    Déplacer ou prioriser certains candidats si nécessaire.
 5. **UC15 : Interface plus ergonomique et dynamique**  
    Mise à jour automatique de la file et meilleure visibilité globale.
+
+#### Espace Administrateur
+
+1. **UC A5 : Notifications administratives**
+Recevoir alertes sur absences ou problèmes.
+
+2. **UC A6 : Statistiques globales**
+Analyse du nombre de candidats, retards, annulations et temps moyen.
+
+3. **UC A7 : Réorganisation automatique ou priorisation**
+Permet de déplacer un candidat ou ajuster la file en cas de besoins spécifiques.
 
 ---
 
