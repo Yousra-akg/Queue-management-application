@@ -1,0 +1,66 @@
+@startuml QueueManagement_Sprint2
+skinparam actorStyle awesome
+left to right direction
+
+skinparam package {
+    BackgroundColor White
+    BorderColor #2C3E50
+}
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+    ArrowColor #117864
+}
+
+actor "Candidat" as C
+actor "Formateur" as F
+actor "Administrateur" as Admin
+
+package "Sprint 2 – Fonctionnalités Avancées" {
+
+    ' ========================
+    ' Espace Candidat
+    ' ========================
+    usecase "Notifications de passage" as UC9
+    usecase "Historique et suivi du ticket" as UC10
+
+    C -- UC9
+    C -- UC10
+
+    ' ========================
+    ' Espace Formateur
+    ' ========================
+    usecase "Authentification Formateur" as UCA2
+    usecase "Mise à jour numérique des tickets" as UC11
+    usecase "Notifications pour candidats" as UC12
+    usecase "Statistiques des sessions" as UC13
+    usecase "Gestion améliorée de la file" as UC14
+
+    F -- UC11
+    F -- UC12
+    F -- UC13
+    F -- UC14
+    UC11 ..> UCA2 : <<include>>
+    UC12 ..> UCA2 : <<include>>
+    UC13 ..> UCA2 : <<include>>
+    UC14 ..> UCA2 : <<include>>
+
+
+    ' ========================
+    ' Espace Administrateur
+    ' ========================
+    usecase "Authentification Admin" as UCA1
+    usecase "Notifications administratives" as UCA5
+    usecase "Statistiques globales" as UCA6
+    usecase "Réorganisation/priorisation automatique" as UCA7
+
+    Admin -- UCA5
+    Admin -- UCA6
+    Admin -- UCA7
+    UCA5 ..> UCA1 : <<include>>
+    UCA6 ..> UCA1 : <<include>>
+    UCA7 ..> UCA1 : <<include>>
+}
+
+@enduml

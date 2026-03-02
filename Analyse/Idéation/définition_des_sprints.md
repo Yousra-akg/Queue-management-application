@@ -65,8 +65,7 @@ Modifier ou réinitialiser les tickets si nécessaire.
    Analyser le temps moyen d’attente et le nombre de passages.
 4. **UC14 : Gestion améliorée de la file**  
    Déplacer ou prioriser certains candidats si nécessaire.
-5. **UC15 : Interface plus ergonomique et dynamique**  
-   Mise à jour automatique de la file et meilleure visibilité globale.
+
 
 #### Espace Administrateur
 

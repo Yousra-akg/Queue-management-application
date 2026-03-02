@@ -22,12 +22,10 @@ package "Sprint 1 – MVP" {
     ' ========================
     ' Espace Candidat
     ' ========================
-    usecase "Accès après QCM réussi" as UC1
     usecase "Réception du numéro de passage" as UC2
     usecase "Voir ordre de passage approximatif" as UC3
     usecase "Annuler ou reporter son passage" as UC4
 
-    C -- UC1
     C -- UC2
     C -- UC3
     C -- UC4
@@ -50,14 +48,11 @@ package "Sprint 1 – MVP" {
     usecase "Authentification Admin" as UCA1
     usecase "Création et gestion des sessions" as UCA2
     usecase "Suivi de la file d’attente globale" as UCA3
-    usecase "Gestion manuelle des tickets" as UCA4
 
     Admin -- UCA2
     Admin -- UCA3
-    Admin -- UCA4
     UCA2 ..> UCA1 : <<include>>
     UCA3 ..> UCA1 : <<include>>
-    UCA4 ..> UCA1 : <<include>>
 }
 
 @enduml
