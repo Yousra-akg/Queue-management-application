@@ -187,12 +187,12 @@ Exemple : « Comment pourrions-nous aider l’utilisateur à… ? »
 # Branche fonctionnelle
 
 ## Carte d'empathie
+- **Apprenant Salma**
 
----
+![Maquette application](images/carte-empathie1.png)
+- **Administrateur Hammouda**
 
-# Carte d’empathie
-
-*(À compléter)*  
+![Maquette application](images/carte-empathie2.jpeg) 
 
 ---
 
@@ -212,8 +212,9 @@ La problématique centrale peut donc être formulée comme suit :
 
 # Diagramme de cas d’utilisation générale
 
-*(À compléter)*  
+Le diagramme de cas d’utilisation global de notre application de gestion des files d’attente présente les principales fonctionnalités accessibles aux différents acteurs du système : candidat, équipe SoliCode et administrateur. Il illustre les interactions entre ces acteurs et l’application, notamment la prise de ticket, la gestion des sessions, la mise à jour des statuts et la consultation des statistiques.
 
+![Maquette application](images/use-case.png)
 ---
 
 # Diagramme de cas d’utilisation Sprint 1

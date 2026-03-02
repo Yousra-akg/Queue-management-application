@@ -28,19 +28,19 @@ rectangle "Systeme de gestion des files d attente" {
 }
 
 ' Relations Candidat
-Candidat --> UC1
-Candidat --> UC2
-Candidat --> UC3
-Candidat --> UC4
+Candidat -- UC1
+Candidat -- UC2
+Candidat -- UC3
+Candidat -- UC4
 
 ' Relations Equipe
-SoliCode --> UC5
-SoliCode --> UC6
-SoliCode --> UC7
+SoliCode -- UC5
+SoliCode -- UC6
+SoliCode -- UC7
 
 ' Relations Admin
-Admin --> UC8
-Admin --> UC9
-Admin --> UC10
+Admin -- UC8
+Admin -- UC9
+Admin -- UC10
 
 @enduml
