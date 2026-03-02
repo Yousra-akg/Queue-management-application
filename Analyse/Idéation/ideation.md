@@ -1,5 +1,8 @@
-# IDEATION  
+# IDEATION   
+Projet : Application de Gestion des Files d’Attente – Entretiens SoliCode  
+Date : 25 Féverier 2026 
 
+---
 ## Solutions et idées retenues
 
 
