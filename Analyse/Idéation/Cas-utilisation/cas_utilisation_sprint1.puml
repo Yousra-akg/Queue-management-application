@@ -19,9 +19,6 @@ actor "Administrateur" as Admin
 
 package "Sprint 1 – MVP" {
 
-    ' ========================
-    ' Espace Candidat
-    ' ========================
     usecase "Réception du numéro de passage" as UC2
     usecase "Voir ordre de passage approximatif" as UC3
     usecase "Annuler ou reporter son passage" as UC4
@@ -30,29 +27,33 @@ package "Sprint 1 – MVP" {
     C -- UC3
     C -- UC4
 
-    ' ========================
-    ' Espace Formateur
-    ' ========================
+    
     usecase "Authentification Formateur" as UC5
-    usecase "Gestion des changements" as UC7
+    usecase "Modifier le statut des tickets" as UC7
+    usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC8
+    usecase "Consulter les candidats présents et l’état de chaque ticket." as UC9
 
     
    
     F -- UC7
+    F -- UC8
+    F -- UC9
     
     UC7 ..> UC5 : <<include>>
+    UC8 ..> UC5 : <<include>>
+    UC9 ..> UC5 : <<include>>
 
-    ' ========================
-    ' Espace Administrateur
-    ' ========================
     usecase "Authentification Admin" as UCA1
     usecase "Création et gestion des sessions" as UCA2
-    usecase "Suivi de la file d’attente globale" as UCA3
+    usecase "Voir tous les candidats inscrits pour chaque session." as UCA3
+    usecase "Modifier ou réinitialiser les tickets si nécessaire." as UCA4
 
     Admin -- UCA2
     Admin -- UCA3
+    Admin -- UCA4
     UCA2 ..> UCA1 : <<include>>
     UCA3 ..> UCA1 : <<include>>
+    UCA4 ..> UCA1 : <<include>>
 }
 
 @enduml

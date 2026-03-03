@@ -14,19 +14,19 @@ Ce document présente la planification agile du projet **Queue Management App**,
 ### Cas d'Utilisation (UC) du Sprint 1 :
 
 #### Espace Candidat
-1. **UC1 : Accès à l’application après QCM réussi**  
-   Seuls les candidats ayant réussi le QCM reçoivent le lien vers l’application.
-2. **UC2 : Réception du numéro de passage**  
+1. **UC1 : Réception du numéro de passage**  
    Le candidat reçoit son numéro de passage au jour de l’entretien.
-3. **UC3 : Voir l’ordre de passage approximatif**  
+2. **UC2 : Voir l’ordre de passage approximatif**  
    Connaître sa position dans la file et le temps estimé avant son tour.
-4. **UC4 : Annuler ou reporter son passage**  
+3. **UC3 : Annuler ou reporter son passage**  
    Permet de gérer les imprévus (ex. retard ou indisponibilité).
 
 #### Espace Formateur
-1. **UC5 : Gestion des changements**  
-   Ajuster manuellement l’ordre de passage si nécessaire.
-4. **UC6 : Interface simple pour visualiser la progression**  
+1. **UC4 : Mise à jour numérique de l’état des tickets**  
+   Modifier le statut des tickets (En attente / En cours / Terminé).
+2. **UC14 : Gestion améliorée de la file**  
+   Déplacer ou prioriser certains candidats si nécessaire.
+3. **UC6 : Interface simple pour visualiser la progression**  
    Vue rapide sur les candidats présents et l’état de chaque ticket.
 
 #### Espace Administrateur
@@ -52,19 +52,16 @@ Modifier ou réinitialiser les tickets si nécessaire.
 
 #### Espace Candidat
 1. **UC9 : Notifications de passage**  
-   Être alerté quelques minutes avant son tour.
+   Être alerté quelques minutes avant son tour et lors de son tour.
 2. **UC10 : Historique et suivi du ticket**  
    Voir si le ticket a été annulé ou reporté.
 
 #### Espace Formateur
-1. **UC11 : Mise à jour numérique de l’état des tickets**  
-   Modifier le statut des tickets (En attente / En cours / Terminé).
-2. **UC12 : Notifications pour candidats**  
+1. **UC12 : Notifications pour candidats**  
    Envoyer automatiquement notifications pour reports ou annulations.
-3. **UC13 : Statistiques des sessions**  
+2. **UC13 : Statistiques des sessions**  
    Analyser le temps moyen d’attente et le nombre de passages.
-4. **UC14 : Gestion améliorée de la file**  
-   Déplacer ou prioriser certains candidats si nécessaire.
+
 
 
 #### Espace Administrateur
