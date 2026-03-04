@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Formateur - SoliCode Queue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline/dist/preline.css">
+</head>
+
+<body class="bg-gray-50 h-full font-sans">
+
+    <!-- Navigation -->
+    <header
+        class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0">
+        <nav class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+            aria-label="Global">
+            <div class="flex items-center justify-between">
+                <a class="flex-none text-2xl font-black text-blue-600 focus:outline-none focus:opacity-80 tracking-tighter"
+                    href="#" aria-label="SoliCode">
+                    Soli<span class="text-gray-800">Code</span>
+                </a>
+            </div>
+            <div class="hidden sm:block sm:order-3 sm:py-4">
+                <div class="flex items-center gap-x-2">
+                    <div class="text-right mr-3">
+                        <p class="text-xs font-bold text-gray-800">Formateur Principal</p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Session #402</p>
+                    </div>
+                    <div
+                        class="size-10 rounded-full bg-gray-100 border-2 border-white shadow-sm flex items-center justify-center font-bold text-blue-600">
+                        FP
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="content" role="main" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8">
+
+        <!-- Dashboard Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-black text-gray-800 tracking-tight">Session d'entretien : <span
+                        class="text-blue-600">Développement Web Full Stack</span></h1>
+                <p class="text-gray-500 font-medium">Gestion du flux des candidats en temps réel</p>
+            </div>
+            <div class="flex items-center gap-x-4">
+                <div class="bg-white border border-gray-100 rounded-2xl px-5 py-3 shadow-sm flex items-center gap-x-3">
+                    <div class="size-2 rounded-full bg-amber-500 animate-pulse"></div>
+                    <p class="text-sm font-bold text-gray-700"><span id="waiting-count">20</span> Candidats en attente
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions & Toolbar -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-x-3">
+                <button type="button" onclick="callNext()"
+                    class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 shadow-xl shadow-blue-500/20 transform hover:scale-[1.02] active:scale-[0.98]">
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    Appeler le suivant
+                </button>
+            </div>
+            <div class="flex items-center gap-3 w-full max-w-sm">
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                        <svg class="size-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.3-4.3" />
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" onkeyup="filterCandidates()"
+                        class="py-2 px-4 ps-11 block w-full border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+                        placeholder="Rechercher par nom...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidate List Section -->
+        <div class="bg-white border border-gray-100 rounded-[2.5rem] p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 size-64 bg-blue-50 rounded-full blur-3xl opacity-20 -mr-32 -mt-32"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6 px-4">
+                    <h2 class="font-black text-gray-800 uppercase tracking-widest text-xs">File d'attente active</h2>
+                </div>
+
+                <div id="candidate-list" class="space-y-3">
+                    <!-- Row 1: Ahmed Mansouri (En cours) -->
+                    <div
+                        class="candidate-card bg-blue-50/50 border-2 border-blue-200 rounded-2xl p-4 shadow-sm group transition-all duration-300">
+                        <div class="flex items-center gap-x-4 flex-grow">
+                            <div
+                                class="size-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30">
+                                AM</div>
+                            <div class="flex-grow">
+                                <h4 class="candidate-name font-bold text-gray-900 text-lg">Ahmed Mansouri</h4>
+                                <div class="badge-container">
+                                    <span
+                                        class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-blue-600 text-white mt-1 shadow-sm">
+                                        <span class="size-1.5 inline-block rounded-full bg-white animate-pulse"></span>
+                                        En cours d'entretien
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <select onchange="updateRowStyle(this)"
+                                    class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                    <option value="waiting">En attente</option>
+                                    <option value="in_progress" selected>En cours</option>
+                                    <option value="done">Terminé</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Sarah Fassi (En attente) -->
+                    <div
+                        class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-x-4 flex-grow">
+                            <div
+                                class="size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base">
+                                SF</div>
+                            <div class="flex-grow">
+                                <h4 class="candidate-name font-bold text-gray-800 text-lg">Sarah Fassi</h4>
+                                <div class="badge-container">
+                                    <span
+                                        class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                                        <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                        QCM Validé
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <select onchange="updateRowStyle(this)"
+                                    class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                    <option value="waiting" selected>En attente</option>
+                                    <option value="in_progress">En cours</option>
+                                    <option value="done">Terminé</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Yousra Akg (En attente) -->
+                    <div
+                        class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-x-4 flex-grow">
+                            <div
+                                class="size-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-base ring-4 ring-blue-50">
+                                YA</div>
+                            <div class="flex-grow">
+                                <h4 class="candidate-name font-black text-gray-900 text-lg">Yousra Akg</h4>
+                                <div class="badge-container">
+                                    <span
+                                        class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                                        <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                        QCM Validé
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <select onchange="updateRowStyle(this)"
+                                    class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                    <option value="waiting" selected>En attente</option>
+                                    <option value="in_progress">En cours</option>
+                                    <option value="done">Terminé</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Kaoutar Hassani -->
+                    <div
+                        class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-x-4 flex-grow">
+                            <div
+                                class="size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base">
+                                KH</div>
+                            <div class="flex-grow">
+                                <h4 class="candidate-name font-bold text-gray-800 text-lg">Kaoutar Hassani</h4>
+                                <div class="badge-container">
+                                    <span
+                                        class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                                        <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                        QCM Validé
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <select onchange="updateRowStyle(this)"
+                                    class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                    <option value="waiting" selected>En attente</option>
+                                    <option value="in_progress">En cours</option>
+                                    <option value="done">Terminé</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Omar Lahlou -->
+                    <div
+                        class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-x-4 flex-grow">
+                            <div
+                                class="size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base">
+                                OL</div>
+                            <div class="flex-grow">
+                                <h4 class="candidate-name font-bold text-gray-800 text-lg">Omar Lahlou</h4>
+                                <div class="badge-container">
+                                    <span
+                                        class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                                        <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                        QCM Validé
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <select onchange="updateRowStyle(this)"
+                                    class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                    <option value="waiting" selected>En attente</option>
+                                    <option value="in_progress">En cours</option>
+                                    <option value="done">Terminé</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div id="load-more-container" class="mt-8 pt-6 border-t border-gray-100 flex justify-center">
+                    <button type="button" onclick="loadAll()"
+                        class="text-xs font-black text-blue-600 uppercase tracking-widest hover:underline transition-all">Charger
+                        les 15 autres candidats</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Update styling based on status
+        function updateRowStyle(selectElement) {
+            const card = selectElement.closest('.candidate-card');
+            const badgeContainer = card.querySelector('.badge-container');
+            const status = selectElement.value;
+            const avatar = card.querySelector('.size-12');
+
+            // Reset classes
+            card.classList.remove('bg-blue-50/50', 'border-blue-200', 'bg-green-50/50', 'border-green-200', 'border-gray-100', 'bg-white', 'border-2');
+            card.classList.add('border');
+
+            if (status === 'in_progress') {
+                card.classList.add('bg-blue-50/50', 'border-blue-200', 'border-2');
+                avatar.className = "size-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30";
+                badgeContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-blue-600 text-white mt-1 shadow-sm">
+                        <span class="size-1.5 inline-block rounded-full bg-white animate-pulse"></span>
+                        En cours d'entretien
+                    </span>
+                `;
+            } else if (status === 'done') {
+                card.classList.add('bg-green-50/50', 'border-green-200', 'border-2');
+                avatar.className = "size-12 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-green-500/30";
+                badgeContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-600 text-white mt-1 shadow-sm">
+                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                        Entretien terminé
+                    </span>
+                `;
+            } else {
+                card.classList.add('bg-white', 'border-gray-100');
+                avatar.className = avatar.innerText === "YA" ? "size-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-base ring-4 ring-blue-50" : "size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base";
+                badgeContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                        <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                        QCM Validé
+                    </span>
+                `;
+            }
+        }
+
+        // Filter candidates by name
+        function filterCandidates() {
+            const input = document.getElementById('search-input');
+            const filter = input.value.toLowerCase();
+            const cards = document.querySelectorAll('.candidate-card');
+
+            cards.forEach(card => {
+                const nameText = card.querySelector('.candidate-name').innerText;
+                if (nameText.toLowerCase().includes(filter)) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // Simulate Loade More (All 15)
+        function loadAll() {
+            const list = document.getElementById('candidate-list');
+            const data = [
+                { name: "Imane Benkirane", initials: "IB" },
+                { name: "Zineb Amrani", initials: "ZA" },
+                { name: "Hamza Rami", initials: "HR" },
+                { name: "Sami Alami", initials: "SA" },
+                { name: "Layla Rahmouni", initials: "LR" },
+                { name: "Yassin El Fassi", initials: "YF" },
+                { name: "Fatima Zahra", initials: "FZ" },
+                { name: "Mehdi Benjelloun", initials: "MB" },
+                { name: "Salma Alaoui", initials: "SA" },
+                { name: "Driss El Mansouri", initials: "DM" },
+                { name: "Houda Tazi", initials: "HT" },
+                { name: "Noureddine Amiri", initials: "NA" },
+                { name: "Ghita Berrada", initials: "GB" },
+                { name: "Adil Chraibi", initials: "AC" },
+                { name: "Meryem Kabbaj", initials: "MK" }
+            ];
+
+            data.forEach((c, index) => {
+                const div = document.createElement('div');
+                div.className = "candidate-card bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-all duration-300 opacity-0 transform translate-y-4";
+                div.innerHTML = `
+                    <div class="flex items-center gap-x-4 flex-grow">
+                        <div class="size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base">${c.initials}</div>
+                        <div class="flex-grow">
+                            <h4 class="candidate-name font-bold text-gray-800 text-lg">${c.name}</h4>
+                            <div class="badge-container">
+                                <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-green-100 text-green-700 mt-1">
+                                    <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                    QCM Validé
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-x-4">
+                            <select onchange="updateRowStyle(this)" class="status-select py-2 px-3 pe-9 block border-gray-200 rounded-xl text-xs font-bold focus:border-blue-500 focus:ring-blue-500 bg-white min-w-[140px]">
+                                <option value="waiting" selected>En attente</option>
+                                <option value="in_progress">En cours</option>
+                                <option value="done">Terminé</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+                setTimeout(() => {
+                    div.classList.remove('opacity-0', 'translate-y-4');
+                }, index * 30); // Staggered appearance
+            });
+
+            // Hide the button
+            document.getElementById('load-more-container').classList.add('hidden');
+
+            // Re-apply filter if searching
+            filterCandidates();
+        }
+
+        // Simulate Call Next
+        function callNext() {
+            const selects = document.querySelectorAll('.status-select');
+            for (let s of selects) {
+                if (s.value === 'waiting') {
+                    s.value = 'in_progress';
+                    updateRowStyle(s);
+                    break;
+                }
+            }
+        }
+    </script>
+
+    <!-- Preline JS -->
+    <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.min.js"></script>
+</body>
+
+</html>

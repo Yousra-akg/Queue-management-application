@@ -14,7 +14,7 @@ rectangle "Systeme de gestion des files d attente" {
   usecase "Prendre un ticket" as UC1
   usecase "Consulter sa position" as UC2
   usecase "Recevoir notifications avant son tour" as UC3
-  usecase "Annuler / Reporter ticket" as UC4
+  usecase "Marquer comme présent" as UC4
   usecase "Historique et suivi des tickets" as UC16
 
   ' --- Cas Equipe ---
@@ -29,8 +29,6 @@ rectangle "Systeme de gestion des files d attente" {
   usecase "Création et gestion des sessions" as UC11
   usecase "Suivi de la file d’attente globale" as UC12
   usecase "Consulter statistiques" as UC13
-  usecase "Notifications administratives" as UC14
-  usecase "Réorganisation/priorisation automatique" as UC15
 }
 
 ' Relations Candidat
@@ -56,13 +54,10 @@ UC9 ..> UC17 : <<include>>
 Admin -- UC11
 Admin -- UC12
 Admin -- UC13
-Admin -- UC14
-Admin -- UC15
 
 UC11 ..> UC10 : <<include>>
 UC12 ..> UC10 : <<include>>
 UC13 ..> UC10 : <<include>>
-UC14 ..> UC10 : <<include>>
-UC15 ..> UC10 : <<include>>
+
 
 @enduml

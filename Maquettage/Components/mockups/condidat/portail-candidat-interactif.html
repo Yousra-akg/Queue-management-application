@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoliCode Queue - Portail Candidat Interactif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline/dist/preline.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .transition-all-slow {
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 h-full flex flex-col font-sans overflow-x-hidden">
+
+    <!-- [STATE: LIVE] Notification Banner (Hidden by default) -->
+    <div id="notif-banner"
+        class="hidden bg-blue-600 py-3 text-center px-4 relative z-[100] transition-all duration-500 transform -translate-y-full">
+        <p class="text-white text-sm font-bold flex items-center justify-center gap-x-2">
+            <span class="relative flex size-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span class="relative inline-flex rounded-full size-2 bg-white"></span>
+            </span>
+            C'est le jour de votre entretien ! Signalez votre arrivée au centre.
+        </p>
+    </div>
+
+    <header class="bg-white border-b border-gray-200 py-3">
+        <nav class="max-w-[85rem] mx-auto px-4 flex items-center justify-between sm:px-6 lg:px-8">
+            <a class="text-xl font-bold text-blue-600" href="#">Soli<span class="text-gray-800">Code</span></a>
+            <div class="flex items-center gap-x-3">
+                <span class="text-sm font-medium text-gray-600">Yousra Akg</span>
+                <div
+                    class="size-9 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center font-bold border border-gray-200">
+                    YA</div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        <div class="max-w-[45rem] mx-auto px-4 py-8 sm:py-12 space-y-8">
+
+            <!-- [STATE: INITIAL] Success Message -->
+            <div id="initial-header" class="text-center transition-all duration-500">
+                <h1 class="text-2xl font-bold text-gray-800">Félicitations pour votre réussite !</h1>
+                <p class="text-gray-500 mt-2">Votre profil est validé. Voici votre accès pour l'entretien.</p>
+            </div>
+
+            <!-- Main Interactive Card -->
+            <div
+                class="bg-white border border-gray-200 rounded-3xl shadow-xl overflow-hidden transition-all duration-500">
+                <div class="p-8 sm:p-12 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 mb-2">Votre Code Ticket</p>
+                    <h2 class="text-7xl font-black text-blue-900 tracking-tighter sm:text-8xl mb-8">SOLI-88</h2>
+
+                    <!-- [STATE: WAITING] Timer Section -->
+                    <div id="timer-section"
+                        class="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 mb-8 transition-all duration-500">
+                        <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-4">L'entretien
+                            commence dans :</p>
+                        <div class="flex justify-center items-center gap-6 sm:gap-10">
+                            <div class="flex flex-col items-center">
+                                <span id="days" class="text-4xl sm:text-5xl font-black text-blue-600">00</span>
+                                <span
+                                    class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-2">Jours</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-200">:</div>
+                            <div class="flex flex-col items-center">
+                                <span id="hours" class="text-4xl sm:text-5xl font-black text-blue-600">00</span>
+                                <span
+                                    class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-2">Heures</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-200">:</div>
+                            <div class="flex flex-col items-center">
+                                <span id="minutes" class="text-4xl sm:text-5xl font-black text-blue-600">00</span>
+                                <span
+                                    class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-2">Min</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-200 hidden sm:block">:</div>
+                            <div class="sm:flex flex-col items-center hidden">
+                                <span id="seconds" class="text-4xl sm:text-5xl font-black text-blue-600">00</span>
+                                <span
+                                    class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-2">Sec</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Presence Button / Badge Area -->
+                    <div id="presence-action-area" class="max-w-xs mx-auto space-y-4">
+                        <button type="button" id="presence-btn" disabled
+                            class="w-full py-4 px-8 inline-flex justify-center items-center gap-x-3 text-lg font-bold rounded-2xl border border-transparent bg-gray-200 text-gray-400 cursor-not-allowed transition-all duration-500">
+                            <svg class="flex-shrink-0 size-6 text-current" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                            Je suis présent(e)
+                        </button>
+
+                        <!-- Confirmation Badge (Hidden by default) -->
+                        <div id="presence-confirmed-badge"
+                            class="hidden animate-bounce inline-flex items-center gap-x-2 py-3 px-6 rounded-2xl bg-green-100 text-green-800 font-bold text-sm shadow-sm border border-green-200 mx-auto">
+                            <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Présence confirmée à <span id="confirm-time">--:--</span>
+                        </div>
+
+                        <p id="presence-hint" class="text-xs text-gray-400 font-medium">Le bouton s'activera
+                            automatiquement après le timer</p>
+                    </div>
+                </div>
+
+                <div id="info-footer"
+                    class="bg-blue-50/50 p-6 border-t border-blue-100 text-center transition-all duration-500">
+                    <p class="text-blue-800 text-sm font-medium">Conservez cette page ouverte. Le tableau s'affichera
+                        ici le jour J.</p>
+                </div>
+            </div>
+
+            <!-- [STATE: LIVE] Queue Table (Hidden by default) -->
+            <div id="queue-section"
+                class="hidden opacity-0 transform translate-y-8 transition-all duration-700 bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="font-bold text-gray-800">File d'attente en temps réel</h3>
+                </div>
+                <div class="overflow-hidden">
+                    <table class="w-full divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200">
+                            <!-- 3 Candidates "En cours" -->
+                            <tr class="bg-green-600 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 1</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            AM</div>
+                                        <span class="font-medium">Ahmed Mansouri</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest border border-white/20">En
+                                        cours</span></td>
+                            </tr>
+                            <tr class="bg-green-600 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 2</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            OL</div>
+                                        <span class="font-medium">Omar Lahlou</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest border border-white/20">En
+                                        cours</span></td>
+                            </tr>
+                            <tr class="bg-green-600 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 3</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            KH</div>
+                                        <span class="font-medium">Kaoutar Hassani</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest border border-white/20">En
+                                        cours</span></td>
+                            </tr>
+
+                            <!-- 3 Candidates "Suivant" -->
+                            <tr class="bg-green-500/80 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 4</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            SF</div>
+                                        <span class="font-medium">Sarah Fassi</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">Suivant</span>
+                                </td>
+                            </tr>
+                            <tr class="bg-green-500/80 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 5</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            YI</div>
+                                        <span class="font-medium">Yassine Idrissi</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">Suivant</span>
+                                </td>
+                            </tr>
+                            <tr class="bg-green-500/80 text-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold w-20">Pos 6</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                                            MB</div>
+                                        <span class="font-medium">Malak Bennani</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-end"><span
+                                        class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">Suivant</span>
+                                </td>
+                            </tr>
+
+                            <!-- User Pos 7 -->
+                            <tr class="bg-white border-l-[8px] border-blue-600 shadow-sm relative z-10 scale-[1.02]">
+                                <td class="px-6 py-5 whitespace-nowrap text-sm font-black text-blue-600 w-20">Pos 7</td>
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-x-4">
+                                        <div
+                                            class="size-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm shadow-inner">
+                                            YA</div>
+                                        <div>
+                                            <p class="font-bold text-gray-900">Yousra Akg</p>
+                                            <p class="text-[10px] text-blue-600 font-black uppercase">Votre profil</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-end"><span
+                                        class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">Votre
+                                        tour</span></td>
+                            </tr>
+
+                            <!-- 5 more candidates -->
+                            <tr class="bg-white opacity-40">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 w-20">Pos 8
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs text-gray-400">
+                                            IB</div>
+                                        <span class="text-sm text-gray-500">Imane Benkirane</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"></td>
+                            </tr>
+                            <tr class="bg-white opacity-40">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 w-20">Pos 9
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs text-gray-400">
+                                            ZA</div>
+                                        <span class="text-sm text-gray-500">Zineb Amrani</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"></td>
+                            </tr>
+                            <tr class="bg-white opacity-40">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 w-20">Pos 10
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs text-gray-400">
+                                            HR</div>
+                                        <span class="text-sm text-gray-500">Hamza Rami</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"></td>
+                            </tr>
+                            <tr class="bg-white opacity-40">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 w-20">Pos 11
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs text-gray-400">
+                                            SA</div>
+                                        <span class="text-sm text-gray-500">Sami Alami</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"></td>
+                            </tr>
+                            <tr class="bg-white opacity-40">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 w-20">Pos 12
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-x-3">
+                                        <div
+                                            class="size-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs text-gray-400">
+                                            LR</div>
+                                        <span class="text-sm text-gray-500">Layla Rahmouni</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Presence Modal -->
+    <div id="hs-presence-modal"
+        class="hidden fixed inset-0 z-[110] overflow-y-auto bg-gray-900/50 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0"
+        role="dialog" aria-modal="true">
+        <div class="min-h-full flex items-center justify-center py-4">
+            <div id="modal-content"
+                class="w-full max-w-lg bg-white border shadow-2xl rounded-3xl overflow-hidden transform transition-all duration-300 scale-95 opacity-0">
+                <div class="h-2 bg-green-600"></div>
+                <div class="p-8 sm:p-12 text-center">
+                    <div class="mb-6">
+                        <span
+                            class="inline-flex justify-center items-center size-16 rounded-full bg-green-50 text-green-600">
+                            <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <h3 class="mb-2 text-2xl font-bold text-gray-800">Vérification de présence</h3>
+                    <p class="text-gray-500 mb-8">Veuillez saisir le code secret à 4 chiffres affiché à l'entrée.</p>
+                    <div class="flex justify-center gap-x-3 mb-10">
+                        <input type="text" id="presence-code" maxlength="4"
+                            class="block w-48 py-4 px-3 text-center text-4xl font-bold text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:border-blue-600 focus:ring-blue-600 focus:outline-none transition-all tracking-[0.5em]"
+                            placeholder="0000">
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <button type="button" id="confirm-presence-btn"
+                            class="py-4 px-6 text-sm font-bold rounded-2xl bg-green-600 text-white hover:bg-green-700 shadow-xl shadow-green-600/20">Confirmer
+                            ma présence</button>
+                        <button type="button" id="close-modal"
+                            class="py-3 px-6 text-sm font-medium rounded-2xl text-gray-500 hover:text-gray-800">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-6 text-center border-t border-gray-100 bg-white">
+        <p class="text-gray-400 text-xs">SoliCode © 2026 - Gestion des entretiens</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- CONFIGURATION --
+            // Target date: 3 days from now
+            const targetDate = new Date();
+            targetDate.setSeconds(targetDate.getSeconds() + 10); // SET TO 10 SECONDS FOR DEMO
+
+            // -- ELEMENTS --
+            const timerEls = {
+                days: document.getElementById('days'),
+                hours: document.getElementById('hours'),
+                minutes: document.getElementById('minutes'),
+                seconds: document.getElementById('seconds')
+            };
+            const timerSection = document.getElementById('timer-section');
+            const initialHeader = document.getElementById('initial-header');
+            const notifBanner = document.getElementById('notif-banner');
+            const presenceBtn = document.getElementById('presence-btn');
+            const presenceHint = document.getElementById('presence-hint');
+            const infoFooter = document.getElementById('info-footer');
+            const queueSection = document.getElementById('queue-section');
+            const modal = document.getElementById('hs-presence-modal');
+            const modalContent = document.getElementById('modal-content');
+            const confirmBtn = document.getElementById('confirm-presence-btn');
+            const closeBtn = document.getElementById('close-modal');
+            const presenceCodeInput = document.getElementById('presence-code');
+            const confirmedBadge = document.getElementById('presence-confirmed-badge');
+            const confirmTimeEl = document.getElementById('confirm-time');
+
+            // -- TIMER LOGIC --
+            const updateTimer = () => {
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    clearInterval(timerInterval);
+                    switchToLiveState();
+                    return;
+                }
+
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                timerEls.days.textContent = String(d).padStart(2, '0');
+                timerEls.hours.textContent = String(h).padStart(2, '0');
+                timerEls.minutes.textContent = String(m).padStart(2, '0');
+                timerEls.seconds.textContent = String(s).padStart(2, '0');
+            };
+
+            const timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+
+            // -- STATE TRANSITIONS --
+            const switchToLiveState = () => {
+                // Hide timer and initial header
+                timerSection.classList.add('opacity-0', '-translate-y-4');
+                initialHeader.classList.add('opacity-0', '-translate-y-4');
+
+                setTimeout(() => {
+                    timerSection.classList.add('hidden');
+                    initialHeader.classList.add('hidden');
+
+                    // Show notification banner
+                    notifBanner.classList.remove('hidden');
+                    setTimeout(() => notifBanner.classList.remove('-translate-y-full'), 10);
+
+                    // Activate button
+                    presenceBtn.disabled = false;
+                    presenceBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                    presenceBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-2xl', 'shadow-blue-600/30', 'animate-pulse');
+                    presenceHint.textContent = "Cliquez pour valider votre présence physique";
+                    presenceHint.classList.replace('text-gray-400', 'text-blue-600');
+
+                    infoFooter.textContent = "C'est votre tour bientôt. Restez vigilant !";
+                    infoFooter.classList.add('bg-green-50', 'text-green-800', 'border-green-100');
+                }, 500);
+            };
+
+            // -- MODAL ACTIONS --
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                setTimeout(() => {
+                    modal.classList.add('opacity-100');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                presenceCodeInput.focus();
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('opacity-100');
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }, 300);
+            };
+
+            presenceBtn.addEventListener('click', () => {
+                if (!presenceBtn.disabled) openModal();
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+            confirmBtn.addEventListener('click', () => {
+                const val = presenceCodeInput.value;
+                if (val === '1234') { // Secret code validation
+                    closeModal();
+                    switchToConfirmedState();
+                } else {
+                    // Visual feedback for wrong code
+                    presenceCodeInput.classList.add('border-red-500', 'text-red-600', 'animate-shake');
+                    setTimeout(() => {
+                        presenceCodeInput.classList.remove('border-red-500', 'text-red-600', 'animate-shake');
+                        presenceCodeInput.value = ''; // Reset for retry
+                    }, 500);
+                }
+            });
+
+            const switchToConfirmedState = () => {
+                const now = new Date();
+                confirmTimeEl.textContent = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+                // Hide button, show badge
+                presenceBtn.classList.add('hidden');
+                presenceHint.classList.add('hidden');
+                confirmedBadge.classList.remove('hidden');
+
+                // Show Queue
+                queueSection.classList.remove('hidden');
+                setTimeout(() => {
+                    queueSection.classList.remove('opacity-0', 'translate-y-8');
+                }, 100);
+            };
+        });
+    </script>
+
+    <style>
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .animate-shake {
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+    </style>
+</body>
+
+</html>

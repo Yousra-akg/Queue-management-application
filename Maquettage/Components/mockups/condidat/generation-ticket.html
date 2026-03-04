@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoliCode Queue - Génération du Ticket</title>
+    <!-- Tailwind & Preline -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 h-full font-sans">
+
+    <!-- Header -->
+    <header
+        class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0">
+        <nav class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+            aria-label="Global">
+            <div class="flex items-center justify-between">
+                <a class="flex-none text-xl font-bold text-blue-600 focus:outline-none focus:opacity-80" href="#"
+                    aria-label="SoliCode">
+                    Soli<span class="text-gray-800">Code</span>
+                </a>
+            </div>
+            <div class="hidden sm:block sm:order-3">
+                <div class="flex items-center gap-x-2">
+                    <div
+                        class="inline-flex items-center justify-center size-[38px] rounded-full bg-gray-100 text-gray-500">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="content" role="main">
+        <div class="max-w-[40rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+
+            <!-- Card Container -->
+            <div class="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 sm:p-10">
+
+                <!-- Molecule: Success Header -->
+                <div class="text-center mb-8">
+                    <div
+                        class="inline-flex justify-center items-center size-[72px] rounded-full border-4 border-green-50 bg-green-100 mb-6 group transition-all duration-300 hover:scale-110">
+                        <svg class="flex-shrink-0 size-10 text-green-600" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-800 sm:text-4xl">
+                        Félicitations !
+                    </h1>
+                    <p class="mt-3 text-lg text-gray-500">
+                        Vous avez réussi le QCM avec succès. Votre profil a été validé par notre système.
+                    </p>
+                </div>
+
+                <!-- Molecule: Candidate Card -->
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 mb-10">
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Candidat
+                                </p>
+                                <p class="text-lg font-bold text-gray-800">Yousra Akg</p>
+                            </div>
+                            <div class="sm:text-right">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Identifiant
+                                    QCM</p>
+                                <p class="text-lg font-mono font-bold text-blue-600">#QCM-2026-X89</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-200 flex items-center justify-between">
+                            <span
+                                class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span class="size-1.5 inline-block rounded-full bg-green-800"></span>
+                                QCM Validé
+                            </span>
+                            <span class="text-xs text-gray-400 italic">Redirection automatique...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA: Atom Button -->
+                <div class="grid">
+                    <button type="button" onclick="window.location.href='portail-candidat-interactif.html'"
+                        class="py-4 px-8 inline-flex justify-center items-center gap-x-3 text-lg font-bold rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-600/30 group">
+                        Obtenir ma place dans la file
+                        <svg class="flex-shrink-0 size-5 transition-transform duration-300 group-hover:translate-x-1"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                            <path d="M13 5v2" />
+                            <path d="M13 17v2" />
+                            <path d="M13 11v2" />
+                        </svg>
+                    </button>
+                </div>
+
+                <p class="mt-6 text-center text-sm text-gray-400">
+                    En cliquant, vous confirmez votre présence pour l'entretien physique.
+                </p>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
+        <div class="text-center">
+            <p class="text-gray-400 text-sm">SoliCode © 2026 - Gestion des entretiens</p>
+        </div>
+    </footer>
+
+    <!-- Preline JS -->
+    <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.min.js"></script>
+</body>
+
+</html>
