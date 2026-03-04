@@ -141,6 +141,19 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.min.js"></script>
+    <script>
+        document.getElementById('admin-login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin@gmail.com' && password === 'admin123') {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Identifiants invalides. Veuillez utiliser admin@gmail.com / admin123');
+            }
+        });
+    </script>
 </body>
 
 </html>
