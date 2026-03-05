@@ -6,11 +6,10 @@ Après la phase d’empathie menée avec l’administrateur Hamouda, plusieurs i
 
 - Les candidats n’ont pas de ticket numérique unique, ce qui entraîne des confusions et des erreurs dans l’ordre de passage.  
 - Absence de visibilité en temps réel sur la position dans la file et le temps d’attente estimé.  
-- Difficulté pour l’administration à gérer les retards, absences ou réorganisation des candidats.   
-- Manque de notifications automatiques pour prévenir les candidats que leur tour approche.  
-- Absence de statistiques exploitables pour améliorer les sessions
+- Difficulté pour l’administration à gérer la réorganisation des candidats.   
+- Manque de notifications pour prévenir les candidats que leur tour approche.  
 
 Ainsi, le problème principal peut être formulé comme suit :
 
-- Comment pourrions-nous concevoir une application de gestion des files d’attente qui offre une **visibilité en temps réel** aux candidats et réduit leur stress pendant l’attente ?  
-- Comment pourrions-nous structurer le système pour permettre à l’administration de gérer facilement les tickets, retards et absences, tout en maintenant un ordre clair et dynamique ?  
+- Comment concevoir une application de gestion des files d’attente qui offre une **visibilité en temps réel** aux candidats et réduit leur stress pendant l’attente ?  
+- Comment structurer le système pour permettre à l’administration de gérer facilement les tickets, retards et absences, tout en maintenant un ordre clair et dynamique ?  

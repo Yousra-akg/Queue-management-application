@@ -15,7 +15,7 @@ rectangle "Systeme de gestion des files d attente" {
   usecase "Consulter sa position" as UC2
   usecase "Recevoir notifications avant son tour" as UC3
   usecase "Marquer comme présent" as UC4
-  usecase "Historique et suivi des tickets" as UC16
+  usecase "Suivi des tickets" as UC16
 
   ' --- Cas Equipe ---
   usecase "Authentification formateur " as UC17
@@ -58,6 +58,19 @@ Admin -- UC13
 UC11 ..> UC10 : <<include>>
 UC12 ..> UC10 : <<include>>
 UC13 ..> UC10 : <<include>>
+
+package "Application Mobile" #E8F8F5 {
+        usecase "Réception du numéro de passage" as M1
+        usecase "Consulter sa position" as M2
+        usecase "Marquer comme présent" as M3
+        usecase "Recevoir notifications" as M4
+
+
+        Candidat -- M1
+        Candidat -- M2
+        Candidat -- M3
+        Candidat -- M4
+    }
 
 
 @enduml

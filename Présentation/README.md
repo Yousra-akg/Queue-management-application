@@ -126,6 +126,9 @@ style: |
 
 ---
 ## 1. Contexte du projet
+<p>
+Dans le cadre de ma formation en développement web à SoliCode, j’ai été amené à concevoir un projet de fin de formation répondant à une problématique concrète. Lors des sessions d’entretiens de sélection, j’ai constaté que la gestion manuelle des flux de candidats entraînait souvent de la confusion et de l’attente imprévisible pour les étudiants. C’est ainsi qu’est née l’idée de SoliQueue, une application web de gestion de file d'attente en temps réel, en offrant aux candidats une visibilité claire sur leur rang et aux administrateurs un outil centralisé pour piloter les sessions et organiser les files d'attente de manière dynamique
+</p>
 
 ---
 
@@ -166,9 +169,9 @@ style: |
   <div class="dt-card" style="border-top-color: #f39c12;">
     <h4>Comprendre l'utilisateur</h4>
     <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
-      <p>- Le candidat souhaite un ticket numérique, voir sa position et le temps d’attente en temps réel, et pouvoir annuler ou reporter son passage.</p>
-      <p>-L’équipe SoliCode souhaite gérer facilement les sessions, réorganiser les files en cas de retard ou absence, et suivre l’ordre des candidats.</p>
-      <p>- L’administrateur Hamouda souhaite une interface simple et intuitive, avec visibilité globale sur les tickets, notifications automatiques et statistiques pour optimiser les sessions.</p>
+      <p>- Le candidat souhaite suivre sa position en temps réel via une interface mobile pour réduire son stress et garantir un ordre de passage équitable.</p>
+      <p>-Le formateur souhaite piloter sa session avec fluidité grâce à un outil numérique lui permettant de gérer le statut des candidats et de réorganiser la file instantanément.</p>
+      <p>- L'administrateur souhaite disposer d'une vue globale avec des statistiques précises pour optimiser l'organisation des journées d'entretien.</p>
     </blockquote>
   </div>
 </div>
@@ -183,7 +186,7 @@ style: |
     <h4>Cadrage du problème</h4>
     <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
      <p> - Comment pourrions-nous permettre aux candidats de prendre un ticket numérique et de voir leur position et temps d’attente en temps réel, pour réduire le stress et l’incertitude ?</p>
-      <p>- Comment pourrions-nous structurer l’application pour que l’administration puisse gérer facilement les sessions, réorganiser les files en cas de retard ou d’absence, et suivre l’ordre des candidats ? </p>
+      <p>- Comment pourrions-nous structurer l’application pour que l’administration puisse gérer facilement les sessions, réorganiser les files en cas d’absence, et suivre l’ordre des candidats ? </p>
       <p>- Comment pourrions-nous concevoir une interface administrateur simple, claire et dynamique, permettant de gérer efficacement les tickets, notifications et statistiques ?  </p>
     </blockquote>
   </div>
@@ -197,9 +200,9 @@ style: |
 <div class="img-container">
   <div class="dt-card" style="border-top-color: #f39c12;">
     <h4>Solutions retenues</h4>
-    <p>• Interface <strong>"Single Question"</strong> pour éviter la surcharge cognitive.</p>
-    <p>• <strong>Timer dynamique</strong> par catégorie de question.</p>
-    <p>• <strong>Dashboard</strong> temps réel pour le suivi des formateurs.</p>
+    <p>• <strong>Ticket numérique et suivi "Live"</strong> pour permettre aux candidats de visualiser leur rang en temps réel sur mobile.</p>
+    <p>• Gestionnaire de file interactif pour permettre aux formateurs de changer les statuts et réorganiser les priorités instantanément.</p>
+    <p>• Dashboard d'administration centralisé pour automatiser la création des sessions et l'affectation massive des candidats.</p>
   </div>
 </div>
 
@@ -212,6 +215,14 @@ style: |
 <div class="img-container">
   <h3>Interaction Utilisateur (UML)</h3>
   <img src="images/use-case.png" class="img-methodo" alt="Use Case">
+</div>
+<div class="img-container">
+  <h3>Interaction Utilisateur (UML)</h3>
+  <img src="images/use-case-S1.png" class="img-methodo" alt="Use Case">
+</div>
+<div class="img-container">
+  <h3>Interaction Utilisateur (UML)</h3>
+  <img src="images/use-case-S1.png" class="img-methodo" alt="Use Case">
 </div>
 
 ---

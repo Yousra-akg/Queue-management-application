@@ -9,22 +9,17 @@ L’objectif de cet entretien était de comprendre les contraintes rencontrées 
 
 # Observations Clés
 
-1. **Gestion manuelle complexe et chronophage**  
-La gestion actuelle repose sur des listes papier. 
-Cela oblige l’administrateur à vérifier manuellement les noms, modifier l’ordre et répondre constamment aux questions des candidats.
+1. **Absence de visibilité pour les candidats**  
+Après avoir réussi le QCM, les candidats attendent dans le couloir sans savoir combien de personnes sont avant eux, ce qui génère du stress et une atmosphère désorganisée.
 
 2. **Difficulté à contrôler l’ordre réel de passage**  
 En cas de confusion ou de contestation, il est difficile de prouver l’ordre exact des candidats.  
 Cela peut générer des tensions et donner une impression d’injustice.
 
-3. **Problèmes liés aux retards et absences**  
-Certains candidats arrivent en retard ou ne se présentent pas.  
-L’administrateur doit alors réorganiser la file de manière improvisée, ce qui perturbe le planning global.
-
-4. **Manque de visibilité globale sur la session**  
+3. **Manque de visibilité globale sur la session**  
 Il est difficile d’avoir une vue claire et instantanée du nombre de candidats restants, du temps moyen par entretien ou de l’état d’avancement de la session.
 
-6. **Absence de données exploitables**  
+4. **Absence de données exploitables**  
 Aucune statistique fiable n’est conservée concernant :
 - Le temps moyen d’attente  
 - Le nombre réel de candidats présents   

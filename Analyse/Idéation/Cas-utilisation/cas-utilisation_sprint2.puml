@@ -21,7 +21,7 @@ package "Sprint 2 – Fonctionnalités Avancées" {
 
     usecase "Notification quelques minutes avant son tour" as UC1
     usecase "Notification lors de son tour" as UC2
-    usecase "Voir si le ticket a été annulé ou reporté" as UC3
+    usecase "Suivi des tickets" as UC3
 
     C -- UC1
     C -- UC2
@@ -29,14 +29,11 @@ package "Sprint 2 – Fonctionnalités Avancées" {
 
    
     usecase "Authentification Formateur" as UC4
-    usecase "Envoyer automatiquement notifications pour reports ou annulations" as UC6
     usecase "Voir les statistiques des sessions" as UC7
 
     
-    F -- UC6
     F -- UC7
  
-    UC6 ..> UC4 : <<include>>
     UC7 ..> UC4 : <<include>>
 
 
@@ -45,14 +42,11 @@ package "Sprint 2 – Fonctionnalités Avancées" {
     ' ========================
     usecase "Authentification Admin" as UC8
     usecase "Recevoir alertes sur absences ou problèmes" as UC9
-    usecase "Consulter les statistiques globales" as UC10
     usecase "Réorganisation/priorisation automatique" as UC11
 
     Admin -- UC9
-    Admin -- UC10
     Admin -- UC11
     UC9 ..> UC8 : <<include>>
-    UC10 ..> UC8 : <<include>>
     UC11 ..> UC8 : <<include>>
 }
 

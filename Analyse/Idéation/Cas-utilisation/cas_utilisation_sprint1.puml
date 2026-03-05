@@ -20,8 +20,8 @@ actor "Administrateur" as Admin
 package "Sprint 1 – MVP" {
 
     usecase "Réception du numéro de passage" as UC2
-    usecase "Voir ordre de passage approximatif" as UC3
-    usecase "Annuler ou reporter son passage" as UC4
+    usecase "Consulter sa position" as UC3
+    usecase "Marquer comme présent" as UC4
 
     C -- UC2
     C -- UC3
@@ -29,31 +29,51 @@ package "Sprint 1 – MVP" {
 
     
     usecase "Authentification Formateur" as UC5
-    usecase "Modifier le statut des tickets" as UC7
-    usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC8
-    usecase "Consulter les candidats présents et l’état de chaque ticket." as UC9
+    usecase "Acceder à une session" as UC7
+    usecase "Modifier le statut des tickets" as UC8
+    usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC9
+    usecase "Consulter les candidats présents et l’état de chaque ticket." as UC10
 
     
    
     F -- UC7
     F -- UC8
     F -- UC9
+    F -- UC10
     
     UC7 ..> UC5 : <<include>>
     UC8 ..> UC5 : <<include>>
     UC9 ..> UC5 : <<include>>
+    UC10 ..> UC5 : <<include>>
 
     usecase "Authentification Admin" as UCA1
     usecase "Création et gestion des sessions" as UCA2
     usecase "Voir tous les candidats inscrits pour chaque session." as UCA3
     usecase "Modifier ou réinitialiser les tickets si nécessaire." as UCA4
+    usecase "Consulter les statistiques globales" as UCA5
+
 
     Admin -- UCA2
     Admin -- UCA3
     Admin -- UCA4
+    Admin -- UCA5
     UCA2 ..> UCA1 : <<include>>
     UCA3 ..> UCA1 : <<include>>
     UCA4 ..> UCA1 : <<include>>
+    UCA5 ..> UCA1 : <<include>>
+
+    package "Application Mobile" #E8F8F5 {
+        usecase "Réception du numéro de passage" as M1
+        usecase "Consulter sa position" as M2
+        usecase "Marquer comme présent" as M3
+        usecase "Recevoir notifications" as M4
+
+
+        C -- M1
+        C -- M2
+        C -- M3
+        C -- M4
+    }
 }
 
 @enduml
