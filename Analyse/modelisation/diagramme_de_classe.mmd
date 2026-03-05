@@ -1,0 +1,55 @@
+classDiagram
+    class Utilisateur {
+        +int id
+        +string nom
+        +string email
+        +string motDePasse
+    }
+
+    class Administrateur {
+        +creerSession(nom, date, capacite)
+        +assignerCandidats(listCandidats, session)
+        +genererCodePresence(session)
+    }
+
+    class Formateur {
+        +rejoindreSession(session)
+        +appelerSuivant(session)
+        +changerStatutTicket(ticket, nouveauStatut)
+        +reordonnerFile(session)
+    }
+
+    class Candidat {
+        +int id
+        +string nom
+        +string prenom
+        +float scoreQCM
+        +date dateReussiteQCM
+        +validerPresence(codeSecret)
+    }
+
+    class Session {
+        +int id
+        +string nom
+        +date dateEntretien
+        +int capaciteMax
+        +string codeSecretPresence
+        +string statut
+        +datetime heureDebut
+        +datetime heureFin
+    }
+
+    class Ticket {
+        +int id
+        +int numeroOrdre
+        +string codeUnique
+        +string statut
+        +datetime heureArrivee
+    }
+
+    Utilisateur <|-- Administrateur
+    Utilisateur <|-- Formateur
+    Administrateur "1" -- "0..*" Session : gere
+    Formateur "0..*" -- "0..1" Session : anime
+    Session "1" *-- "0..*" Ticket : contient
+    Candidat "1" -- "1" Ticket : possede
