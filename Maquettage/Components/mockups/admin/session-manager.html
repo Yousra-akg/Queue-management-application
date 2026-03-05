@@ -313,24 +313,17 @@
                                 <path d="m21 21-4.3-4.3" />
                             </svg>
                         </div>
-                        <input type="text"
-                            class="py-3 ps-11 pe-4 block w-full border-slate-100 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 bg-slate-50/50 font-medium placeholder:text-slate-400"
+                        <input type="text" id="session-search"
+                            class="py-3 ps-11 pe-4 block w-full border-slate-300 border-[1.5px] shadow-sm rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 bg-white font-medium placeholder:text-slate-400 transition-all"
                             placeholder="Rechercher par titre de session...">
                     </div>
                     <div class="flex gap-3 flex-wrap">
-                        <select
-                            class="py-3 px-4 pe-9 block w-40 border-slate-100 rounded-2xl text-xs font-bold text-slate-600 focus:border-blue-500 focus:ring-blue-500 bg-slate-50/50">
-                            <option>Tous les statuts</option>
-                            <option>Active</option>
-                            <option>Planifiée</option>
-                            <option>Terminée</option>
-                        </select>
-                        <select
-                            class="py-3 px-4 pe-9 block w-40 border-slate-100 rounded-2xl text-xs font-bold text-slate-600 focus:border-blue-500 focus:ring-blue-500 bg-slate-50/50">
-                            <option>Tous les types</option>
-                            <option>Session Web</option>
-                            <option>Test QCM</option>
-                            <option>Entretien Final</option>
+                        <select id="status-filter"
+                            class="py-3 px-4 pe-9 block w-48 border-slate-300 border-[1.5px] shadow-sm rounded-2xl text-xs font-bold text-slate-600 focus:border-blue-500 focus:ring-blue-500 bg-white transition-all">
+                            <option value="all">Tous les statuts</option>
+                            <option value="active">Active</option>
+                            <option value="planned">Planifiée</option>
+                            <option value="completed">Terminée</option>
                         </select>
                     </div>
                 </div>
@@ -340,13 +333,13 @@
                     <!-- Table Info Header -->
                     <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
                         <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Affichage de <span
-                                class="text-slate-900 font-bold">4</span> sessions</p>
+                                class="text-slate-900 font-bold" id="visible-count">2</span> sessions</p>
                         <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest italic">Mis à jour
                             aujourd'hui</p>
                     </div>
 
                     <div class="overflow-x-auto overflow-y-hidden">
-                        <table class="w-full text-start">
+                        <table class="w-full text-start" id="sessions-table">
                             <thead class="bg-slate-50/50 border-b border-slate-100">
                                 <tr>
                                     <th scope="col"
@@ -368,7 +361,8 @@
                             </thead>
                             <tbody class="divide-y divide-slate-50">
                                 <!-- Row 1 -->
-                                <tr class="hover:bg-slate-50/50 transition-colors group">
+                                <tr class="session-row hover:bg-slate-50/50 transition-colors group"
+                                    data-status="active">
                                     <td class="ps-8 py-5">
                                         <div class="flex items-center gap-4">
                                             <div
@@ -381,15 +375,18 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-semibold text-slate-900 leading-tight uppercase">
-                                                    Session Web - J1</p>
+                                                <p
+                                                    class="session-title text-sm font-semibold text-slate-900 leading-tight uppercase">
+                                                    Session J1</p>
                                                 <p class="text-[10px] font-medium text-slate-400 mt-0.5">Publiée le 01
                                                     Mars 2026</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5">
-                                        <p class="text-xs text-slate-400 font-medium max-w-[200px] truncate">Première
+                                        <p
+                                            class="session-desc text-xs text-slate-400 font-medium max-w-[200px] truncate">
+                                            Première
                                             journée d'entretiens techniques...</p>
                                     </td>
                                     <td class="px-6 py-5 text-center">
@@ -403,12 +400,13 @@
                                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                                                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                             </svg>
-                                            <span class="text-xs font-semibold text-slate-600">20/50</span>
+                                            <span
+                                                class="session-total text-xs font-semibold text-slate-600">20/50</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <span
-                                            class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-green-50 text-green-600 uppercase">
+                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-green-50 text-green-600 uppercase">
                                             <span class="size-1.5 rounded-full bg-green-600"></span>
                                             Active
                                         </span>
@@ -416,7 +414,7 @@
                                     <td class="px-6 py-5 text-end pe-8">
                                         <div class="flex justify-end items-center gap-2">
                                             <button
-                                                class="size-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
+                                                class="action-btn size-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
                                                 title="Voir">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -426,8 +424,8 @@
                                                 </svg>
                                             </button>
                                             <button
-                                                class="size-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center"
-                                                title="Modifier">
+                                                class="action-btn edit-btn size-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center"
+                                                title="Modifier" data-hs-overlay="#modal-edit-session">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -436,8 +434,8 @@
                                                 </svg>
                                             </button>
                                             <button
-                                                class="size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
-                                                title="Supprimer">
+                                                class="action-btn delete-btn size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
+                                                title="Supprimer" data-hs-overlay="#modal-delete-confirm">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -452,7 +450,8 @@
                                     </td>
                                 </tr>
                                 <!-- Row 2 -->
-                                <tr class="hover:bg-slate-50/50 transition-colors group">
+                                <tr class="session-row hover:bg-slate-50/50 transition-colors group"
+                                    data-status="planned">
                                     <td class="ps-8 py-5">
                                         <div class="flex items-center gap-4">
                                             <div
@@ -464,16 +463,19 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-semibold text-slate-900 leading-tight uppercase">
-                                                    Test QCM - Session A</p>
+                                                <p
+                                                    class="session-title text-sm font-semibold text-slate-900 leading-tight uppercase">
+                                                    Session J2</p>
                                                 <p class="text-[10px] font-medium text-slate-400 mt-0.5">Publiée le 28
                                                     Fév 2026</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5">
-                                        <p class="text-xs text-slate-400 font-medium max-w-[200px] truncate">Passage du
-                                            test technique pour le groupe 1...</p>
+                                        <p
+                                            class="session-desc text-xs text-slate-400 font-medium max-w-[200px] truncate">
+                                            Passage du
+                                            test technique pour le groupe 2...</p>
                                     </td>
                                     <td class="px-6 py-5 text-center">
                                         <div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg">
@@ -486,21 +488,51 @@
                                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                                                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                             </svg>
-                                            <span class="text-xs font-semibold text-slate-600">45/60</span>
+                                            <span
+                                                class="session-total text-xs font-semibold text-slate-600">45/60</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <span
-                                            class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600 uppercase">
+                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600 uppercase">
                                             <span class="size-1.5 rounded-full bg-blue-600"></span>
-                                            En cours
+                                            Planifiée
                                         </span>
                                     </td>
                                     <td class="px-6 py-5 text-end pe-8">
                                         <div class="flex justify-end items-center gap-2">
-                                            <line x1="10" y1="11" x2="10" y2="17" />
-                                            <line x1="14" y1="11" x2="14" y2="17" />
-                                            </svg>
+                                            <button
+                                                class="action-btn size-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
+                                                title="Voir">
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                class="action-btn edit-btn size-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center"
+                                                title="Modifier" data-hs-overlay="#modal-edit-session">
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                                    <path d="m15 5 4 4" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                class="action-btn delete-btn size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
+                                                title="Supprimer" data-hs-overlay="#modal-delete-confirm">
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M3 6h18" />
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                                    <line x1="10" y1="11" x2="10" y2="17" />
+                                                    <line x1="14" y1="11" x2="14" y2="17" />
+                                                </svg>
                                             </button>
                                         </div>
                                     </td>
@@ -510,24 +542,29 @@
                     </div>
 
                     <!-- Table Footer: Pagination -->
-                    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-center">
-                        <nav class="flex items-center gap-2">
+                    <div class="px-8 py-6 border-t border-slate-100 flex items-center justify-center bg-slate-50/20">
+                        <nav class="flex items-center gap-2" id="pagination-nav">
                             <button
-                                class="size-10 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:bg-slate-50 transition-all">
+                                class="prev-page size-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path d="m15 18-6-6 6-6" />
                                 </svg>
                             </button>
+                            <div class="flex items-center gap-2" id="page-buttons">
+                                <button
+                                    class="page-btn size-10 flex items-center justify-center rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all"
+                                    data-page="1">1</button>
+                                <button
+                                    class="page-btn size-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-all"
+                                    data-page="2">2</button>
+                                <button
+                                    class="page-btn size-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-all"
+                                    data-page="3">3</button>
+                            </div>
                             <button
-                                class="size-10 flex items-center justify-center rounded-xl bg-blue-600 text-white font-black text-xs shadow-lg shadow-blue-500/20">1</button>
-                            <button
-                                class="size-10 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-600 font-black text-xs hover:bg-slate-50 transition-all">2</button>
-                            <button
-                                class="size-10 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-600 font-black text-xs hover:bg-slate-50 transition-all">3</button>
-                            <button
-                                class="size-10 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:bg-slate-50 transition-all">
+                                class="next-page size-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 transition-all">
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -538,7 +575,219 @@
                     </div>
                 </div>
             </div>
+
         </div>
+    </div>
+
+    <!-- Edit Session Modal -->
+    <div id="modal-edit-session"
+        class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+        <div
+            class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+            <div class="flex flex-col bg-white border shadow-sm rounded-[2.5rem] pointer-events-auto w-full">
+                <div class="flex justify-between items-center py-6 px-8 border-b border-slate-100">
+                    <h3 class="font-black text-slate-900 uppercase tracking-tighter">Modifier la Session</h3>
+                    <button type="button"
+                        class="flex justify-center items-center size-8 text-sm font-semibold rounded-xl border border-transparent text-slate-400 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none"
+                        data-hs-overlay="#modal-edit-session">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto">
+                    <form id="edit-session-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-slate-500 uppercase">Titre de la
+                                session</label>
+                            <input type="text" id="edit-session-title"
+                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
+                                placeholder="ex: Session J1">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-slate-500 uppercase">Description</label>
+                            <textarea id="edit-session-desc"
+                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
+                                rows="3" placeholder="Description de la session..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-xs font-black text-slate-500 uppercase">Statut</label>
+                                <select id="edit-session-status"
+                                    class="py-3 px-4 pe-9 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    <option value="active">Active</option>
+                                    <option value="planned">Planifiée</option>
+                                    <option value="completed">Terminée</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-black text-slate-500 uppercase">Capacité</label>
+                                <input type="number" id="edit-session-capacity"
+                                    class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
+                                    placeholder="50">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="flex justify-end items-center gap-x-2 py-6 px-8 border-t border-slate-100">
+                    <button type="button"
+                        class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all"
+                        data-hs-overlay="#modal-edit-session">Annuler</button>
+                    <button type="button" id="save-session-btn"
+                        class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-black rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all uppercase">Enregistrer
+                        les modifications</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="modal-delete-confirm"
+        class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+        <div
+            class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-md sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+            <div class="flex flex-col bg-white border shadow-sm rounded-[2.5rem] pointer-events-auto w-full">
+                <div class="p-8 text-center flex flex-col items-center">
+                    <div
+                        class="size-16 bg-red-50 text-red-600 rounded-[1.5rem] flex items-center justify-center mb-6 border border-red-100 shadow-sm">
+                        <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18" />
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            <line x1="10" y1="11" x2="10" y2="17" />
+                            <line x1="14" y1="11" x2="14" y2="17" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-2">Supprimer la
+                        Session</h3>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-4">Êtes-vous sûr de
+                        vouloir supprimer cette session ? Cette action est irréversible.</p>
+                    <div class="mt-8 flex gap-3 w-full">
+                        <button type="button"
+                            class="flex-1 py-4 px-6 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all"
+                            data-hs-overlay="#modal-delete-confirm">Annuler</button>
+                        <button type="button" id="confirm-delete-btn"
+                            class="flex-1 py-4 px-6 text-xs font-black rounded-2xl border border-transparent bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-500/20 transition-all uppercase">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('session-search');
+            const statusFilter = document.getElementById('status-filter');
+            const rows = document.querySelectorAll('.session-row');
+            const visibleCount = document.getElementById('visible-count');
+            const paginationBtns = document.querySelectorAll('.page-btn');
+            const actionBtns = document.querySelectorAll('.action-btn');
+
+            let selectedRow = null;
+
+            // Filter Logic
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const statusTerm = statusFilter.value;
+                let count = 0;
+
+                rows.forEach(row => {
+                    const title = row.querySelector('.session-title').textContent.toLowerCase();
+                    const status = row.getAttribute('data-status');
+
+                    const matchesSearch = title.includes(searchTerm);
+                    const matchesStatus = statusTerm === 'all' || status === statusTerm;
+
+                    if (matchesSearch && matchesStatus) {
+                        row.classList.remove('hidden');
+                        count++;
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                });
+                visibleCount.textContent = count;
+            }
+
+            searchInput.addEventListener('input', filterTable);
+            statusFilter.addEventListener('change', filterTable);
+
+            // Pagination Interaction
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    paginationBtns.forEach(b => {
+                        b.classList.remove('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-500/20');
+                        b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-600');
+                    });
+                    btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-600');
+                    btn.classList.add('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-500/20');
+
+                    // Visual feedback for page change
+                    const table = document.getElementById('sessions-table');
+                    table.classList.add('opacity-50');
+                    setTimeout(() => table.classList.remove('opacity-50'), 200);
+                });
+            });
+
+            // Edit Logic
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedRow = btn.closest('tr');
+                    const title = selectedRow.querySelector('.session-title').textContent.trim();
+                    const desc = selectedRow.querySelector('.session-desc').textContent.trim();
+                    const status = selectedRow.getAttribute('data-status');
+                    const capacity = selectedRow.querySelector('.session-total').textContent.split('/')[1];
+
+                    document.getElementById('edit-session-title').value = title;
+                    document.getElementById('edit-session-desc').value = desc;
+                    document.getElementById('edit-session-status').value = status;
+                    document.getElementById('edit-session-capacity').value = capacity;
+                });
+            });
+
+            document.getElementById('save-session-btn').addEventListener('click', () => {
+                if (selectedRow) {
+                    const newTitle = document.getElementById('edit-session-title').value;
+                    const newStatus = document.getElementById('edit-session-status').value;
+                    const newCapacity = document.getElementById('edit-session-capacity').value;
+
+                    selectedRow.querySelector('.session-title').textContent = newTitle;
+                    selectedRow.setAttribute('data-status', newStatus);
+
+                    // Update badge
+                    const badge = selectedRow.querySelector('.session-status-badge');
+                    badge.innerHTML = `<span class="size-1.5 rounded-full ${newStatus === 'active' ? 'bg-green-600' : (newStatus === 'planned' ? 'bg-blue-600' : 'bg-slate-400')}"></span> ${newStatus === 'active' ? 'Active' : (newStatus === 'planned' ? 'Planifiée' : 'Terminée')}`;
+                    badge.className = `session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold ${newStatus === 'active' ? 'bg-green-50 text-green-600' : (newStatus === 'planned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-500')} uppercase`;
+
+                    // Close modal
+                    HSOverlay.close('#modal-edit-session');
+                }
+            });
+
+            // Delete Logic
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedRow = btn.closest('tr');
+                });
+            });
+
+            document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+                if (selectedRow) {
+                    selectedRow.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        selectedRow.remove();
+                        filterTable();
+                    }, 300);
+                    HSOverlay.close('#modal-delete-confirm');
+                }
+            });
+        });
+    </script>
+    </div>
     </div>
 
     <!-- Interactivity Script -->

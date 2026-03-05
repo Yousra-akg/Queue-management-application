@@ -6,6 +6,18 @@ classDiagram
         +string motDePasse
     }
 
+    class Role {
+        +int id
+        +string nom
+        +string description
+    }
+
+    class Permission {
+        +int id
+        +string nom
+        +string description
+    }
+
     class Administrateur {
         +creerSession(nom, date, capacite)
         +assignerCandidats(listCandidats, session)
@@ -47,6 +59,11 @@ classDiagram
         +datetime heureArrivee
     }
 
+    %% Relations d'Access Control
+    Utilisateur "0..*" -- "1" Role : possède
+    Role "1" -- "0..*" Permission : contient
+
+    %% Relations d'Héritage et Métier
     Utilisateur <|-- Administrateur
     Utilisateur <|-- Formateur
     Administrateur "1" -- "0..*" Session : gere
