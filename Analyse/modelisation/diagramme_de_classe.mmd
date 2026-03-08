@@ -1,4 +1,5 @@
 classDiagram
+    %% Classe Parent
     class Utilisateur {
         +int id
         +string nom
@@ -6,29 +7,40 @@ classDiagram
         +string motDePasse
     }
 
+    %% Héritage pour les rôles administratifs
+    class Administrateur {
+        +gererSessions()
+        +consulterStats()
+    }
+
+    class Formateur {
+        +appelerSuivant()
+        +validerPresence()
+    }
+
+    Utilisateur <|-- Administrateur : hérite
+    Utilisateur <|-- Formateur : hérite
+
     class Role {
         +int id
         +string nom
-        +string description
     }
 
     class Permission {
         +int id
         +string nom
-        +string description
     }
 
-    class Administrateur {
-        +creerSession(nom, date, capacite)
-        +assignerCandidats(listCandidats, session)
-        +genererCodePresence(session)
-    }
-
-    class Formateur {
-        +rejoindreSession(session)
-        +appelerSuivant(session)
-        +changerStatutTicket(ticket, nouveauStatut)
-        +reordonnerFile(session)
+    class Session {
+        +int id
+        +string nom
+        +date dateEntretien
+        +time heureDebut
+        +time heureFin
+        +int capaciteMax
+        +string codePresence
+        +string statut
+        +calculerStatistiques()
     }
 
     class Candidat {
@@ -36,37 +48,25 @@ classDiagram
         +string nom
         +string prenom
         +float scoreQCM
-        +date dateReussiteQCM
-        +validerPresence(codeSecret)
-    }
-
-    class Session {
-        +int id
-        +string nom
-        +date dateEntretien
-        +int capaciteMax
-        +string codeSecretPresence
-        +string statut
-        +datetime heureDebut
-        +datetime heureFin
+        +string identifiantQCM
     }
 
     class Ticket {
         +int id
-        +int numeroOrdre
         +string codeUnique
+        +int numeroOrdre
         +string statut
         +datetime heureArrivee
     }
 
-    %% Relations d'Access Control
+    %% Relations
     Utilisateur "0..*" -- "1" Role : possède
     Role "1" -- "0..*" Permission : contient
-
-    %% Relations d'Héritage et Métier
-    Utilisateur <|-- Administrateur
-    Utilisateur <|-- Formateur
-    Administrateur "1" -- "0..*" Session : gere
-    Formateur "0..*" -- "0..1" Session : anime
+    
+    %% Un Admin ou Formateur peut gérer des sessions
+    Utilisateur "1" -- "0..*" Session : gère
+    
+    %% Relations liées au processus de file d'attente
+    Session "1" -- "0..*" Candidat : est assigné à
+    Candidat "1" -- "0..1" Ticket : génère
     Session "1" *-- "0..*" Ticket : contient
-    Candidat "1" -- "1" Ticket : possede

@@ -1,15 +1,20 @@
-## Définition du problème
+# 🔬 SoliQueue – Plateforme de Gestion des Files d'Attente
 
-Actuellement, la gestion des files d’attente pour les entretiens de SoliCode présente plusieurs limites qui impactent l’expérience des candidats et l’efficacité du travail administratif.
+## Phase 2 du Design Thinking : Définir
+Suite à la phase d’empathie réalisée auprès des candidats, de l'administrateur et des formateurs, nous pouvons désormais formuler clairement les problématiques principales que **SoliQueue** doit résoudre.
 
-Après la phase d’empathie menée avec l’administrateur Hamouda, plusieurs insuffisances ont été identifiées :
+## 🎯. Énoncé du Problème
 
-- Les candidats n’ont pas de ticket numérique unique, ce qui entraîne des confusions et des erreurs dans l’ordre de passage.  
-- Absence de visibilité en temps réel sur la position dans la file et le temps d’attente estimé.  
-- Difficulté pour l’administration à gérer la réorganisation des candidats.   
-- Manque de notifications pour prévenir les candidats que leur tour approche.  
+### Pour le Candidat :
+Le candidat a besoin d’une visibilité immédiate et d’une preuve de rang officielle après la réussite de son QCM, car l’attente physique actuelle est marquée par l’incertitude et l’absence de suivi, ce qui entraîne stress, confusion et peur de perdre son tour.
 
-Ainsi, le problème principal peut être formulé comme suit :
+### Pour l’Administrateur & le Formateur :
+L’équipe administrative a besoin d’un système de monitoring centralisé et automatisé pour superviser le flux des entretiens, car la gestion manuelle sur papier rend le suivi des présences opaque, le tri des candidats fastidieux et empêche la collecte de statistiques fiables pour optimiser les sessions.
 
-- Comment concevoir une application de gestion des files d’attente qui offre une **visibilité en temps réel** aux candidats et réduit leur stress pendant l’attente ?  
-- Comment structurer le système pour permettre à l’administration de gérer facilement les tickets, retards et absences, tout en maintenant un ordre clair et dynamique ?  
+## 💡. Questions “Comment pourrions-nous” (HMW)
+
+* **Comment pourrions-nous** offrir au candidat un ticket numérique unique (ex: SOLI-88) dès sa validation du QCM ?
+* **Comment pourrions-nous** permettre aux candidats de suivre leur position dans la file en temps réel sur leur propre téléphone ?
+* **Comment pourrions-nous** sécuriser la validation de présence physique au centre via un système de code secret ?
+* **Comment pourrions-nous** aider les formateurs à appeler le candidat suivant et gérer les statuts (En cours/Terminé) en un seul clic ?
+* **Comment pourrions-nous** fournir à l'administration un dashboard analytique pour suivre le taux de présence et le remplissage des sessions ?

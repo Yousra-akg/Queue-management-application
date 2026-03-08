@@ -1,0 +1,85 @@
+@startuml SoliQueue_Sprint1_MVP
+left to right direction
+skinparam actorStyle awesome
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+    ArrowColor #117864
+}
+
+' Acteurs
+actor "Candidat" as C
+actor "Formateur" as F
+actor "Administrateur" as Admin
+actor "Mobile" as Mob
+
+
+' =========================
+' Candidat 
+' =========================
+
+usecase "Obtenir un ticket (SOLI-XX)" as UC1
+usecase "Consulter position et timer" as UC2
+usecase "Valider présence (Code Secret)" as UC3
+usecase "Suivre l'état de la file globale" as UC4
+
+C -- UC1
+C -- UC2
+C -- UC3
+C -- UC4
+
+
+' =========================
+' Formateur
+' =========================
+
+usecase "Rejoindre une session d'entretien" as UC7
+usecase "Appeler le candidat suivant" as UC8
+usecase "Mettre à jour statut (Terminé/Absent)" as UC9
+usecase "Prioriser/Déplacer un candidat" as UC10
+
+F -- UC7
+F -- UC8
+F -- UC9
+F -- UC10
+
+
+
+' =========================
+' Administrateur
+' =========================
+
+usecase "Gérer les sessions (CRUD)" as UC11
+usecase "Affecter les candidats aux sessions" as UC12
+usecase "Consulter dashboard de statistiques" as UC13
+
+Admin -- UC11
+Admin -- UC12
+Admin -- UC13
+
+
+' =========================
+' Mobile
+' =========================
+
+usecase "Consommer l'API" as API
+
+Mob -- API
+
+
+' =========================
+' Authentification
+' =========================
+
+usecase "S'authentifier" as Auth
+
+UC7 ..> Auth : <<include>>
+UC8 ..> Auth : <<include>>
+UC9 ..> Auth : <<include>>
+UC10 ..> Auth : <<include>>
+UC11 ..> Auth : <<include>>
+UC12 ..> Auth : <<include>>
+UC13 ..> Auth : <<include>>
+
+@enduml

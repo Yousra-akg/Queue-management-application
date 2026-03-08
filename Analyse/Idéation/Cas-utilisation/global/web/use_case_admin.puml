@@ -1,0 +1,88 @@
+@startuml SoliQueue_UseCase_Admin
+left to right direction
+skinparam actorStyle awesome
+skinparam shadowing false
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+}
+
+skinparam nodesep 40
+skinparam ranksep 50
+
+' Acteurs Web
+actor "Administrateur" as Admin
+actor "Formateur" as Formateur
+
+' Acteur Mobile (Candidat)
+actor "Mobile" as Mob
+
+'=====================
+' Admin Use Cases (Web)
+'=====================
+usecase "Tableau de bord global" as UC1
+usecase "Gérer les sessions" as UC2
+usecase "Affecter les candidats (Drag & Drop)" as UC3
+usecase "Gérer les paramètres de sécurité" as UC4
+usecase "Consulter les statistiques" as UC5
+
+'=====================
+' Formateur Use Cases (Web)
+'=====================
+usecase "Rejoindre une session d'entretien" as UC7
+usecase "Appeler le candidat suivant" as UC8
+usecase "Mettre à jour statut (Présent/Absent/Terminé)" as UC9
+usecase "Consulter la file d'attente active" as UC10
+usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC11
+
+'=====================
+' Mobile API (Candidat)
+'=====================
+usecase "Consommer API (Synchronisation File)" as API
+
+'=====================
+' Authentification
+'=====================
+usecase "S'authentifier" as Auth
+
+'=====================
+' Relations Admin
+'=====================
+Admin -- UC1
+Admin -- UC2
+Admin -- UC3
+Admin -- UC4
+Admin -- UC5
+
+'=====================
+' Relations Formateur
+'=====================
+Formateur -- UC7
+Formateur -- UC8
+Formateur -- UC9
+Formateur -- UC10
+Formateur -- UC11
+
+'=====================
+' Relations Mobile
+'=====================
+Mob -- API
+
+
+'=====================
+' Authentification includes
+'=====================
+UC1 ..> Auth : <<include>>
+UC2 ..> Auth : <<include>>
+UC3 ..> Auth : <<include>>
+UC4 ..> Auth : <<include>>
+UC5 ..> Auth : <<include>>
+
+UC7 ..> Auth : <<include>>
+UC8 ..> Auth : <<include>>
+UC9 ..> Auth : <<include>>
+UC10 ..> Auth : <<include>>
+UC11 ..> Auth : <<include>>
+
+@enduml

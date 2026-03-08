@@ -10,6 +10,14 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    colors: {
+                        primary: '#1A73E8',
+                        success: '#34A853',
+                        alert: '#FBBC05',
+                        danger: '#EA4335',
+                        bgSurface: '#F8F9FA',
+                        textDark: '#202124',
+                    },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
@@ -20,15 +28,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline/dist/preline.css">
+    <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.js"></script>
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen font-sans">
+<body class="bg-bgSurface min-h-screen font-sans">
     <!-- Navigation Sidebar (Desktop) -->
     <div id="application-sidebar"
-        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[60] w-64 bg-slate-900 border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0">
+        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[60] w-64 bg-textDark border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0">
         <div class="px-6">
             <a class="flex-none text-2xl font-black text-white tracking-tighter" href="#"
-                aria-label="SoliCode Admin">Soli<span class="text-blue-500">Admin</span></a>
+                aria-label="SoliCode Admin">Soli<span class="text-primary">Admin</span></a>
         </div>
 
         <nav class="p-6 w-full flex flex-col flex-wrap">
@@ -48,7 +57,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="flex items-center gap-x-3.5 py-2.5 px-3 bg-blue-600 text-sm text-white font-black rounded-xl"
+                    <a class="flex items-center gap-x-3.5 py-2.5 px-3 bg-primary text-sm text-white font-black rounded-xl"
                         href="session-manager.html">
                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -107,15 +116,15 @@
                             class="candidate-item flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:border-blue-500 transition-all cursor-move select-none">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="size-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black">
+                                    class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
                                     LM</div>
                                 <div>
                                     <p class="text-sm font-black text-slate-900 uppercase">Lila Mansouri</p>
-                                    <p class="text-[10px] font-bold text-indigo-600 uppercase">Score: 94/100</p>
+                                    <p class="text-[10px] font-bold text-primary uppercase">Score: 94/100</p>
                                 </div>
                             </div>
                             <button
-                                class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 group-hover:text-blue-600 group-hover:border-blue-600 transition-all">
+                                class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 group-hover:text-primary group-hover:border-primary transition-all">
                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -125,18 +134,18 @@
                         </div>
 
                         <div draggable="true" id="cand-amine"
-                            class="candidate-item flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:border-blue-500 transition-all cursor-move select-none">
+                            class="candidate-item flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:border-primary transition-all cursor-move select-none">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="size-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black">
+                                    class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
                                     AF</div>
                                 <div>
                                     <p class="text-sm font-black text-slate-900 uppercase">Amine Fassi</p>
-                                    <p class="text-[10px] font-bold text-indigo-600 uppercase">Score: 88/100</p>
+                                    <p class="text-[10px] font-bold text-primary uppercase">Score: 88/100</p>
                                 </div>
                             </div>
                             <button
-                                class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 group-hover:text-blue-600 group-hover:border-blue-600 transition-all">
+                                class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 group-hover:text-primary group-hover:border-primary transition-all">
                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -154,24 +163,24 @@
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-lg font-black text-slate-900 uppercase">Affectation Sessions</h2>
                             <span
-                                class="py-1 px-3 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase">4
+                                class="py-1 px-3 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase">4
                                 Sessions Disponibles</span>
                         </div>
 
                         <!-- Tabs Navigation -->
                         <nav class="flex space-x-2 bg-slate-50 p-1.5 rounded-2xl" aria-label="Tabs" role="tablist">
                             <button type="button"
-                                class="hs-tab-active:bg-white hs-tab-active:text-blue-600 hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600 active lg"
+                                class="hs-tab-active:bg-white hs-tab-active:text-primary hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600 active lg"
                                 id="tabs-item-1" data-hs-tab="#tabs-1" aria-controls="tabs-1" role="tab"
                                 aria-selected="true">J1</button>
                             <button type="button"
-                                class="hs-tab-active:bg-white hs-tab-active:text-blue-600 hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
+                                class="hs-tab-active:bg-white hs-tab-active:text-primary hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
                                 id="tabs-item-2" data-hs-tab="#tabs-2" aria-controls="tabs-2" role="tab">J2</button>
                             <button type="button"
-                                class="hs-tab-active:bg-white hs-tab-active:text-blue-600 hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
+                                class="hs-tab-active:bg-white hs-tab-active:text-primary hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
                                 id="tabs-item-3" data-hs-tab="#tabs-3" aria-controls="tabs-3" role="tab">J3</button>
                             <button type="button"
-                                class="hs-tab-active:bg-white hs-tab-active:text-blue-600 hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
+                                class="hs-tab-active:bg-white hs-tab-active:text-primary hs-tab-active:shadow-sm py-2 px-4 inline-flex items-center gap-x-2 bg-transparent text-xs font-black uppercase text-slate-400 rounded-xl hover:text-slate-600"
                                 id="tabs-item-4" data-hs-tab="#tabs-4" aria-controls="tabs-4" role="tab">J4</button>
                         </nav>
                     </div>
@@ -181,15 +190,15 @@
                         <div id="tabs-1" class="tab-pane flex-grow flex flex-col" role="tabpanel"
                             aria-labelledby="tabs-item-1">
                             <div
-                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
+                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-bgSurface border border-slate-100 rounded-2xl">
                                 <div>
-                                    <p class="text-xs font-black text-blue-900 tracking-tight">Capacité J1</p>
+                                    <p class="text-xs font-black text-textDark tracking-tight">Capacité J1</p>
                                     <div class="w-48 h-2 bg-slate-200 rounded-full mt-2">
-                                        <div class="progress-bar bg-blue-600 h-full rounded-full" style="width: 0%">
+                                        <div class="progress-bar bg-primary h-full rounded-full" style="width: 0%">
                                         </div>
                                     </div>
                                 </div>
-                                <span class="count-text text-sm font-black text-blue-900">0/50</span>
+                                <span class="count-text text-sm font-black text-textDark">0/50</span>
                             </div>
                             <div class="drop-zone flex-grow border-2 border-dashed border-slate-100 rounded-[2rem] p-4 flex flex-col gap-2 min-h-[150px] transition-all"
                                 data-session="J1">
@@ -214,15 +223,15 @@
                         <div id="tabs-2" class="hidden tab-pane flex-grow flex flex-col" role="tabpanel"
                             aria-labelledby="tabs-item-2">
                             <div
-                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
+                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-bgSurface border border-slate-100 rounded-2xl">
                                 <div>
-                                    <p class="text-xs font-black text-blue-900 tracking-tight">Capacité Jour 2</p>
+                                    <p class="text-xs font-black text-textDark tracking-tight">Capacité Jour x</p>
                                     <div class="w-48 h-2 bg-slate-200 rounded-full mt-2">
-                                        <div class="progress-bar bg-blue-600 h-full rounded-full" style="width: 0%">
+                                        <div class="progress-bar bg-primary h-full rounded-full" style="width: 0%">
                                         </div>
                                     </div>
                                 </div>
-                                <span class="count-text text-sm font-black text-blue-900">0/50</span>
+                                <span class="count-text text-sm font-black text-textDark">0/50</span>
                             </div>
                             <div class="drop-zone flex-grow border-2 border-dashed border-slate-100 rounded-[2rem] p-4 flex flex-col gap-2 min-h-[150px] transition-all"
                                 data-session="J2">
@@ -236,15 +245,15 @@
                         <div id="tabs-3" class="hidden tab-pane flex-grow flex flex-col" role="tabpanel"
                             aria-labelledby="tabs-item-3">
                             <div
-                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
+                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-bgSurface border border-slate-100 rounded-2xl">
                                 <div>
-                                    <p class="text-xs font-black text-blue-900 tracking-tight">Capacité Jour 3</p>
+                                    <p class="text-xs font-black text-textDark tracking-tight">Capacité Jour 3</p>
                                     <div class="w-48 h-2 bg-slate-200 rounded-full mt-2">
-                                        <div class="progress-bar bg-blue-600 h-full rounded-full" style="width: 0%">
+                                        <div class="progress-bar bg-primary h-full rounded-full" style="width: 0%">
                                         </div>
                                     </div>
                                 </div>
-                                <span class="count-text text-sm font-black text-blue-900">0/50</span>
+                                <span class="count-text text-sm font-black text-textDark">0/50</span>
                             </div>
                             <div class="drop-zone flex-grow border-2 border-dashed border-slate-100 rounded-[2rem] p-4 flex flex-col gap-2 min-h-[150px] transition-all"
                                 data-session="J3">
@@ -258,15 +267,15 @@
                         <div id="tabs-4" class="hidden tab-pane flex-grow flex flex-col" role="tabpanel"
                             aria-labelledby="tabs-item-4">
                             <div
-                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
+                                class="capacity-container flex justify-between items-center mb-6 p-4 bg-bgSurface border border-slate-100 rounded-2xl">
                                 <div>
-                                    <p class="text-xs font-black text-blue-900 tracking-tight">Capacité Jour 4</p>
+                                    <p class="text-xs font-black text-textDark tracking-tight">Capacité Jour 4</p>
                                     <div class="w-48 h-2 bg-slate-200 rounded-full mt-2">
-                                        <div class="progress-bar bg-blue-600 h-full rounded-full" style="width: 0%">
+                                        <div class="progress-bar bg-primary h-full rounded-full" style="width: 0%">
                                         </div>
                                     </div>
                                 </div>
-                                <span class="count-text text-sm font-black text-blue-900">0/50</span>
+                                <span class="count-text text-sm font-black text-textDark">0/50</span>
                             </div>
                             <div class="drop-zone flex-grow border-2 border-dashed border-slate-100 rounded-[2rem] p-4 flex flex-col gap-2 min-h-[150px] transition-all"
                                 data-session="J4">
@@ -290,7 +299,7 @@
                             sessions publiées sur SoliCode</p>
                     </div>
                     <a href="add-session.html"
-                        class="py-3 px-6 bg-blue-600 text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20 flex items-center gap-2">
+                        class="py-3 px-6 bg-primary text-white text-xs font-black rounded-2xl uppercase hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 flex items-center gap-2">
                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -343,30 +352,40 @@
                             <thead class="bg-slate-50/50 border-b border-slate-100">
                                 <tr>
                                     <th scope="col"
-                                        class="ps-8 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic">
-                                        Titre de la Session</th>
+                                        class="ps-8 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Nom de la Session</th>
                                     <th scope="col"
-                                        class="px-6 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic">
-                                        Description</th>
+                                        class="px-6 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Date de l'entretien</th>
                                     <th scope="col"
-                                        class="px-6 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic text-center">
-                                        Candidats</th>
+                                        class="px-6 py-4 text-center text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Capacité Max</th>
                                     <th scope="col"
-                                        class="px-6 py-4 text-start text-[10px] font-medium text-slate-400 uppercase tracking-widest italic">
+                                        class="px-6 py-4 text-center text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Heure de début</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-center text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Heure de fin</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-center text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
+                                        Code de Présence</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-center text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
                                         Statut</th>
                                     <th scope="col"
-                                        class="px-6 py-4 text-end pe-8 text-[10px] font-medium text-slate-400 uppercase tracking-widest italic text-end">
+                                        class="px-6 py-4 text-end pe-8 text-[10px] font-medium text-slate-400 uppercase tracking-widest italic whitespace-nowrap">
                                         Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-50">
-                                <!-- Row 1 -->
+                                <!-- Row 1: Session J1 -->
                                 <tr class="session-row hover:bg-slate-50/50 transition-colors group"
                                     data-status="active">
+                                    <!-- Nom de la Session -->
                                     <td class="ps-8 py-5">
-                                        <div class="flex items-center gap-4">
+                                        <div class="flex items-center gap-3">
                                             <div
-                                                class="size-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shadow-sm group-hover:scale-110 transition-transform">
+                                                class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
                                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -374,57 +393,90 @@
                                                         d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                                                 </svg>
                                             </div>
-                                            <div>
-                                                <p
-                                                    class="session-title text-sm font-semibold text-slate-900 leading-tight uppercase">
-                                                    Session J1</p>
-                                                <p class="text-[10px] font-medium text-slate-400 mt-0.5">Publiée le 01
-                                                    Mars 2026</p>
-                                            </div>
+                                            <p
+                                                class="session-title text-sm font-black text-textDark uppercase whitespace-nowrap">
+                                                Session J1</p>
                                         </div>
                                     </td>
+                                    <!-- Date de l'entretien -->
                                     <td class="px-6 py-5">
-                                        <p
-                                            class="session-desc text-xs text-slate-400 font-medium max-w-[200px] truncate">
-                                            Première
-                                            journée d'entretiens techniques...</p>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="size-3.5 text-slate-400 flex-shrink-0"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                                <line x1="16" x2="16" y1="2" y2="6" />
+                                                <line x1="8" x2="8" y1="2" y2="6" />
+                                                <line x1="3" x2="21" y1="10" y2="10" />
+                                            </svg>
+                                            <span
+                                                class="session-date text-xs font-semibold text-slate-600 whitespace-nowrap">01
+                                                Mars 2026</span>
+                                        </div>
                                     </td>
+                                    <!-- Capacité Max -->
                                     <td class="px-6 py-5 text-center">
-                                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg">
+                                        <span
+                                            class="session-capacity inline-flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary text-xs font-black border border-primary/20">50</span>
+                                    </td>
+                                    <!-- Heure de début -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
                                             <svg class="size-3 text-slate-400" xmlns="http://www.w3.org/2000/svg"
                                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round">
-                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                                <circle cx="9" cy="7" r="4" />
-                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
                                             </svg>
                                             <span
-                                                class="session-total text-xs font-semibold text-slate-600">20/50</span>
+                                                class="session-start-time text-xs font-bold text-slate-600">09:00</span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-5 whitespace-nowrap">
+                                    <!-- Heure de fin -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
+                                            <svg class="size-3 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
+                                            </svg>
+                                            <span class="session-end-time text-xs font-bold text-slate-600">17:00</span>
+                                        </div>
+                                    </td>
+                                    <!-- Code de Présence -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-textDark rounded-xl">
+                                            <svg class="size-3 text-white/60" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <rect width="11" height="11" x="3" y="11" rx="2" ry="2" />
+                                                <path d="m7 11V7a5 5 0 0 1 9.9-1" />
+                                            </svg>
+                                            <span
+                                                class="session-code text-xs font-black text-white tracking-widest">8271</span>
+                                        </div>
+                                    </td>
+                                    <!-- Statut -->
+                                    <td class="px-6 py-5 text-center whitespace-nowrap">
                                         <span
-                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-green-50 text-green-600 uppercase">
-                                            <span class="size-1.5 rounded-full bg-green-600"></span>
+                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-success/10 text-success uppercase">
+                                            <span class="size-1.5 rounded-full bg-success"></span>
                                             Active
                                         </span>
                                     </td>
+                                    <!-- Actions -->
                                     <td class="px-6 py-5 text-end pe-8">
                                         <div class="flex justify-end items-center gap-2">
                                             <button
-                                                class="action-btn size-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
-                                                title="Voir">
-                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
-                                            </button>
-                                            <button
-                                                class="action-btn edit-btn size-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center"
+                                                class="action-btn edit-btn size-8 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center"
                                                 title="Modifier" data-hs-overlay="#modal-edit-session">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -434,7 +486,7 @@
                                                 </svg>
                                             </button>
                                             <button
-                                                class="action-btn delete-btn size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
+                                                class="action-btn delete-btn size-8 rounded-lg bg-danger/10 border border-danger/20 text-danger hover:bg-danger hover:text-white transition-all flex items-center justify-center"
                                                 title="Supprimer" data-hs-overlay="#modal-delete-confirm">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -442,77 +494,110 @@
                                                     <path d="M3 6h18" />
                                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                                     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                                    <line x1="10" y1="11" x2="10" y2="17" />
-                                                    <line x1="14" y1="11" x2="14" y2="17" />
                                                 </svg>
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
-                                <!-- Row 2 -->
+                                <!-- Row 2: Session J2 -->
                                 <tr class="session-row hover:bg-slate-50/50 transition-colors group"
                                     data-status="planned">
+                                    <!-- Nom de la Session -->
                                     <td class="ps-8 py-5">
-                                        <div class="flex items-center gap-4">
+                                        <div class="flex items-center gap-3">
                                             <div
-                                                class="size-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 shadow-sm group-hover:scale-110 transition-transform">
+                                                class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
                                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                                    <path
+                                                        d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                                                 </svg>
                                             </div>
-                                            <div>
-                                                <p
-                                                    class="session-title text-sm font-semibold text-slate-900 leading-tight uppercase">
-                                                    Session J2</p>
-                                                <p class="text-[10px] font-medium text-slate-400 mt-0.5">Publiée le 28
-                                                    Fév 2026</p>
-                                            </div>
+                                            <p
+                                                class="session-title text-sm font-black text-textDark uppercase whitespace-nowrap">
+                                                Session J2</p>
                                         </div>
                                     </td>
+                                    <!-- Date de l'entretien -->
                                     <td class="px-6 py-5">
-                                        <p
-                                            class="session-desc text-xs text-slate-400 font-medium max-w-[200px] truncate">
-                                            Passage du
-                                            test technique pour le groupe 2...</p>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="size-3.5 text-slate-400 flex-shrink-0"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                                <line x1="16" x2="16" y1="2" y2="6" />
+                                                <line x1="8" x2="8" y1="2" y2="6" />
+                                                <line x1="3" x2="21" y1="10" y2="10" />
+                                            </svg>
+                                            <span
+                                                class="session-date text-xs font-semibold text-slate-600 whitespace-nowrap">05
+                                                Mars 2026</span>
+                                        </div>
                                     </td>
+                                    <!-- Capacité Max -->
                                     <td class="px-6 py-5 text-center">
-                                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg">
+                                        <span
+                                            class="session-capacity inline-flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary text-xs font-black border border-primary/20">60</span>
+                                    </td>
+                                    <!-- Heure de début -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
                                             <svg class="size-3 text-slate-400" xmlns="http://www.w3.org/2000/svg"
                                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round">
-                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                                <circle cx="9" cy="7" r="4" />
-                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
                                             </svg>
                                             <span
-                                                class="session-total text-xs font-semibold text-slate-600">45/60</span>
+                                                class="session-start-time text-xs font-bold text-slate-600">08:30</span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-5 whitespace-nowrap">
+                                    <!-- Heure de fin -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
+                                            <svg class="size-3 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
+                                            </svg>
+                                            <span class="session-end-time text-xs font-bold text-slate-600">16:30</span>
+                                        </div>
+                                    </td>
+                                    <!-- Code de Présence -->
+                                    <td class="px-6 py-5 text-center">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-textDark rounded-xl">
+                                            <svg class="size-3 text-white/60" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <rect width="11" height="11" x="3" y="11" rx="2" ry="2" />
+                                                <path d="m7 11V7a5 5 0 0 1 9.9-1" />
+                                            </svg>
+                                            <span
+                                                class="session-code text-xs font-black text-white tracking-widest">4532</span>
+                                        </div>
+                                    </td>
+                                    <!-- Statut -->
+                                    <td class="px-6 py-5 text-center whitespace-nowrap">
                                         <span
-                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600 uppercase">
-                                            <span class="size-1.5 rounded-full bg-blue-600"></span>
+                                            class="session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold bg-primary/10 text-primary uppercase">
+                                            <span class="size-1.5 rounded-full bg-primary"></span>
                                             Planifiée
                                         </span>
                                     </td>
+                                    <!-- Actions -->
                                     <td class="px-6 py-5 text-end pe-8">
                                         <div class="flex justify-end items-center gap-2">
                                             <button
-                                                class="action-btn size-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
-                                                title="Voir">
-                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
-                                            </button>
-                                            <button
-                                                class="action-btn edit-btn size-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center"
+                                                class="action-btn edit-btn size-8 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center"
                                                 title="Modifier" data-hs-overlay="#modal-edit-session">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -522,7 +607,7 @@
                                                 </svg>
                                             </button>
                                             <button
-                                                class="action-btn delete-btn size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
+                                                class="action-btn delete-btn size-8 rounded-lg bg-danger/10 border border-danger/20 text-danger hover:bg-danger hover:text-white transition-all flex items-center justify-center"
                                                 title="Supprimer" data-hs-overlay="#modal-delete-confirm">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -530,8 +615,6 @@
                                                     <path d="M3 6h18" />
                                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                                     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                                    <line x1="10" y1="11" x2="10" y2="17" />
-                                                    <line x1="14" y1="11" x2="14" y2="17" />
                                                 </svg>
                                             </button>
                                         </div>
@@ -554,7 +637,7 @@
                             </button>
                             <div class="flex items-center gap-2" id="page-buttons">
                                 <button
-                                    class="page-btn size-10 flex items-center justify-center rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all"
+                                    class="page-btn size-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold text-xs shadow-lg shadow-primary/20 transition-all"
                                     data-page="1">1</button>
                                 <button
                                     class="page-btn size-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-all"
@@ -581,105 +664,137 @@
 
     <!-- Edit Session Modal -->
     <div id="modal-edit-session"
-        class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+        class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
         <div
-            class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
-            <div class="flex flex-col bg-white border shadow-sm rounded-[2.5rem] pointer-events-auto w-full">
-                <div class="flex justify-between items-center py-6 px-8 border-b border-slate-100">
-                    <h3 class="font-black text-slate-900 uppercase tracking-tighter">Modifier la Session</h3>
-                    <button type="button"
-                        class="flex justify-center items-center size-8 text-sm font-semibold rounded-xl border border-transparent text-slate-400 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none"
-                        data-hs-overlay="#modal-edit-session">
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="p-8 overflow-y-auto">
-                    <form id="edit-session-form" class="space-y-6">
+            class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg mx-4 flex flex-col animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center py-6 px-8 border-b border-slate-100">
+                <h3 class="font-black text-slate-900 uppercase tracking-tighter">Modifier la Session</h3>
+                <button type="button" onclick="closeModal('modal-edit-session')"
+                    class="flex justify-center items-center size-8 text-sm font-semibold rounded-xl border border-transparent text-slate-400 hover:bg-slate-100">
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto max-h-[80vh]">
+                <form id="edit-session-form" class="space-y-5">
+                    <!-- Nom de la Session -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Nom de la Session</label>
+                        <input type="text" id="edit-session-title"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm"
+                            placeholder="ex: Session J1">
+                    </div>
+                    <!-- Date de l'entretien -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Date de l'entretien</label>
+                        <input type="date" id="edit-session-date"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm">
+                    </div>
+                    <!-- Capacité Max -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Capacité Max</label>
+                        <input type="number" id="edit-session-capacity"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm"
+                            placeholder="50" min="1">
+                    </div>
+                    <!-- Heure de début / Heure de fin -->
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-xs font-black text-slate-500 uppercase">Titre de la
-                                session</label>
-                            <input type="text" id="edit-session-title"
-                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                placeholder="ex: Session J1">
+                            <label class="text-xs font-black text-slate-500 uppercase">Heure de début</label>
+                            <input type="time" id="edit-session-start"
+                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-black text-slate-500 uppercase">Description</label>
-                            <textarea id="edit-session-desc"
-                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                rows="3" placeholder="Description de la session..."></textarea>
+                            <label class="text-xs font-black text-slate-500 uppercase">Heure de fin</label>
+                            <input type="time" id="edit-session-end"
+                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500 uppercase">Statut</label>
-                                <select id="edit-session-status"
-                                    class="py-3 px-4 pe-9 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                                    <option value="active">Active</option>
-                                    <option value="planned">Planifiée</option>
-                                    <option value="completed">Terminée</option>
-                                </select>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500 uppercase">Capacité</label>
-                                <input type="number" id="edit-session-capacity"
-                                    class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                    placeholder="50">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="flex justify-end items-center gap-x-2 py-6 px-8 border-t border-slate-100">
-                    <button type="button"
-                        class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all"
-                        data-hs-overlay="#modal-edit-session">Annuler</button>
-                    <button type="button" id="save-session-btn"
-                        class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-black rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all uppercase">Enregistrer
-                        les modifications</button>
-                </div>
+                    </div>
+                    <!-- Code de Présence -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Code de Présence Session</label>
+                        <input type="text" id="edit-session-code"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm font-black tracking-widest"
+                            placeholder="ex: 8271" maxlength="6">
+                    </div>
+                    <!-- Statut -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Statut</label>
+                        <select id="edit-session-status"
+                            class="py-3 px-4 pe-9 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm">
+                            <option value="active">Active</option>
+                            <option value="planned">Planifiée</option>
+                            <option value="completed">Terminée</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end items-center gap-x-2 py-6 px-8 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modal-edit-session')"
+                    class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all">Annuler</button>
+                <button type="button" id="save-session-btn"
+                    class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-black rounded-2xl border border-transparent bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all uppercase">Enregistrer
+                    les modifications</button>
             </div>
         </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
     <div id="modal-delete-confirm"
-        class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+        class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
         <div
-            class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-md sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
-            <div class="flex flex-col bg-white border shadow-sm rounded-[2.5rem] pointer-events-auto w-full">
-                <div class="p-8 text-center flex flex-col items-center">
-                    <div
-                        class="size-16 bg-red-50 text-red-600 rounded-[1.5rem] flex items-center justify-center mb-6 border border-red-100 shadow-sm">
-                        <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                            <line x1="10" y1="11" x2="10" y2="17" />
-                            <line x1="14" y1="11" x2="14" y2="17" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-2">Supprimer la
-                        Session</h3>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-4">Êtes-vous sûr de
-                        vouloir supprimer cette session ? Cette action est irréversible.</p>
-                    <div class="mt-8 flex gap-3 w-full">
-                        <button type="button"
-                            class="flex-1 py-4 px-6 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all"
-                            data-hs-overlay="#modal-delete-confirm">Annuler</button>
-                        <button type="button" id="confirm-delete-btn"
-                            class="flex-1 py-4 px-6 text-xs font-black rounded-2xl border border-transparent bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-500/20 transition-all uppercase">Supprimer</button>
-                    </div>
+            class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md mx-4 flex flex-col animate-in fade-in zoom-in duration-200">
+            <div class="p-8 text-center flex flex-col items-center">
+                <div
+                    class="size-16 bg-danger/10 text-danger rounded-[1.5rem] flex items-center justify-center mb-6 border border-danger/20 shadow-sm">
+                    <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" y1="11" x2="10" y2="17" />
+                        <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-2">Supprimer la Session</h3>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-4">Êtes-vous sûr de vouloir
+                    supprimer cette session ? Cette action est irréversible.</p>
+                <div class="mt-8 flex gap-3 w-full">
+                    <button type="button" onclick="closeModal('modal-delete-confirm')"
+                        class="flex-1 py-4 px-6 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all">Annuler</button>
+                    <button type="button" id="confirm-delete-btn"
+                        class="flex-1 py-4 px-6 text-xs font-black rounded-2xl border border-transparent bg-danger text-white hover:bg-danger/90 shadow-lg shadow-danger/20 transition-all uppercase">Supprimer</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ── Modal helpers (no Preline needed) ──────────────────────────────
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        }
+        // Close on backdrop click
+        ['modal-edit-session', 'modal-delete-confirm'].forEach(id => {
+            document.addEventListener('DOMContentLoaded', () => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('click', (e) => {
+                    if (e.target === el) closeModal(id);
+                });
+            });
+        });
+        // ──────────────────────────────────────────────────────────────────
+
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('session-search');
             const statusFilter = document.getElementById('status-filter');
@@ -720,11 +835,11 @@
             paginationBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     paginationBtns.forEach(b => {
-                        b.classList.remove('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-500/20');
+                        b.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/20');
                         b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-600');
                     });
                     btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-600');
-                    btn.classList.add('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-500/20');
+                    btn.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/20');
 
                     // Visual feedback for page change
                     const table = document.getElementById('sessions-table');
@@ -737,34 +852,63 @@
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     selectedRow = btn.closest('tr');
-                    const title = selectedRow.querySelector('.session-title').textContent.trim();
-                    const desc = selectedRow.querySelector('.session-desc').textContent.trim();
-                    const status = selectedRow.getAttribute('data-status');
-                    const capacity = selectedRow.querySelector('.session-total').textContent.split('/')[1];
+                    const title = selectedRow.querySelector('.session-title')?.textContent.trim() ?? '';
+                    const date = selectedRow.querySelector('.session-date')?.textContent.trim() ?? '';
+                    const capacity = selectedRow.querySelector('.session-capacity')?.textContent.trim() ?? '';
+                    const startTime = selectedRow.querySelector('.session-start-time')?.textContent.trim() ?? '';
+                    const endTime = selectedRow.querySelector('.session-end-time')?.textContent.trim() ?? '';
+                    const code = selectedRow.querySelector('.session-code')?.textContent.trim() ?? '';
+                    const status = selectedRow.getAttribute('data-status') ?? 'active';
 
                     document.getElementById('edit-session-title').value = title;
-                    document.getElementById('edit-session-desc').value = desc;
-                    document.getElementById('edit-session-status').value = status;
+                    document.getElementById('edit-session-date').value = '';
                     document.getElementById('edit-session-capacity').value = capacity;
+                    document.getElementById('edit-session-start').value = startTime;
+                    document.getElementById('edit-session-end').value = endTime;
+                    document.getElementById('edit-session-code').value = code;
+                    document.getElementById('edit-session-status').value = status;
+                    openModal('modal-edit-session');
                 });
             });
 
             document.getElementById('save-session-btn').addEventListener('click', () => {
                 if (selectedRow) {
-                    const newTitle = document.getElementById('edit-session-title').value;
-                    const newStatus = document.getElementById('edit-session-status').value;
+                    const newTitle = document.getElementById('edit-session-title').value.trim();
+                    const newDate = document.getElementById('edit-session-date').value;
                     const newCapacity = document.getElementById('edit-session-capacity').value;
+                    const newStart = document.getElementById('edit-session-start').value;
+                    const newEnd = document.getElementById('edit-session-end').value;
+                    const newCode = document.getElementById('edit-session-code').value.trim();
 
-                    selectedRow.querySelector('.session-title').textContent = newTitle;
+                    if (newTitle) selectedRow.querySelector('.session-title').textContent = newTitle;
+                    if (newDate) {
+                        // Format date for display: dd Mmm yyyy
+                        const d = new Date(newDate);
+                        const months = ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+                        const formatted = `${String(d.getDate()).padStart(2, '0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
+                        selectedRow.querySelector('.session-date').textContent = formatted;
+                    }
+                    if (newCapacity) selectedRow.querySelector('.session-capacity').textContent = newCapacity;
+                    if (newStart) selectedRow.querySelector('.session-start-time').textContent = newStart;
+                    if (newEnd) selectedRow.querySelector('.session-end-time').textContent = newEnd;
+                    if (newCode) selectedRow.querySelector('.session-code').textContent = newCode;
+
+                    // Update status
+                    const newStatus = document.getElementById('edit-session-status').value;
                     selectedRow.setAttribute('data-status', newStatus);
-
-                    // Update badge
                     const badge = selectedRow.querySelector('.session-status-badge');
-                    badge.innerHTML = `<span class="size-1.5 rounded-full ${newStatus === 'active' ? 'bg-green-600' : (newStatus === 'planned' ? 'bg-blue-600' : 'bg-slate-400')}"></span> ${newStatus === 'active' ? 'Active' : (newStatus === 'planned' ? 'Planifiée' : 'Terminée')}`;
-                    badge.className = `session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold ${newStatus === 'active' ? 'bg-green-50 text-green-600' : (newStatus === 'planned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-500')} uppercase`;
+                    if (badge) {
+                        const cfg = {
+                            active: { cls: 'bg-success/10 text-success', dot: 'bg-success', label: 'Active' },
+                            planned: { cls: 'bg-primary/10 text-primary', dot: 'bg-primary', label: 'Planifiée' },
+                            completed: { cls: 'bg-slate-100 text-slate-500', dot: 'bg-slate-400', label: 'Terminée' }
+                        }[newStatus] ?? { cls: 'bg-slate-100 text-slate-500', dot: 'bg-slate-400', label: newStatus };
+                        badge.className = `session-status-badge inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-semibold ${cfg.cls} uppercase`;
+                        badge.innerHTML = `<span class="size-1.5 rounded-full ${cfg.dot}"></span> ${cfg.label}`;
+                    }
 
                     // Close modal
-                    HSOverlay.close('#modal-edit-session');
+                    closeModal('modal-edit-session');
                 }
             });
 
@@ -772,6 +916,7 @@
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     selectedRow = btn.closest('tr');
+                    openModal('modal-delete-confirm');
                 });
             });
 
@@ -782,7 +927,8 @@
                         selectedRow.remove();
                         filterTable();
                     }, 300);
-                    HSOverlay.close('#modal-delete-confirm');
+                    HSOverlay && HSOverlay.close && HSOverlay.close('#modal-delete-confirm');
+                    closeModal('modal-delete-confirm');
                 }
             });
         });
@@ -793,9 +939,9 @@
     <!-- Interactivity Script -->
     <style>
         .candidate-item.selected {
-            background-color: #eff6ff;
-            border-color: #3b82f6;
-            box-shadow: 0 4px 6px -1px rgb(59 130 246 / 0.1), 0 2px 4px -2px rgb(59 130 246 / 0.1);
+            background-color: rgba(26, 115, 232, 0.05);
+            border-color: #1A73E8;
+            box-shadow: 0 4px 6px -1px rgba(26, 115, 232, 0.1), 0 2px 4px -2px rgba(26, 115, 232, 0.1);
         }
     </style>
     <script>
@@ -849,18 +995,18 @@
             document.getElementById('candidate-pool').addEventListener('dragend', (e) => {
                 const target = e.target.closest('.candidate-item');
                 if (target) target.classList.remove('opacity-50', 'scale-95');
-                dropZones.forEach(zone => zone.classList.remove('border-blue-400', 'bg-blue-50/50'));
+                dropZones.forEach(zone => zone.classList.remove('border-primary', 'bg-primary/5'));
             });
 
             // Handle Drop Zones
             dropZones.forEach(zone => {
                 zone.addEventListener('dragover', (e) => {
                     e.preventDefault();
-                    zone.classList.add('border-blue-400', 'bg-blue-50/50');
+                    zone.classList.add('border-primary', 'bg-primary/5');
                 });
 
                 zone.addEventListener('dragleave', () => {
-                    zone.classList.remove('border-blue-400', 'bg-blue-50/50');
+                    zone.classList.remove('border-primary', 'bg-primary/5');
                 });
 
                 zone.addEventListener('drop', (e) => {
@@ -899,7 +1045,7 @@
                         <div class="size-8 rounded-lg bg-slate-50 text-[11px] font-black flex items-center justify-center text-slate-500">${initials}</div>
                         <span class="text-xs font-bold text-slate-800 uppercase">${name}</span>
                     </div>
-                    <button class="remove-btn text-slate-300 hover:text-red-500 transition-colors">
+                    <button class="remove-btn text-slate-300 hover:text-danger transition-colors">
                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>
                 `;

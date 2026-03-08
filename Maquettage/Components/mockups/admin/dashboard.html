@@ -10,6 +10,14 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    colors: {
+                        primary: '#1A73E8',
+                        success: '#34A853',
+                        alert: '#FBBC05',
+                        danger: '#EA4335',
+                        bgSurface: '#F8F9FA',
+                        textDark: '#202124',
+                    },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
@@ -22,19 +30,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline/dist/preline.css">
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen font-sans">
+<body class="bg-bgSurface min-h-screen font-sans">
     <!-- Navigation Sidebar (Desktop) -->
     <div id="application-sidebar"
-        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[60] w-64 bg-slate-900 border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0">
+        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[60] w-64 bg-textDark border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0">
         <div class="px-6">
             <a class="flex-none text-2xl font-black text-white tracking-tighter" href="#"
-                aria-label="SoliCode Admin">Soli<span class="text-blue-500">Admin</span></a>
+                aria-label="SoliCode Admin">Soli<span class="text-primary">Admin</span></a>
         </div>
 
         <nav class="p-6 w-full flex flex-col flex-wrap">
             <ul class="space-y-1.5">
                 <li>
-                    <a class="flex items-center gap-x-3.5 py-2.5 px-3 bg-blue-600 text-sm text-white font-black rounded-xl"
+                    <a class="flex items-center gap-x-3.5 py-2.5 px-3 bg-primary text-sm text-white font-black rounded-xl"
                         href="#">
                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -71,11 +79,11 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
                 <div>
-                    <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Dashboard Admin</h1>
+                    <h1 class="text-3xl font-black text-textDark tracking-tighter uppercase">Dashboard Admin</h1>
                     <p class="text-sm text-slate-400 font-medium">Gestion de la file d'attente SoliCode</p>
                 </div>
                 <button type="button" onclick="window.location.href='add-session.html'"
-                    class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-black rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 shadow-xl shadow-blue-500/20 transition-all transform hover:scale-105">
+                    class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-black rounded-2xl border border-transparent bg-primary text-white hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all transform hover:scale-105">
                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -92,7 +100,7 @@
                 <div class="flex flex-col bg-white border border-slate-200 shadow-sm rounded-3xl p-6">
                     <div class="flex items-center gap-x-4">
                         <div
-                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-primary/10 text-primary">
                             <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -105,7 +113,7 @@
                         <div>
                             <p class="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Candidats Admis
                             </p>
-                            <h3 class="text-2xl font-black text-slate-900">428</h3>
+                            <h3 class="text-2xl font-black text-textDark">428</h3>
                         </div>
                     </div>
                 </div>
@@ -114,7 +122,7 @@
                 <div class="flex flex-col bg-white border border-slate-200 shadow-sm rounded-3xl p-6">
                     <div class="flex items-center gap-x-4">
                         <div
-                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-primary/10 text-primary">
                             <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -126,7 +134,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Sessions</p>
-                            <h3 class="text-2xl font-black text-slate-900">4 Jours</h3>
+                            <h3 class="text-2xl font-black text-textDark">4 Jours</h3>
                         </div>
                     </div>
                 </div>
@@ -135,7 +143,7 @@
                 <div class="flex flex-col bg-white border border-slate-200 shadow-sm rounded-3xl p-6">
                     <div class="flex items-center gap-x-4">
                         <div
-                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-green-50 text-green-600">
+                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-success/10 text-success">
                             <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -145,7 +153,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Terminés</p>
-                            <h3 class="text-2xl font-black text-slate-900">182</h3>
+                            <h3 class="text-2xl font-black text-textDark">182</h3>
                         </div>
                     </div>
                 </div>
@@ -154,7 +162,7 @@
                 <div class="flex flex-col bg-white border border-slate-200 shadow-sm rounded-3xl p-6">
                     <div class="flex items-center gap-x-4">
                         <div
-                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
+                            class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-alert/10 text-alert">
                             <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -164,7 +172,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Présence</p>
-                            <h3 class="text-2xl font-black text-slate-900">94.2%</h3>
+                            <h3 class="text-2xl font-black text-textDark">94.2%</h3>
                         </div>
                     </div>
                 </div>
@@ -174,7 +182,7 @@
             <div class="grid lg:grid-cols-2 gap-6">
                 <!-- Session Fill Rate -->
                 <div class="bg-white border border-slate-200 shadow-sm rounded-[2rem] p-8">
-                    <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-8">Remplissage des Sessions
+                    <h4 class="text-lg font-black text-textDark uppercase tracking-tight mb-8">Remplissage des Sessions
                     </h4>
                     <div class="space-y-8">
                         <div>
@@ -183,7 +191,7 @@
                                 <span class="text-[10px] font-bold text-slate-400">50/50 - Complet</span>
                             </div>
                             <div class="flex w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                                <div class="bg-indigo-600" style="width: 100%"></div>
+                                <div class="bg-primary" style="width: 100%"></div>
                             </div>
                         </div>
                         <div>
@@ -192,7 +200,7 @@
                                 <span class="text-[10px] font-bold text-slate-400">48/50</span>
                             </div>
                             <div class="flex w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                                <div class="bg-blue-600" style="width: 96%"></div>
+                                <div class="bg-primary/80" style="width: 96%"></div>
                             </div>
                         </div>
                         <div>
@@ -201,7 +209,7 @@
                                 <span class="text-[10px] font-bold text-slate-400">12/50</span>
                             </div>
                             <div class="flex w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                                <div class="bg-green-500" style="width: 24%"></div>
+                                <div class="bg-success" style="width: 24%"></div>
                             </div>
                         </div>
                         <div>
@@ -218,11 +226,11 @@
 
                 <!-- Recent Activity -->
                 <div class="bg-white border border-slate-200 shadow-sm rounded-[2rem] p-8">
-                    <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-8">Activité Recente</h4>
+                    <h4 class="text-lg font-black text-textDark uppercase tracking-tight mb-8">Activité Recente</h4>
                     <ul class="space-y-6">
                         <li class="flex gap-x-4">
                             <div
-                                class="size-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                class="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -233,13 +241,13 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-900">Nouvelle Session J5 créée</p>
+                                <p class="text-sm font-bold text-textDark">Nouvelle Session J5 créée</p>
                                 <p class="text-[10px] font-medium text-slate-400">Il y a 10 minutes par Admin</p>
                             </div>
                         </li>
                         <li class="flex gap-x-4">
                             <div
-                                class="size-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                                class="size-10 rounded-xl bg-success/10 flex items-center justify-center text-success flex-shrink-0">
                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -248,13 +256,13 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-900">50 Candidats assignés à J1</p>
+                                <p class="text-sm font-bold text-textDark">50 Candidats assignés à J1</p>
                                 <p class="text-[10px] font-medium text-slate-400">Il y a 2 heures</p>
                             </div>
                         </li>
                         <li class="flex gap-x-4">
                             <div
-                                class="size-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0">
+                                class="size-10 rounded-xl bg-alert/10 flex items-center justify-center text-alert flex-shrink-0">
                                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -264,7 +272,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-900">Paramètres de sécurité mis à jour</p>
+                                <p class="text-sm font-bold text-textDark">Paramètres de sécurité mis à jour</p>
                                 <p class="text-[10px] font-medium text-slate-400">Hier à 18:45</p>
                             </div>
                         </li>
