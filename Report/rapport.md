@@ -43,6 +43,15 @@
 
 ---
 
+# Remerciement
+Je tiens à exprimer ma profonde gratitude à toutes les personnes qui ont contribué au succès de ce projet de fin de formation.
+
+Mes remerciements s'adressent tout d'abord à mon encadrant, M. ESSARRAJ Fouad, pour sa disponibilité, ses conseils précieux et son accompagnement technique tout au long de ce parcours. Ses critiques constructives m'ont permis de relever les défis complexes de ce projet.
+
+Je remercie également l'équipe pédagogique du centre SoliCode pour la qualité de la formation reçue et pour nous avoir offert un environnement propice à l'apprentissage et à l'innovation.
+
+Enfin, je remercie mes collègues et mes proches pour leur soutien moral et leurs encouragements constants, qui m'ont aidé à mener à bien ce travail.
+
 # Introduction
 
 Dans le cadre de la digitalisation des processus administratifs à SoliCode, la gestion des entretiens de recrutement représente un défi logistique majeur. Actuellement, l'absence de système automatisé pour gérer l'ordre de passage des candidats crée une attente opaque, génératrice de stress pour les étudiants et de désorganisation pour l'administration. Le projet SoliQueue a été conçu pour répondre à ce besoin en transformant une file d'attente physique invisible en une expérience numérique transparente, permettant un suivi en temps réel pour toutes les parties prenantes. 
@@ -56,9 +65,21 @@ Lors de ma formation en développement web à SoliCode, j’ai observé que la g
 ---
 
 # Objectif de Project
+Le projet SoliQueue a été développé avec des objectifs précis visant à transformer radicalement l'expérience des entretiens de sélection :
 
-*(À compléter)*  
+## Objectifs Opérationnels :
+- **Automatisation du flux :** Éliminer la gestion manuelle (papier/tableur) pour réduire les erreurs humaines dans l'affectation des candidats.
 
+- **Validation de présence :** Garantir que seuls les candidats physiquement présents peuvent être appelés grâce au système de code secret à 4 chiffres.
+
+- **Accessibilité Mobile :** Permettre aux candidats de suivre leur progression sans rester immobiles devant une salle, favorisant ainsi une attente plus confortable.
+
+## Objectifs Stratégiques :
+- **Transparence :** Restaurer la confiance des candidats envers le processus de sélection en offrant une visibilité totale sur l'ordre de passage.
+
+- **Pilotage par la donnée :** Fournir à l'administration des statistiques fiables (temps moyen d'entretien, taux d'absentéisme) pour optimiser l'organisation des futures cohortes.
+
+- **Modernisation de l'image :** Aligner les outils internes de SoliCode avec son identité de centre d'excellence technologique.
 ---
 
 # Cahier de charge
@@ -86,8 +107,6 @@ SoliQueue est une solution hybride (Web/Mobile) permettant d'automatiser la file
 ---
 
 # Méthode de travail
-
----
 
 # Scrum
 ![Maquette application](images/scrum.png)

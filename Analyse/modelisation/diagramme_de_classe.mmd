@@ -7,19 +7,30 @@ classDiagram
         +string motDePasse
     }
 
-    %% Héritage pour les rôles administratifs
+    %% Héritage corrigé
     class Administrateur {
         +gererSessions()
         +consulterStats()
     }
 
     class Formateur {
+        +string specialite
         +appelerSuivant()
         +validerPresence()
     }
 
     Utilisateur <|-- Administrateur : hérite
     Utilisateur <|-- Formateur : hérite
+
+    %% Nouvelle entité réclamée par le prof
+    class Notification {
+        +int id
+        +string titre
+        +string message
+        +datetime dateEnvoi
+        +bool estLu
+        +envoyer()
+    }
 
     class Role {
         +int id
@@ -59,14 +70,13 @@ classDiagram
         +datetime heureArrivee
     }
 
-    %% Relations
     Utilisateur "0..*" -- "1" Role : possède
     Role "1" -- "0..*" Permission : contient
-    
-    %% Un Admin ou Formateur peut gérer des sessions
     Utilisateur "1" -- "0..*" Session : gère
     
-    %% Relations liées au processus de file d'attente
+    Utilisateur "1" -- "0..*" Notification : reçoit
+    Candidat "1" -- "0..*" Notification : reçoit
+
     Session "1" -- "0..*" Candidat : est assigné à
     Candidat "1" -- "0..1" Ticket : génère
     Session "1" *-- "0..*" Ticket : contient
