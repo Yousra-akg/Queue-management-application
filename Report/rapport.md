@@ -213,25 +213,11 @@ Le diagramme de cas d’utilisation global de notre application de gestion des f
 
 # Maquettes
 
-*(À compléter)*  
+- Maquette web
+  ![maquette web](images/maquette_web.png)
+- Maquette Mobile
+  ![maquette mobile](images/maquette_mobile.png)
 
----
-
-# Charte graphique
-
-*(À compléter)*  
-
----
-
-# Réalisation
-
-*(À compléter)*  
-
----
-
-# Interfaces
-
-*(À compléter)*  
 
 ---
 
