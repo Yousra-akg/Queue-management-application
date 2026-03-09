@@ -108,7 +108,7 @@ style: |
 
 **Réalisé par :** <span class="highlight">Yousra Akajou</span>  
 **Encadré par :** <span class="highlight">M. ESSARRAJ Fouad</span>  
-**Filière :** Développement Mobile et Web
+**Filière :** Développement Mobile 
 
 ---
 
@@ -126,9 +126,7 @@ style: |
 
 ---
 ## 1. Contexte du projet
-<p>
-Dans le cadre de ma formation en développement web à SoliCode, j’ai été amené à concevoir un projet de fin de formation répondant à une problématique concrète. Lors des sessions d’entretiens de sélection, j’ai constaté que la gestion manuelle des flux de candidats entraînait souvent de la confusion et de l’attente imprévisible pour les étudiants. C’est ainsi qu’est née l’idée de SoliQueue, une application web de gestion de file d'attente en temps réel, en offrant aux candidats une visibilité claire sur leur rang et aux administrateurs un outil centralisé pour piloter les sessions et organiser les files d'attente de manière dynamique
-</p>
+<img src="images/contexte.png" class="img-methodo" alt="Design Thinking">
 
 ---
 
@@ -152,28 +150,33 @@ Dans le cadre de ma formation en développement web à SoliCode, j’ai été am
 
 ---
 
-## Méthodologie : Processus 2TUP
-
-
+## 3. Branche Fonctionnelle : Design Thinking
+### 1. EMPATHIE
+### Carte d'empathie Candidat
 
 <div class="img-container">
-  <img src="images/2TUP.PNG" class="img-methodo" alt="2TUP">
+  <img src="images/carte_empathie2.png" class="img-methodo" alt="Scrum">
+</div>
+
+
+
+---
+## Branche Fonctionnelle : Design Thinking
+### 1. EMPATHIE
+### Carte d'empathie Formateur
+
+<div class="img-container">
+  <img src="images/carte_empathie3.png" class="img-methodo" alt="Scrum">
 </div>
 
 ---
-
-## 3. Branche Fonctionnelle : Design Thinking
+## Branche Fonctionnelle : Design Thinking
 ### 1. EMPATHIE
 
+### Carte d'empathie Administrateur
+
 <div class="img-container">
-  <div class="dt-card" style="border-top-color: #f39c12;">
-    <h4>Comprendre l'utilisateur</h4>
-    <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
-      <p>- Le candidat souhaite suivre sa position en temps réel via une interface mobile pour réduire son stress et garantir un ordre de passage équitable.</p>
-      <p>-Le formateur souhaite piloter sa session avec fluidité grâce à un outil numérique lui permettant de gérer le statut des candidats et de réorganiser la file instantanément.</p>
-      <p>- L'administrateur souhaite disposer d'une vue globale avec des statistiques précises pour optimiser l'organisation des journées d'entretien.</p>
-    </blockquote>
-  </div>
+  <img src="images/carte_empathie1.png" class="img-methodo" alt="Scrum">
 </div>
 
 ---
@@ -185,55 +188,81 @@ Dans le cadre de ma formation en développement web à SoliCode, j’ai été am
   <div class="dt-card" style="border-top-color: #f39c12;">
     <h4>Cadrage du problème</h4>
     <blockquote style="font-style: italic; background: white; padding: 15px; border-radius: 8px;">
-     <p> - Comment pourrions-nous permettre aux candidats de prendre un ticket numérique et de voir leur position et temps d’attente en temps réel, pour réduire le stress et l’incertitude ?</p>
-      <p>- Comment pourrions-nous structurer l’application pour que l’administration puisse gérer facilement les sessions, réorganiser les files en cas d’absence, et suivre l’ordre des candidats ? </p>
-      <p>- Comment pourrions-nous concevoir une interface administrateur simple, claire et dynamique, permettant de gérer efficacement les tickets, notifications et statistiques ?  </p>
+     <p> Les candidats souffrent d'une attente opaque et stressante sans visibilité sur leur rang, tandis que l'administration peine à gérer les flux manuellement sur papier, ce qui rend le processus d'entretien désorganisé et inefficace.</p>
+      <p>- Comment pourrions-nous digitaliser la file d'attente pour offrir une transparence totale aux candidats et un pilotage centralisé aux organisateurs ? </p>
     </blockquote>
   </div>
 </div>
 
 ---
 
-## Branche Fonctionnelle : Design Thinking
-### 3. IDÉATION
-
+## Branche Fonctionnelle : Cas d'utilisation
+### Diagramme cas d'utilisation global: Partie Public
 <div class="img-container">
-  <div class="dt-card" style="border-top-color: #f39c12;">
-    <h4>Solutions retenues</h4>
-    <p>• <strong>Ticket numérique et suivi "Live"</strong> pour permettre aux candidats de visualiser leur rang en temps réel sur mobile.</p>
-    <p>• Gestionnaire de file interactif pour permettre aux formateurs de changer les statuts et réorganiser les priorités instantanément.</p>
-    <p>• Dashboard d'administration centralisé pour automatiser la création des sessions et l'affectation massive des candidats.</p>
-  </div>
+  <img src="images/UC_public_global.png" class="img-methodo" alt="Scrum">
 </div>
 
 ---
 
 ## Branche Fonctionnelle : Cas d'utilisation
-
-
-
+### Diagramme cas d'utilisation global: Partie Admin
+### Espace Admin
 <div class="img-container">
-  <h3>Interaction Utilisateur (UML)</h3>
-  <img src="images/use-case.png" class="img-methodo" alt="Use Case">
-</div>
-<div class="img-container">
-  <h3>Interaction Utilisateur (UML)</h3>
-  <img src="images/use-case-S1.png" class="img-methodo" alt="Use Case">
-</div>
-<div class="img-container">
-  <h3>Interaction Utilisateur (UML)</h3>
-  <img src="images/use-case-S1.png" class="img-methodo" alt="Use Case">
+  <img src="images/UC_admin_global.png" class="img-methodo" alt="Scrum">
 </div>
 
 ---
-## Branche Fonctionnelle : Maquettes (UI/UX)
+
+## Branche Fonctionnelle : Cas d'utilisation
+### Diagramme cas d'utilisation global: Partie Admin
+### Espace Formateur
+<div class="img-container">
+  <img src="images/UC_formateur_global.png" class="img-methodo" alt="Scrum">
+</div>
+
+---
+
+## Branche Fonctionnelle : Cas d'utilisation
+### Diagramme cas d'utilisation global: Mobile
+### Espace Formateur
+<div class="img-container">
+  <img src="images/UC_mobile_global.png" class="img-methodo" alt="Scrum">
+</div>
+
+---
+
+## Branche Fonctionnelle : Cas d'utilisation - Sprint 1
+<div class="img-container">
+  <img src="images/Uc_sprint1.png" class="img-methodo" alt="Scrum">
+</div>
+
+---
+
+## Branche Fonctionnelle : Cas d'utilisation - Sprint 2
+<div class="img-container">
+  <img src="images/UC_sprint2.png" class="img-methodo" alt="Scrum">
+</div>
+
+---
+## Branche Fonctionnelle : Maquette web
 
 
 
 <div class="maquette-grid">
   <div style="text-align: center;">
-    <img src="images/maquette.png" class="img-methodo" style="height: 360px; width: auto;" alt="Maquette Desktop">
+    <img src="images/maquette_web.png" class="img-methodo" style="height: 360px; width: auto;" alt="Maquette Desktop">
     <p style="font-size: 0.3rem; color: #666;">Interface Administration</p>
+  </div>
+</div>
+
+---
+
+## Branche Fonctionnelle : Maquette mobile
+
+<div class="maquette-grid">
+  <div style="text-align: center;">
+    <img src="images/maquette_mobile.png" class="img-methodo" style="height: 360px; width: auto;" alt="Maquette Desktop">
+    <p style="font-size: 0.3rem; color: #666;">Interface Mobile</p>
   </div>
 </div>
 
@@ -241,29 +270,25 @@ Dans le cadre de ma formation en développement web à SoliCode, j’ai été am
 
 ## 4. Branche Technique : Tech Stack
 <div class="sommaire-grid">
+
   <div class="dt-card" style="margin-top:0;">
-    <h4>Les technologies à utiliser</h4>
+    <h4>Backend</h4>
     <ul>
-      <li><strong>Base de données:</strong> MySQL </li>
-      <li><strong>Framework:</strong> Laravel 12</li>
-      <li><strong>Architecture:</strong> N-Tiers</li>
-      <strong>Controller:</strong> Requêtes HTTP
-      <strong>Service:</strong> Logique métier
-      <strong>Model:</strong> Base de données
-      <li><strong>Architecture:</strong> MVC</li>
-      <li><strong> Blade :</strong>Templates réutilisables (components, layouts).</li>
+      <li><strong>Framework :</strong> Laravel 12</li>
+      <li><strong>Base de données :</strong> MySQL</li>
+      <li><strong>Architecture :</strong> MVC / N-Tiers</li>
     </ul>
   </div>
+
   <div class="dt-card" style="margin-top:0; border-top-color: #27ae60;">
+    <h4>Frontend</h4>
     <ul>
-      <li><strong> AJAX :</strong> Interactions dynamiques (ex: Modales) sans rechargement de page.</li>
-      <li><strong>Alpine.js :</strong>  Librairie JavaScript pour les interactions dynamiques.</li>
-      <li><strong>Spatie :</strong> Librairie pour la gestion des permissions et rôles.</li>
-      <li><strong>Vite :</strong>   Outil de build rapide.</li>
-      <li><strong>Lucide :</strong> Librairie d'icônes.</li>
-      <li><strong>Tailwind CSS :</strong>Développement rapide, responsive.</li>
+      <li><strong>Preline</strong></li>
+      <li><strong>Alpine.js</strong></li>
+      <li><strong>AJAX</strong></li>
     </ul>
   </div>
+
 </div>
 
 ---
@@ -272,43 +297,14 @@ Dans le cadre de ma formation en développement web à SoliCode, j’ai été am
 ## 5. Conception : Diagramme de classe
 
 
- <h3>Modélisation des données (MLD)</h3>
+ <h3>Modélisation des données</h3>
 <div class="img-container">
  
-  <img src="images/diagramme-class.png" style="width: 100%;" alt="Diagramme de classe">
+  <img src="images/diagramme_classe.png" style="width: 100%;" alt="Diagramme de classe">
 </div>
 
 ---
 
-## 5. Démonstration : Environnement & Outils
-
-<div class="sommaire-grid">
-  <div class="dt-card" style="margin-top:0;">
-    <h4>Environnement de Développement</h4>
-    <ul>
-      <li><strong>IDE :</strong> VS Code & Antigravity </li>
-      <li><strong>Monitoring DB :</strong> Workbench Sql</li>
-    </ul>
-  </div>
-  <div class="dt-card" style="margin-top:0; border-top-color: #27ae60;">
-    <h4>Gestion & Déploiement</h4>
-    <ul>
-      <li><strong>Modelisation UML :</strong>Mermaid/PlantUML</li>
-      <li><strong>Gestion de version :</strong> Git (GitHub)</li>
-      <li><strong>Navigateur :</strong> Chrome DevTools</li>
-    </ul>
-  </div>
-</div>
-
-<br>
-
----
 ## 6. Conclusion
-
-- **Objectifs atteints** : Application QCM fonctionnelle et responsive.
-- **Compétences** : Maîtrise du cycle Agile et de la stack Full-stack.
-- **Perspectives** : Intégration d'un module d'IA pour l'analyse prédictive.
-
-<br>
 
 ### Merci pour votre attention !
