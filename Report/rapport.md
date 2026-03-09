@@ -43,18 +43,6 @@
 
 ---
 
-# Liste des figures
-
-*(À compléter)*  
-
----
-
-# Remerciement
-
-*(À compléter)*  
-
----
-
 # Introduction
 
 Dans le cadre de la digitalisation des processus administratifs à SoliCode, la gestion des entretiens de recrutement représente un défi logistique majeur. Actuellement, l'absence de système automatisé pour gérer l'ordre de passage des candidats crée une attente opaque, génératrice de stress pour les étudiants et de désorganisation pour l'administration. Le projet SoliQueue a été conçu pour répondre à ce besoin en transformant une file d'attente physique invisible en une expérience numérique transparente, permettant un suivi en temps réel pour toutes les parties prenantes. 
