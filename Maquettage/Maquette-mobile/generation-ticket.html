@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr"
+    class="bg-slate-900 border-x border-slate-200 shadow-2xl h-[100dvh] mx-auto w-full max-w-[430px] overflow-hidden font-sans">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no text-size-adjust=none">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SoliCode Queue - Ticket</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -21,6 +22,15 @@
         }
     </script>
     <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         @keyframes fade-in-up {
             from {
                 transform: translateY(20px);
@@ -39,20 +49,20 @@
     </style>
 </head>
 
-<body class="bg-[#f8fafc] h-full font-sans antialiased overflow-hidden select-none">
+<body class="bg-[#f8fafc] h-[100dvh] flex flex-col font-sans relative overflow-hidden select-none">
 
     <!-- Top Bar -->
     <header
-        class="fixed top-0 inset-x-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 z-50">
+        class="sticky top-0 w-full h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 z-50">
         <a class="text-xl font-black text-blue-600 tracking-tighter" href="#">SoliCode</a>
         <div
             class="size-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100 italic">
             YA</div>
     </header>
 
-    <main class="h-full pt-20 pb-24 px-6 flex flex-col justify-center animate-fade-in-up">
+    <main class="flex-1 overflow-y-auto hide-scrollbar pb-24 px-6 flex flex-col justify-center animate-fade-in-up">
         <!-- Success Header -->
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-center text-center mt-8">
             <div class="relative mb-6">
                 <div class="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-10 animate-pulse"></div>
                 <div
@@ -96,7 +106,7 @@
     </main>
 
     <!-- Fixed Bottom CTA -->
-    <footer class="fixed bottom-0 inset-x-0 p-6 bg-white border-t border-gray-100 z-50">
+    <footer class="fixed bottom-0 w-full max-w-[430px] p-6 bg-white border-t border-gray-100 z-50">
         <button type="button" onclick="window.location.href='portail-interactif.html'"
             class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-3 text-lg font-black rounded-2xl bg-blue-600 text-white hover:bg-blue-700 active:scale-95 transition-all duration-300 shadow-xl shadow-blue-500/25 group">
             Obtenir ma place
@@ -111,8 +121,8 @@
                 <path d="M13 11v2"></path>
             </svg>
         </button>
-        <p class="mt-4 text-center text-[10px] text-gray-400 font-medium px-8">
-            En cliquant, vous confirmez votre présence pour l'entretien physique.
+        <p class="mt-4 text-center text-[10px] text-gray-400 font-medium px-8 uppercase tracking-widest">
+            Validation présence requise
         </p>
     </footer>
 

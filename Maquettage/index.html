@@ -17,10 +17,10 @@
                     colors: {
                         primary: {
                             50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                            100: '#e0e7ff',
+                            500: '#1A73E8',
+                            600: '#1557B0',
+                            700: '#1C54A3',
                             900: '#0a2351'
                         },
                     },
@@ -84,6 +84,20 @@
 
         <!-- Navigation -->
         <nav id="sidebar-nav" class="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
+            <!-- Identity & Design -->
+            <div>
+                <p
+                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-2 border-l-2 border-primary-500">
+                    🎨 Identité & Design</p>
+                <div class="space-y-1">
+                    <button onclick="loadComponent('charte-graphique/index.html', 'Design: Charte Graphique', this)"
+                        class="nav-btn"><span>✨</span> Charte Graphique</button>
+                    <button
+                        onclick="loadComponent('Maquette-mobile/admin-dashboard.html', 'Admin: Mobile Mockup', this)"
+                        class="nav-btn"><span>📱</span> Mobile Admin (New)</button>
+                </div>
+            </div>
+
             <!-- Mockups -->
             <div>
                 <p
