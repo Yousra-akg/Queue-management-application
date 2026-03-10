@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Ticket;
 
 class TicketSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class TicketSeeder extends Seeder
         $header = fgetcsv($file);
         while (($row = fgetcsv($file)) !== FALSE) {
             $data = array_combine($header, $row);
-            \App\Models\Ticket::create($data);
+            Ticket::create($data);
         }
         fclose($file);
     }

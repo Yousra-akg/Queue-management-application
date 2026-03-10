@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class UserSeeder extends Seeder
     $header = fgetcsv($file);
     while (($row = fgetcsv($file)) !== FALSE) {
         $data = array_combine($header, $row);
-        \App\Models\User::create($data);
+        User::create($data);
     }
     fclose($file);
     }

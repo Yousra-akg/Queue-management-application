@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Candidat;
 
 class CandidatSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class CandidatSeeder extends Seeder
         $header = fgetcsv($file);
         while (($row = fgetcsv($file)) !== FALSE) {
             $data = array_combine($header, $row);
-            \App\Models\Candidat::create($data);
+            Candidat::create($data);
         }
         fclose($file);
     }

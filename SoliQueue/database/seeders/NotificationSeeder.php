@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Notification;
 
 class NotificationSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class NotificationSeeder extends Seeder
         $header = fgetcsv($file);
         while (($row = fgetcsv($file)) !== FALSE) {
             $data = array_combine($header, $row);
-            \App\Models\Notification::create($data);
+            Notification::create($data);
         }
         fclose($file);
     }
