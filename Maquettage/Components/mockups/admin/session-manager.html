@@ -96,17 +96,21 @@
                             <input type="checkbox" id="master-checkbox"
                                 class="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                             <div>
-                                <h2 class="text-lg font-black text-slate-900 uppercase">Candidats Admis (QCM)</h2>
-                                <p class="text-xs text-slate-400 font-bold">Liste des réussites non-assignées</p>
+                                <h2 class="text-lg font-black text-slate-900 uppercase">Ajouter Candidat</h2>
+                                <p class="text-xs text-slate-400 font-bold">Glissez les candidats vers une session</p>
                             </div>
                         </div>
-                        <div class="flex gap-2">
-                            <select
-                                class="py-2 px-3 block border-slate-200 rounded-xl text-xs font-bold text-slate-500 focus:border-blue-500 focus:ring-blue-500 bg-slate-50">
-                                <option>Filtrer par date de sessions</option>
-                                <option>01 Aout 2026</option>
-                                <option>02 Aout 2026</option>
-                            </select>
+                        <div class="flex gap-2 items-center">
+                            <button id="btn-add-candidat" onclick="openModal('modal-add-candidat')"
+                                class="size-9 flex items-center justify-center rounded-xl bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex-shrink-0"
+                                title="Ajouter un candidat">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14" />
+                                    <path d="M12 5v14" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
@@ -774,6 +778,74 @@
         </div>
     </div>
 
+    <!-- Add Candidate Modal -->
+    <div id="modal-add-candidat"
+        class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div
+            class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md mx-4 flex flex-col animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center py-6 px-8 border-b border-slate-100">
+                <div>
+                    <h3 class="font-black text-slate-900 uppercase tracking-tighter">Ajouter un Candidat</h3>
+                    <p class="text-xs text-slate-400 font-bold mt-0.5">Le candidat sera ajouté à la liste</p>
+                </div>
+                <button type="button" onclick="closeModal('modal-add-candidat')"
+                    class="flex justify-center items-center size-8 text-sm font-semibold rounded-xl border border-transparent text-slate-400 hover:bg-slate-100">
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-8">
+                <form id="add-candidat-form" class="space-y-5">
+                    <!-- Prénom -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Prénom</label>
+                        <input type="text" id="new-cand-prenom"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm"
+                            placeholder="ex: Lila">
+                    </div>
+                    <!-- Nom -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Nom</label>
+                        <input type="text" id="new-cand-nom"
+                            class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm"
+                            placeholder="ex: Mansouri">
+                    </div>
+                    <!-- Score QCM -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-slate-500 uppercase">Score QCM</label>
+                        <div class="relative">
+                            <input type="number" id="new-cand-score" min="0" max="100"
+                                class="py-3 px-4 block w-full border-slate-300 border-2 rounded-2xl text-sm focus:border-primary focus:ring-primary shadow-sm"
+                                placeholder="ex: 87">
+                            <span
+                                class="absolute inset-y-0 end-4 flex items-center text-xs font-bold text-slate-400">/100</span>
+                        </div>
+                    </div>
+                    <p id="add-cand-error" class="hidden text-xs font-bold text-danger">Veuillez remplir tous les
+                        champs.</p>
+                </form>
+            </div>
+            <div class="flex justify-end items-center gap-x-2 py-6 px-8 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modal-add-candidat')"
+                    class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-bold rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-sm transition-all">Annuler</button>
+                <button type="button" id="confirm-add-cand-btn"
+                    class="py-3 px-6 inline-flex items-center gap-x-2 text-xs font-black rounded-2xl border border-transparent bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all uppercase">
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                    </svg>
+                    Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ── Modal helpers (no Preline needed) ──────────────────────────────
         function openModal(id) {
@@ -785,12 +857,59 @@
             if (el) el.classList.add('hidden');
         }
         // Close on backdrop click
-        ['modal-edit-session', 'modal-delete-confirm'].forEach(id => {
+        ['modal-edit-session', 'modal-delete-confirm', 'modal-add-candidat'].forEach(id => {
             document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('click', (e) => {
                     if (e.target === el) closeModal(id);
                 });
+            });
+        });
+
+        // ── Add Candidate Logic ────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            let candCounter = 100;
+
+            document.getElementById('confirm-add-cand-btn').addEventListener('click', () => {
+                const prenom = document.getElementById('new-cand-prenom').value.trim();
+                const nom = document.getElementById('new-cand-nom').value.trim();
+                const score = document.getElementById('new-cand-score').value.trim();
+                const error = document.getElementById('add-cand-error');
+
+                if (!prenom || !nom || !score) {
+                    error.classList.remove('hidden');
+                    return;
+                }
+                error.classList.add('hidden');
+
+                const fullName = `${prenom} ${nom}`;
+                const initials = (prenom[0] + nom[0]).toUpperCase();
+                const id = `cand-custom-${++candCounter}`;
+
+                const el = document.createElement('div');
+                el.draggable = true;
+                el.id = id;
+                el.className = 'candidate-item flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:border-primary transition-all cursor-move select-none animate-in fade-in slide-in-from-bottom-2 duration-300';
+                el.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">${initials}</div>
+                        <div>
+                            <p class="text-sm font-black text-slate-900 uppercase">${fullName}</p>
+                            <p class="text-[10px] font-bold text-primary uppercase">Score: ${score}/100</p>
+                        </div>
+                    </div>
+                    <button class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 group-hover:text-primary group-hover:border-primary transition-all">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                `;
+
+                document.getElementById('candidate-pool').appendChild(el);
+
+                // Reset form
+                document.getElementById('new-cand-prenom').value = '';
+                document.getElementById('new-cand-nom').value = '';
+                document.getElementById('new-cand-score').value = '';
+                closeModal('modal-add-candidat');
             });
         });
         // ──────────────────────────────────────────────────────────────────
