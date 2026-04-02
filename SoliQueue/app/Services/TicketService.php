@@ -22,6 +22,16 @@ class TicketService extends BaseService
         return DB::transaction(function () use ($candidatId) {
             $candidat = Candidat::findOrFail($candidatId);
 
+            // Vérifier si le candidat a déjà un ticket pour cette session
+            $existingTicket = $this->model
+                ->where('candidat_id', $candidatId)
+                ->where('session_id', $candidat->session_id)
+                ->first();
+
+            if ($existingTicket) {
+                return $existingTicket;
+            }
+
             $maxOrder = $this->model
                 ->where('session_id', $candidat->session_id)
                 ->max('numeroOrdre') ?? 0;
