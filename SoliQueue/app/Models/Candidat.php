@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Candidat extends Model {
-    protected $fillable = ['session_id', 'nom', 'prenom', 'scoreQCM'];
+    protected $fillable = ['session_id', 'cin', 'nom', 'prenom', 'scoreQCM', 'is_present'];
 
     public function session() {
         return $this->belongsTo(Session::class);

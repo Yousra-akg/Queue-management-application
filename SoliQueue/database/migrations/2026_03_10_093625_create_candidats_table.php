@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('candidats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('session_id')->constrained()->onDelete('cascade');
+            $table->string('cin')->unique();
             $table->string('nom');
             $table->string('prenom');
             $table->float('scoreQCM', 10, 2);
+            $table->boolean('is_present')->default(false);
             $table->timestamps();
         });
     }

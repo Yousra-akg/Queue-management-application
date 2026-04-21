@@ -61,6 +61,7 @@ class TicketServiceTest extends TestCase
         $candidat = Candidat::create([
             'nom' => 'Nouveau',
             'prenom' => 'Candidat',
+            'cin' => 'TEST999',
             'scoreQCM' => 12.5,
             'session_id' => 1
         ]);
