@@ -42,6 +42,7 @@ class CandidatServiceTest extends TestCase
         Candidat::create([
             'nom' => 'Sans',
             'prenom' => 'Ticket',
+            'cin' => 'TEST000',
             'scoreQCM' => 14,
             'session_id' => 1
         ]);
