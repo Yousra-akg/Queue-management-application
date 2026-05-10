@@ -52,7 +52,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
-                    <template x-for="candidat in filteredCandidats" :key="candidat.id">
+                    <template x-for="candidat in paginatedCandidats" :key="candidat.id">
                         <tr class="hover:bg-slate-50/50 transition-colors group">
                             <td class="ps-8 py-5">
                                 <div class="flex items-center gap-4">
@@ -99,6 +99,22 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="py-4 px-6 border-t border-slate-100 flex items-center justify-center gap-2" x-show="totalPages > 1">
+            <button @click="prevPage()" :disabled="currentPage === 1" class="p-2 text-slate-400 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <template x-for="page in pages" :key="page">
+                <button @click="goToPage(page)" 
+                    :class="{'bg-blue-600 text-white shadow-md': currentPage === page, 'text-slate-600 hover:bg-slate-50': currentPage !== page}"
+                    class="size-8 flex items-center justify-center rounded-lg text-sm font-bold transition-all" x-text="page">
+                </button>
+            </template>
+            <button @click="nextPage()" :disabled="currentPage === totalPages" class="p-2 text-slate-400 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6 6-6"/></svg>
+            </button>
         </div>
     </div>
 
@@ -201,6 +217,26 @@
                 });
             },
 
+            // Pagination
+            currentPage: 1,
+            itemsPerPage: 10,
+            get paginatedCandidats() {
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                return this.filteredCandidats.slice(start, end);
+            },
+            get totalPages() {
+                return Math.ceil(this.filteredCandidats.length / this.itemsPerPage) || 1;
+            },
+            get pages() {
+                let pages = [];
+                for(let i = 1; i <= this.totalPages; i++) pages.push(i);
+                return pages;
+            },
+            nextPage() { if(this.currentPage < this.totalPages) this.currentPage++; },
+            prevPage() { if(this.currentPage > 1) this.currentPage--; },
+            goToPage(p) { this.currentPage = p; },
+
             openAddModal() {
                 this.candidatForm = { id: null, prenom: '', nom: '', cin: '', scoreQCM: '' };
                 this.showAddCandidateModal = true;
@@ -230,7 +266,7 @@
             },
 
             init() {
-                // Initialize component
+                this.$watch('searchQuery', () => this.currentPage = 1);
             }
         }
     }
