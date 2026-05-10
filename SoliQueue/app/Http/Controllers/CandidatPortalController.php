@@ -51,26 +51,74 @@ class CandidatPortalController extends Controller
         $session = $candidat->session;
         $ticket = $candidat->ticket;
 
-        return view('candidat.ticket-details', compact('candidat', 'session', 'ticket'));
+        $queue = [];
+        if ($candidat->is_present) {
+            $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+        }
+
+        return view('candidat.ticket-details', compact('candidat', 'session', 'ticket', 'queue'));
     }
 
     /**
-     * Validation de la présence physique.
+     * Validation de la présence physique avec code secret.
      */
-    public function markPresence()
+    public function markPresence(Request $request)
     {
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
         $candidat = $this->candidatService->getAuthCandidatWithTicket();
 
         if (!$candidat) {
             return response()->json(['success' => false, 'message' => 'Non authentifié'], 401);
         }
 
+        // Validation du code secret de la session
+        $inputCode = str_replace(' ', '', $request->code);
+        if ($candidat->session->codePresence !== $inputCode) {
+            return response()->json(['success' => false, 'message' => 'Code de présence invalide.'], 422);
+        }
+
+        // Marquer la présence
         $this->candidatService->markPresence($candidat->id);
+        
+        // Mettre à jour le statut du ticket à "en attente" ou "en cours" ? 
+        // L'énoncé suggère que la présence débloque l'affichage de la file.
+        // On peut aussi passer le ticket à "en cours" si nécessaire.
+        if ($candidat->ticket && $candidat->ticket->statut === 'en attente') {
+            $candidat->ticket->update(['statut' => 'en cours']);
+        }
+
+        // Récupérer la file d'attente en temps réel
+        $queue = $this->ticketService->getLiveQueue($candidat->session_id);
 
         return response()->json([
             'success' => true,
             'message' => 'Présence confirmée !',
-            'time' => now()->format('H:i')
+            'time' => now()->format('H:i'),
+            'queue' => $queue,
+            'candidat_id' => $candidat->id
+        ]);
+    }
+    /**
+     * Endpoint pour le polling de l'état de la file d'attente (live update).
+     */
+    public function getQueueStatus()
+    {
+        $candidat = $this->candidatService->getAuthCandidatWithTicket();
+        
+        if (!$candidat || !$candidat->is_present) {
+            return response()->json(['success' => false], 401);
+        }
+
+        $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+        
+        return response()->json([
+            'success' => true,
+            'queue' => $queue,
+            'my_ticket_status' => $candidat->ticket->statut ?? 'en attente',
+            'my_position' => $queue->where('candidat_id', $candidat->id)->keys()->first() + 1
         ]);
     }
 }

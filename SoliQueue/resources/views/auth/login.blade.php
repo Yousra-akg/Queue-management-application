@@ -1,54 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="w-full max-w-md">
-    <!-- Login Card -->
-    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden relative">
-        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
-        
-        <div class="p-8 sm:p-12">
-            <!-- Header -->
-            <div class="text-center mb-10">
-                <div class="inline-flex size-16 bg-blue-50 rounded-2xl items-center justify-center mb-6 text-blue-600">
-                    <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                </div>
-                <h1 class="text-3xl font-black text-slate-800 tracking-tight">Bienvenue</h1>
-                <p class="text-slate-400 font-medium mt-2">Prêt pour votre entretien SoliCode ?</p>
-            </div>
-
-            @if(session('error'))
-            <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-bold flex items-center gap-3">
-                <svg class="size-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                {{ session('error') }}
-            </div>
-            @endif
-
-            <!-- Form -->
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
-                @csrf
-                <div>
-                    <label for="cin" class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Numéro de CIN</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-blue-600 transition-colors">
-                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm5 3a3 3 0 01-3 3H9a3 3 0 01-3-3v-1h10v1z"></path></svg>
-                        </div>
-                        <input type="text" name="cin" id="cin" required autofocus
-                            class="block w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-lg font-bold text-slate-800 placeholder-slate-300 focus:bg-white focus:border-blue-600 focus:outline-none transition-all"
-                            placeholder="Ex: AB123456" value="{{ old('cin') }}">
-                    </div>
-                </div>
-
-                <button type="submit" 
-                    class="w-full py-4 bg-blue-600 text-white rounded-2xl text-lg font-black shadow-xl shadow-blue-600/30 hover:bg-blue-700 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-3">
-                    Se connecter
-                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                </button>
-            </form>
+<div class="w-full max-w-md mx-auto animate-slide-up">
+  <div class="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+    <div class="p-8 sm:p-12">
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center mb-6">
+          <img src="{{ asset('img/logo.png') }}" alt="SoliCode" class="h-16 w-auto">
         </div>
+        <h1 class="block text-3xl font-bold text-gray-800 dark:text-white">Connexion Candidat</h1>
+        <p class="mt-3 text-sm text-gray-600 dark:text-neutral-400">
+          Veuillez saisir votre numéro de CIN pour accéder à votre espace.
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <form action="{{ route('login') }}" method="POST">
+          @csrf
+          <div class="grid gap-y-6">
+            <!-- Form Group -->
+            <div>
+              <label for="cin" class="block text-sm font-semibold mb-2 dark:text-white">Numéro de CIN</label>
+              <div class="relative">
+                <input type="text" id="cin" name="cin" class="py-3 px-4 block w-full border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 @error('cin') border-red-500 @enderror" required aria-describedby="cin-error" placeholder="Ex: AB123456" value="{{ old('cin') }}" autofocus>
+                @error('cin')
+                <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                  <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                  </svg>
+                </div>
+                @enderror
+              </div>
+              @error('cin')
+                <p class="text-xs text-red-600 mt-2" id="cin-error">{{ $message }}</p>
+              @enderror
+            </div>
+            <!-- End Form Group -->
+
+            <div class="flex items-center">
+              <div class="flex">
+                <input id="remember" name="remember" type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" {{ old('remember') ? 'checked' : '' }}>
+              </div>
+              <div class="ms-3">
+                <label for="remember" class="text-sm dark:text-white">Se souvenir de moi</label>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none transition-all">
+              Accéder à mon espace
+              <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    
-    <p class="mt-8 text-center text-slate-400 text-sm font-medium">
-        Accès réservé aux candidats sélectionnés.
-    </p>
+  </div>
+  
+  <p class="mt-6 text-center text-sm text-gray-500 dark:text-neutral-500">
+    Besoin d'aide ? Contactez l'administration de SoliCode.
+  </p>
 </div>
 @endsection

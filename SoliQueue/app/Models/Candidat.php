@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Candidat extends Model {
+class Candidat extends Authenticatable {
+    use HasFactory, Notifiable;
+
     protected $fillable = ['session_id', 'cin', 'nom', 'prenom', 'scoreQCM', 'is_present'];
+
+    protected $casts = [
+        'is_present' => 'boolean',
+    ];
+
 
     public function session() {
         return $this->belongsTo(Session::class);

@@ -47,7 +47,7 @@ class CandidatService extends BaseService
      */
     public function getAuthCandidatWithTicket(): ?Candidat
     {
-        $candidatId = LaravelSession::get('candidat_id');
+        $candidatId = \Illuminate\Support\Facades\Auth::id();
 
         if (!$candidatId) {
             return null;

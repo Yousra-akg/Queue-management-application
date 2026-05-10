@@ -13,9 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'candidat.auth' => \App\Http\Middleware\CandidatAuthMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        $middleware->redirectGuestsTo('/');
+        $middleware->redirectUsersTo('/bienvenue');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+            return redirect('/');
+        });
     })->create();
