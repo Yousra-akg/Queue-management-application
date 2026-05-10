@@ -56,8 +56,13 @@
                         <tr class="hover:bg-slate-50/50 transition-colors group">
                             <td class="ps-8 py-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="size-10 rounded-xl bg-blue-50 text-[#1A73E8] flex items-center justify-center font-black border border-blue-100 group-hover:scale-110 transition-transform" 
-                                         x-text="candidat.prenom[0] + candidat.nom[0]"></div>
+                                    <template x-if="candidat.photo">
+                                        <img :src="'/storage/' + candidat.photo" alt="Photo" class="size-10 rounded-xl object-cover border border-slate-200 group-hover:scale-110 transition-transform shadow-sm">
+                                    </template>
+                                    <template x-if="!candidat.photo">
+                                        <div class="size-10 rounded-xl bg-blue-50 text-[#1A73E8] flex items-center justify-center font-black border border-blue-100 group-hover:scale-110 transition-transform shadow-sm" 
+                                             x-text="(candidat.prenom[0] || '') + (candidat.nom[0] || '')"></div>
+                                    </template>
                                     <div>
                                         <p class="text-sm font-medium text-slate-900" x-text="candidat.prenom + ' ' + candidat.nom"></p>
                                     </div>
@@ -131,7 +136,7 @@
                 <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mt-2" x-text="candidatForm.id ? 'Mise à jour des informations' : 'Nouveau candidat QCM'"></p>
             </div>
 
-            <form :action="candidatForm.id ? '{{ url('admin/candidats') }}/' + candidatForm.id : '{{ route('admin.candidates.store') }}'" method="POST" class="flex flex-col flex-1 overflow-hidden">
+            <form :action="candidatForm.id ? '{{ url('admin/candidats') }}/' + candidatForm.id : '{{ route('admin.candidates.store') }}'" method="POST" class="flex flex-col flex-1 overflow-hidden" enctype="multipart/form-data">
                 @csrf
                 <template x-if="candidatForm.id">
                     <input type="hidden" name="_method" value="PUT">
@@ -157,10 +162,17 @@
                             class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 uppercase transition-colors placeholder:text-gray-400 shadow-sm">
                     </div>
                     
-                    <div>
-                        <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Score QCM (/100)</label>
-                        <input type="number" name="scoreQCM" x-model="candidatForm.scoreQCM" min="0" max="100" step="0.1" required placeholder="85"
-                            class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Score QCM (/100)</label>
+                            <input type="number" name="scoreQCM" x-model="candidatForm.scoreQCM" min="0" max="100" step="0.1" required placeholder="85"
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Photo (Optionnel)</label>
+                            <input type="file" name="photo" accept="image/png, image/jpeg, image/jpg"
+                                class="w-full py-2.5 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        </div>
                     </div>
                 </div>
 

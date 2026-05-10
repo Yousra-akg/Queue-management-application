@@ -8,6 +8,7 @@ use App\Models\Session;
 use App\Models\Candidat;
 use App\Services\TicketService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SessionManagementController extends Controller
 {
@@ -156,7 +157,12 @@ class SessionManagementController extends Controller
             'prenom' => 'required|string|max:255',
             'cin' => 'required|string|max:20|unique:candidats,cin',
             'scoreQCM' => 'required|numeric|min:0|max:100',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('candidats', 'public');
+        }
 
         Candidat::create($validated);
 
@@ -170,7 +176,15 @@ class SessionManagementController extends Controller
             'prenom' => 'required|string|max:255',
             'cin' => 'required|string|max:50|unique:candidats,cin,' . $candidat->id,
             'scoreQCM' => 'required|numeric|min:0|max:100',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            if ($candidat->photo) {
+                Storage::disk('public')->delete($candidat->photo);
+            }
+            $validated['photo'] = $request->file('photo')->store('candidats', 'public');
+        }
 
         $candidat->update($validated);
 
@@ -179,6 +193,9 @@ class SessionManagementController extends Controller
 
     public function destroyCandidate(Candidat $candidat)
     {
+        if ($candidat->photo) {
+            Storage::disk('public')->delete($candidat->photo);
+        }
         $candidat->delete();
         return redirect()->back()->with('success', 'Candidat supprimé avec succès.');
     }
