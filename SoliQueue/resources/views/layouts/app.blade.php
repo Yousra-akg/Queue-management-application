@@ -43,9 +43,13 @@
                 <div class="flex flex-row items-center gap-4 mt-4 sm:justify-end sm:mt-0 sm:ps-5">
                     <div class="flex items-center gap-x-3">
                         <span class="text-sm font-semibold text-gray-500 capitalize">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</span>
-                        <div class="inline-flex items-center justify-center size-[38px] rounded-full bg-blue-50 text-blue-600 font-bold uppercase ring-2 ring-white">
-                            {{ substr(Auth::user()->prenom, 0, 1) }}{{ substr(Auth::user()->nom, 0, 1) }}
-                        </div>
+                        @if(Auth::user()->photo)
+                            <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Avatar" class="size-[38px] rounded-full object-cover ring-2 ring-white shadow-sm">
+                        @else
+                            <div class="inline-flex items-center justify-center size-[38px] rounded-full bg-blue-50 text-blue-600 font-bold uppercase ring-2 ring-white">
+                                {{ substr(Auth::user()->prenom, 0, 1) }}{{ substr(Auth::user()->nom, 0, 1) }}
+                            </div>
+                        @endif
                     </div>
                     
                     <div class="pl-3 border-l border-gray-200">
