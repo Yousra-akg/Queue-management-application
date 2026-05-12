@@ -15,7 +15,8 @@ class EtudiantApiController extends Controller
     public function getRandomStudent(): JsonResponse
     {
         // Forcer l'ordre aléatoire (compatible avec SQLite)
-        $etudiant = Candidat::orderByRaw('RANDOM()')->first();
+        $etudiant = Candidat::inRandomOrder()->first();
+
 
         if (!$etudiant) {
             return response()->json([
