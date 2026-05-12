@@ -16,14 +16,10 @@ class MobileCandidateController extends Controller
 
     public function showGenerationTicket()
     {
-        try {
-            $response = $this->apiService->getRandomStudent();
-            $etudiant = $response['data'];
-            return view('mobile.generation-ticket', compact('etudiant'));
-        } catch (\Exception $e) {
-            return response("Erreur API : " . $e->getMessage(), 500);
-        }
+        $etudiant = ['id' => 1, 'nom' => 'TEST', 'prenom' => 'USER'];
+        return view('mobile.generation-ticket', compact('etudiant'));
     }
+
 
     public function generateTicket(Request $request)
     {

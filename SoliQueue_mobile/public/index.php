@@ -2,8 +2,12 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 define('LARAVEL_START', microtime(true));
+
+// Log the request to Android Logcat (via PHP-Native)
+error_log("PHP-Native: Request reached index.php");
 
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {

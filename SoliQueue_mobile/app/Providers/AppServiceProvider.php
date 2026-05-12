@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        error_log("PHP-Native: AppServiceProvider booting...");
     }
+
 }
