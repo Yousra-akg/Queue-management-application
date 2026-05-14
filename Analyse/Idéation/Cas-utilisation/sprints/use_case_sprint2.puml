@@ -22,7 +22,7 @@ package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
     ' ========================
     ' Améliorations Candidat
     ' ========================
-    usecase "Recevoir notifications visuelles prioritaires" as UC1
+    usecase "Recevoir notifications visuelle lors d'un appel" as UC1
     
     C -- UC1
 
@@ -38,11 +38,12 @@ package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
     ' ========================
     ' Améliorations Administrateur
     ' ========================
-    usecase "Suivi de l'activité en temps réel" as UC5
-    usecase "Gérer les paramètres de sécurité" as UC6
+    usecase "Importer fichier Excel des candidats" as UC5
+    usecase "Exporter fichier Excel des candidats" as UC6
 
     Admin -- UC5
     Admin -- UC6
+    
 
     usecase "S'authentifier" as Auth
 
