@@ -5,8 +5,11 @@
 * **Titre du projet :** Projet Final 'SoliQueue' (Développement Mobile + Web)
 * **Date :** Avril 2026
 * **Statut :** 🟡 En cours
+
 ---
+
 ## 📝 Description
+
 Ce README contient la planification complète et corrigée du projet, basée sur toutes les clarifications apportées.
 
 ---
@@ -40,7 +43,7 @@ Ce README contient la planification complète et corrigée du projet, basée sur
 
 ### 🔹 Sprint 2
 
-*  Fonctions avancées
+* ⚙️ Fonctions avancées
   * Améliorations Web
   * Autres fonctionnalités
 
@@ -48,12 +51,13 @@ Ce README contient la planification complète et corrigée du projet, basée sur
 
 ## 📋 Livrables principaux / Phases
 
-*  Déploiement + Installation
-*  Veille technologique
-*  Réseau (Infrastructure / Networking)
+* 🚀 Déploiement + Installation
+* 🔍 Veille technologique
+* 🌐 Réseau (Infrastructure / Networking)
 
 ## Notes 
 
 - Les semaines de congés (W2 et W5) sont des périodes non travaillées pour toute l'équipe.
 - Le Sprint 1 est divisé en deux semaines non consécutives en raison des congés W2.
 - Le Sprint 1 Mobile est déjà  terminé et validé.
+---
