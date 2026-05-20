@@ -24,17 +24,22 @@ actor "Mobile" as Mob
 usecase "Tableau de bord global" as UC1
 usecase "Gérer les sessions" as UC2
 usecase "Affecter les candidats (Drag & Drop)" as UC3
-usecase "Gérer les paramètres de sécurité" as UC4
-usecase "Consulter les statistiques" as UC5
+usecase "Gérer les candidats" as UC4
+usecase "Gérer les formateurs" as UC5
+usecase "Consulter les statistiques" as UC6
+usecase "Importer/Exporter les candidats" as UC7
+usecase "Exporter les sessions" as UC8
+
+
 
 '=====================
 ' Formateur Use Cases (Web)
 '=====================
-usecase "Rejoindre une session d'entretien" as UC7
-usecase "Appeler le candidat suivant" as UC8
-usecase "Mettre à jour statut (Présent/Absent/Terminé)" as UC9
-usecase "Consulter la file d'attente active" as UC10
-usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC11
+usecase "Rejoindre une session d'entretien" as UC9
+usecase "Appeler le candidat suivant" as UC10
+usecase "Mettre à jour statut (Présent/Absent/Terminé)" as UC11
+usecase "Consulter la file d'attente active" as UC12
+usecase "Déplacer ou prioriser certains candidats si nécessaire." as UC13
 
 '=====================
 ' Mobile API (Candidat)
@@ -54,15 +59,18 @@ Admin -- UC2
 Admin -- UC3
 Admin -- UC4
 Admin -- UC5
+Admin -- UC6
+Admin -- UC7
+Admin -- UC8
 
 '=====================
 ' Relations Formateur
 '=====================
-Formateur -- UC7
-Formateur -- UC8
 Formateur -- UC9
 Formateur -- UC10
 Formateur -- UC11
+Formateur -- UC12
+Formateur -- UC13
 
 '=====================
 ' Relations Mobile
@@ -78,11 +86,15 @@ UC2 ..> Auth : <<include>>
 UC3 ..> Auth : <<include>>
 UC4 ..> Auth : <<include>>
 UC5 ..> Auth : <<include>>
+UC6 ..> Auth : <<include>>
+
 
 UC7 ..> Auth : <<include>>
 UC8 ..> Auth : <<include>>
 UC9 ..> Auth : <<include>>
 UC10 ..> Auth : <<include>>
 UC11 ..> Auth : <<include>>
+UC12 ..> Auth : <<include>>
+UC13 ..> Auth : <<include>>
 
 @enduml
