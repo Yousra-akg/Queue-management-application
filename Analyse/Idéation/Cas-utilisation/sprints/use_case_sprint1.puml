@@ -73,6 +73,12 @@ Mob -- API
 ' =========================
 
 usecase "S'authentifier" as Auth
+usecase "Accéder via CIN" as Auth2
+
+UC1 ..> Auth2 : <<include>>
+UC2 ..> Auth2 : <<include>>
+UC3 ..> Auth2 : <<include>>
+UC4 ..> Auth2 : <<include>>
 
 UC7 ..> Auth : <<include>>
 UC8 ..> Auth : <<include>>
