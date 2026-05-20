@@ -22,7 +22,8 @@ actor "Mobile" as Mob
 usecase "Obtenir place dans la file (Ticket)" as UC1
 usecase "Consulter position et timer en temps réel" as UC2
 usecase "Valider présence physique (Code Secret)" as UC4
-usecase "Suivre l'état de la file active" as UC16
+usecase "Suivre l'état de la session active" as UC16
+usecase "Recevoir notification lors de l'appel de son numéro" as UC17
 
 '=====================
 ' Mobile API
@@ -34,7 +35,7 @@ usecase "Consommer API (Données Temps Réel)" as API
 ' Authentification / Accès
 '=====================
 
-usecase "Accéder via Identifiant QCM" as Auth
+usecase "Accéder via CIN" as Auth
 
 '=====================
 ' Relations Candidat
@@ -44,6 +45,7 @@ C -- UC1
 C -- UC2
 C -- UC4
 C -- UC16
+C -- UC17
 
 '=====================
 ' Relations Mobile
@@ -59,5 +61,6 @@ UC1 ..> Auth : <<include>>
 UC2 ..> Auth : <<include>>
 UC4 ..> Auth : <<include>>
 UC16 ..> Auth : <<include>>
+UC17 ..> Auth : <<include>>
 
 @enduml
