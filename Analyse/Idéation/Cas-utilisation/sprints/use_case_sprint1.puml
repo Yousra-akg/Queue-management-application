@@ -36,7 +36,7 @@ C -- UC4
 
 usecase "Rejoindre une session d'entretien" as UC7
 usecase "Appeler le candidat suivant" as UC8
-usecase "Mettre à jour statut (Terminé/En cours/Absent)" as UC9
+usecase "Mettre à jour statut (Terminé/Absent)" as UC9
 usecase "Prioriser/Déplacer un candidat" as UC10
 
 F -- UC7
@@ -53,14 +53,10 @@ F -- UC10
 usecase "Gérer les sessions (CRUD)" as UC11
 usecase "Affecter les candidats aux sessions" as UC12
 usecase "Consulter dashboard de statistiques" as UC13
-usecase "Gérer les candidats" as UC14
-usecase "Gérer les formateurs" as UC15
 
 Admin -- UC11
 Admin -- UC12
 Admin -- UC13
-Admin -- UC14
-Admin -- UC15
 
 
 ' =========================
@@ -79,6 +75,11 @@ Mob -- API
 usecase "S'authentifier" as Auth
 usecase "Accéder via CIN" as Auth2
 
+UC1 ..> Auth2 : <<include>>
+UC2 ..> Auth2 : <<include>>
+UC3 ..> Auth2 : <<include>>
+UC4 ..> Auth2 : <<include>>
+
 UC7 ..> Auth : <<include>>
 UC8 ..> Auth : <<include>>
 UC9 ..> Auth : <<include>>
@@ -86,12 +87,5 @@ UC10 ..> Auth : <<include>>
 UC11 ..> Auth : <<include>>
 UC12 ..> Auth : <<include>>
 UC13 ..> Auth : <<include>>
-UC14 ..> Auth : <<include>>
-UC15 ..> Auth : <<include>>
-
-UC1 ..> Auth2 : <<include>>
-UC2 ..> Auth2 : <<include>>
-UC3 ..> Auth2 : <<include>>
-UC4 ..> Auth2 : <<include>>
 
 @enduml
