@@ -36,10 +36,13 @@ class TicketService extends BaseService
                 ->where('session_id', $candidat->session_id)
                 ->max('numeroOrdre') ?? 0;
 
+            $lastTicketCount = $this->model->count();
+            $codeUnique = 'SOLI-' . str_pad($lastTicketCount + 1, 2, '0', STR_PAD_LEFT);
+
             return $this->model->create([
                 'candidat_id' => $candidatId,
                 'session_id'  => $candidat->session_id,
-                'codeUnique'  => (string) Str::uuid(),
+                'codeUnique'  => $codeUnique,
                 'numeroOrdre' => $maxOrder + 1,
                 'statut'      => 'en attente',
                 'heureArrivee' => Carbon::now(),
@@ -53,6 +56,7 @@ class TicketService extends BaseService
         $ticket = $this->findOrFail($ticketId);
         $session = $ticket->session;
 
+        $codePresence = str_replace(' ', '', $codePresence);
         if ($session->codePresence !== $codePresence) {
             return false;
         }
@@ -66,7 +70,6 @@ class TicketService extends BaseService
         return $this->model
             ->with('candidat')
             ->where('session_id', $sessionId)
-            ->whereIn('statut', ['en attente', 'en cours'])
             ->orderBy('numeroOrdre', 'asc')
             ->get();
     }

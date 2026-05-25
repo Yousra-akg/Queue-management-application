@@ -1,178 +1,170 @@
 @extends('layouts.app', ['candidat_name' => $candidat->prenom . ' ' . $candidat->nom])
 
-@section('content')
-<div class="max-w-3xl w-full py-10">
-    <div class="space-y-8">
-        
-        <!-- Welcome Header -->
-        <div id="initial-header" class="text-center">
-            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Bonjour {{ $candidat->prenom }} !</h1>
-            <p class="text-slate-500 font-medium mt-2">Votre place est réservée dans la file d'attente.</p>
-        </div>
-
-        <!-- Ticket Card -->
-        <div class="bg-white rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden">
-            <div class="p-8 sm:p-16 text-center">
-                <p class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-6">Numéro de Ticket</p>
-                
-                <div class="relative inline-block mb-12">
-                    <h2 class="text-8xl sm:text-[10rem] font-black text-slate-900 tracking-tighter leading-none">
-                        SOLI-<span class="text-blue-600">{{ $ticket->numeroOrdre }}</span>
-                    </h2>
-                    <div class="absolute -top-4 -right-4 size-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 animate-pulse">
-                        <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
-                    </div>
-                </div>
-
-                <!-- Timer Section -->
-                <div id="timer-section" class="bg-slate-50 rounded-[2rem] p-8 border border-slate-100 mb-10 transition-all duration-700">
-                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">L'entretien commence dans :</p>
-                    
-                    <div class="flex justify-center items-center gap-4 sm:gap-10">
-                        <div class="flex flex-col items-center min-w-[70px]">
-                            <span id="days" class="text-4xl sm:text-6xl font-black text-blue-600">00</span>
-                            <span class="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mt-2">Jours</span>
-                        </div>
-                        <div class="text-3xl font-black text-slate-200 mb-6">:</div>
-                        <div class="flex flex-col items-center min-w-[70px]">
-                            <span id="hours" class="text-4xl sm:text-6xl font-black text-blue-600">00</span>
-                            <span class="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mt-2">Heures</span>
-                        </div>
-                        <div class="text-3xl font-black text-slate-200 mb-6">:</div>
-                        <div class="flex flex-col items-center min-w-[70px]">
-                            <span id="minutes" class="text-4xl sm:text-6xl font-black text-blue-600">00</span>
-                            <span class="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mt-2">Min</span>
-                        </div>
-                        <div class="text-3xl font-black text-slate-200 mb-6 hidden sm:block">:</div>
-                        <div class="hidden sm:flex flex-col items-center min-w-[70px]">
-                            <span id="seconds" class="text-4xl sm:text-6xl font-black text-blue-600">00</span>
-                            <span class="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mt-2">Sec</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Area -->
-                <div id="action-area" class="max-w-sm mx-auto">
-                    @if($candidat->is_present)
-                        <div class="py-5 px-8 rounded-2xl bg-green-50 text-green-700 font-black border border-green-100 flex items-center justify-center gap-3">
-                            <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                            PRÉSENCE CONFIRMÉE
-                        </div>
-                    @else
-                        <button type="button" id="presence-btn" disabled
-                            class="w-full py-5 px-8 bg-slate-100 text-slate-400 rounded-2xl text-xl font-black cursor-not-allowed transition-all duration-500 shadow-xl shadow-slate-200/50 flex items-center justify-center gap-3">
-                            <svg class="size-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            Je suis présent(e)
-                        </button>
-                        <p id="presence-hint" class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Le bouton s'activera au début de la session</p>
-                    @endif
-                </div>
-            </div>
-
-            <div class="bg-blue-600 p-6 text-center">
-                <p class="text-blue-100 text-sm font-bold tracking-wide">Gardez cette page ouverte pour suivre votre tour en temps réel.</p>
-            </div>
-        </div>
-
-        <!-- Info Footer -->
-        <div class="text-center">
-            <p class="text-slate-400 text-sm font-medium">Session d'entretien : <span class="text-slate-800 font-bold">{{ $session->nom }}</span></p>
-            <p class="text-slate-400 text-xs mt-1">Date : {{ $session->dateEntretien }} à {{ $session->heureDebut }}</p>
-        </div>
-    </div>
-</div>
-
-<!-- Loader Modal (Hidden) -->
-<div id="loader-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center">
-    <div class="bg-white p-10 rounded-[2rem] text-center max-w-sm w-full mx-4 shadow-2xl">
-        <div class="size-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-        <h3 class="text-xl font-black text-slate-800">Confirmation en cours...</h3>
-    </div>
-</div>
+@section('styles')
+<style>
+    .transition-all-slow {
+        transition: all 0.5s ease;
+    }
+    .scale-up {
+        transform: scale(1.02);
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    .animate-shake {
+        animation: shake 0.2s ease-in-out 0s 2;
+    }
+</style>
 @endsection
 
-@section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- CONFIGURATION ---
-        const targetDate = new Date('{{ $session->dateEntretien }}T{{ $session->heureDebut }}');
-        
-        const timerEls = {
-            days: document.getElementById('days'),
-            hours: document.getElementById('hours'),
-            minutes: document.getElementById('minutes'),
-            seconds: document.getElementById('seconds')
-        };
-        const timerSection = document.getElementById('timer-section');
-        const presenceBtn = document.getElementById('presence-btn');
-        const presenceHint = document.getElementById('presence-hint');
-        const loaderOverlay = document.getElementById('loader-overlay');
+@section('content')
+@php
+    $startTime = \Carbon\Carbon::parse($session->dateEntretien . ' ' . $session->heureDebut);
+    $confirmed = (bool) $candidat->is_present;
 
-        function updateTimer() {
-            const now = new Date();
-            const diff = targetDate - now;
+@endphp
 
-            if (diff <= 0) {
-                clearInterval(timerInterval);
-                activatePresenceButton();
-                return;
-            }
+<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+    <!-- [STATE: INITIAL] Success Message -->
+    <div id="initial-header" class="text-center transition-all duration-500 {{ $confirmed ? 'hidden' : '' }}">
+        <h1 class="text-xl font-bold text-[#202124] tracking-tight">Félicitations pour votre réussite !</h1>
+        <p class="text-slate-500 mt-1 text-sm font-medium">Votre profil est validé. Voici votre accès pour l'entretien.</p>
+    </div>
 
-            timerEls.days.textContent = String(d).padStart(2, '0');
-            timerEls.hours.textContent = String(h).padStart(2, '0');
-            timerEls.minutes.textContent = String(m).padStart(2, '0');
-            timerEls.seconds.textContent = String(s).padStart(2, '0');
-        }
+    <!-- Main Interactive Card -->
+    <div class="bg-white border border-slate-200 rounded-[1.8rem] shadow-2xl shadow-blue-900/10 overflow-hidden transition-all duration-700 relative animate-slide-up">
+        <div class="p-6 sm:p-10 text-center">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Votre Code Ticket</p>
+            <h2 class="text-6xl font-black text-[#202124] tracking-tighter sm:text-7xl mb-8">
+                SOLI-<span class="text-[#1A73E8]">{{ $ticket->numeroOrdre }}</span>
+            </h2>
 
-        function activatePresenceButton() {
-            if (!presenceBtn) return;
-            
-            presenceBtn.disabled = false;
-            presenceBtn.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
-            presenceBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-blue-600/30', 'animate-pulse');
-            
-            presenceHint.textContent = "Cliquez ci-dessus pour confirmer votre arrivée";
-            presenceHint.classList.replace('text-slate-400', 'text-blue-600');
-            
-            // On peut aussi masquer le timer ou changer son style
-            timerSection.classList.add('opacity-50', 'scale-95');
-        }
+            <!-- [STATE: WAITING] Timer Section -->
+            @if(!$confirmed)
+            <div id="timer-section"
+                class="bg-slate-50 rounded-2xl p-5 sm:p-6 border border-slate-100 mb-6 transition-all duration-500">
+                <p class="text-slate-400 font-black text-[9px] uppercase tracking-[0.2em] mb-4">L'entretien commence dans :</p>
+                <div class="flex justify-center items-center gap-4 sm:gap-8">
+                    <div class="flex flex-col items-center">
+                        <span id="days" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Jours</span>
+                    </div>
+                    <div class="text-xl font-black text-slate-200 mb-4">:</div>
+                    <div class="flex flex-col items-center">
+                        <span id="hours" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Heures</span>
+                    </div>
+                    <div class="text-xl font-black text-slate-200 mb-4">:</div>
+                    <div class="flex flex-col items-center">
+                        <span id="minutes" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Min</span>
+                    </div>
+                    <div class="text-xl font-black text-slate-200 mb-4 hidden sm:block">:</div>
+                    <div class="hidden sm:flex flex-col items-center">
+                        <span id="seconds" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Sec</span>
+                    </div>
+                </div>
+            </div>
+            @endif
 
-        const timerInterval = setInterval(updateTimer, 1000);
-        updateTimer();
+            <!-- Presence Button / Badge Area -->
+            <div id="presence-action-area" class="max-w-xs mx-auto space-y-3 transition-all duration-500">
+                @if(!$confirmed)
+                <button type="button" id="presence-btn" disabled
+                    class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-2 text-base font-black rounded-xl border border-transparent bg-slate-100 text-slate-400 cursor-not-allowed transition-all duration-500 shadow-lg shadow-slate-200/50">
+                    <svg class="flex-shrink-0 size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Je suis présent(e)
+                </button>
+                <p id="presence-hint" class="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                    Activé automatiquement après le timer
+                </p>
+                @endif
 
-        // --- PRESENCE HANDLER ---
-        if (presenceBtn) {
-            presenceBtn.addEventListener('click', async () => {
-                loaderOverlay.classList.replace('hidden', 'flex');
+                <!-- Confirmation Badge -->
+                <div id="presence-confirmed-badge"
+                    class="{{ $confirmed ? 'inline-flex' : 'hidden' }} animate-bounce items-center gap-x-2 py-3 px-6 rounded-xl bg-green-50 text-[#34A853] font-black text-xs shadow-sm border border-green-100 mx-auto">
+                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    Présence confirmée à <span id="confirm-time">{{ ($confirmed && $candidat->updated_at) ? $candidat->updated_at->format('H:i') : '--:--' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="info-footer"
+            class="p-4 border-t transition-all duration-500 text-center {{ $confirmed ? 'bg-green-50 border-green-100' : 'bg-blue-50/50 border-blue-100' }}">
+            <p id="footer-text" class="text-xs font-bold {{ $confirmed ? 'text-[#34A853]' : 'text-blue-800' }}">
+                {{ $confirmed ? "C'est votre tour bientôt. Restez vigilant !" : "Conservez cette page ouverte. Le tableau s'affichera ici le jour J." }}
+            </p>
+        </div>
+    </div>
+
+    <!-- [STATE: LIVE] Queue Table -->
+    <div id="queue-section"
+        class="{{ $confirmed ? '' : 'hidden opacity-0 translate-y-6' }} transition-all duration-700 bg-white border border-slate-200 rounded-[1.8rem] shadow-xl overflow-hidden mt-8 text-sm">
+        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+            <h3 class="font-black text-slate-800 uppercase tracking-widest text-[11px]">File d'attente en temps réel</h3>
+            <span class="flex size-1.5">
+                <span class="animate-ping absolute inline-flex size-1.5 rounded-full bg-[#34A853] opacity-75"></span>
+                <span class="relative inline-flex size-1.5 rounded-full bg-[#34A853]"></span>
+            </span>
+        </div>
+        <div class="overflow-hidden">
+            <table class="w-full divide-y divide-slate-100">
+                <tbody id="queue-body" class="divide-y divide-slate-100 font-bold">
+                    <!-- Les lignes seront injectées par JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@endsection
+
+@push('modals')
+<!-- Presence Modal -->
+<div id="presence-modal"
+    class="hidden fixed inset-0 z-[110] overflow-y-auto bg-slate-900/60 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0"
+    role="dialog" aria-modal="true">
+    <div class="min-h-full flex items-center justify-center py-4">
+        <div id="modal-content"
+            class="w-full max-w-lg bg-white border border-slate-200 shadow-2xl rounded-[2.5rem] overflow-hidden transform transition-all duration-300 scale-95 opacity-0">
+            <div class="h-3 bg-gradient-to-r from-green-500 to-green-600"></div>
+            <div class="p-8 sm:p-12 text-center">
+                <div class="mb-8">
+                    <span class="inline-flex justify-center items-center size-16 rounded-2xl bg-green-50 text-green-600 animate-pulse">
+                        <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </span>
+                </div>
+                <h3 class="mb-2 text-2xl font-black text-slate-800 tracking-tight">Vérification</h3>
+                <p class="text-slate-500 font-medium mb-8 leading-relaxed text-base">Veuillez saisir le code d'arrivée.</p>
                 
-                try {
-                    const response = await fetch('{{ route('candidat.mark-presence') }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json'
-                        }
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1000);
-                    }
-                } catch (error) {
-                    alert("Une erreur est survenue lors de la validation.");
-                    loaderOverlay.classList.replace('flex', 'hidden');
-                }
-            });
-        }
-    });
-</script>
+                <div class="flex justify-center gap-x-2 sm:gap-x-3 mb-8" id="otp-container">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <button type="button" id="confirm-presence-btn"
+                        class="py-4 px-6 text-base font-black rounded-xl bg-green-600 text-white hover:bg-green-700 shadow-xl shadow-green-600/20 transform hover:-translate-y-0.5 transition-all text-sm">
+                        Confirmer
+                    </button>
+                    <button type="button" id="close-modal-btn"
+                        class="py-2 px-6 text-[10px] font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endpush
+
+@section('scripts')
+
 @endsection
