@@ -1,0 +1,58 @@
+@startuml SoliQueue_Mobile_Sprint2
+left to right direction
+skinparam actorStyle awesome
+
+skinparam backgroundColor white
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam package {
+    BackgroundColor White
+    BorderColor #2C3E50
+}
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+}
+
+skinparam nodesep 25
+skinparam ranksep 25
+
+' Acteurs
+actor "Candidat" as C
+actor "Web" as W
+
+package "Application Mobile (Sprint 2)" {
+
+    ' Nouvelle fonctionnalité de sécurité
+    usecase "S'authentifier via CIN" as UC1
+    
+    ' Fonctionnalités de base indispensables
+    usecase "Obtenir ticket (SOLI-XX)" as UC2
+    usecase "Suivre position en temps réel" as UC3
+    usecase "Valider présence (Code Secret)" as UC4
+    
+    ' Nouvelle fonctionnalité temps réel
+    usecase "Recevoir notification quand il est appelé" as UC5
+    
+    ' API
+    usecase "Fournir l'API mobile" as UC6
+}
+
+' Relations Principales (Le candidat accède aux services)
+C -- UC2
+C -- UC3
+C -- UC4
+C -- UC5
+
+' Les dépendances Include obligatoires pour le Sprint 2
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC1 : <<include>>
+UC4 ..> UC1 : <<include>>
+UC5 ..> UC1 : <<include>>
+
+' Relation Web
+W -- UC6
+
+@enduml

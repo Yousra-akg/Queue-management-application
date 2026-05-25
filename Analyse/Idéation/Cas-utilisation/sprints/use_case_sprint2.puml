@@ -14,7 +14,6 @@ skinparam usecase {
 }
 
 actor "Candidat" as C
-actor "Formateur" as F
 actor "Administrateur" as Admin
 
 package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
@@ -26,29 +25,21 @@ package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
     
     C -- UC1
 
-
-    ' ========================
-    ' Améliorations Formateur
-    ' ========================
-    usecase "Visualiser statistiques de présence session" as UC4
-
-    F -- UC4
-
-
     ' ========================
     ' Améliorations Administrateur
     ' ========================
-    usecase "Suivi de l'activité en temps réel" as UC5
-    usecase "Gérer les paramètres de sécurité" as UC6
+    usecase "Importer/Exporter les candidats" as UC5
+    usecase "Exporter les sessions" as UC6
 
     Admin -- UC5
     Admin -- UC6
 
-    usecase "S'authentifier" as Auth
+    usecase "S'authentifier via cin" as Auth1
+    usecase "S'authentifier " as Auth2
 
-    UC4 ..> Auth : <<include>>
-    UC5 ..> Auth : <<include>>
-    UC6 ..> Auth : <<include>>
+    UC1 ..> Auth1 : <<include>>
+    UC5 ..> Auth2 : <<include>>
+    UC6 ..> Auth2 : <<include>>
 }
 
 @enduml
