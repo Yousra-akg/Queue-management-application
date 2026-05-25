@@ -57,18 +57,3 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::delete('/formateurs/{formateur}', [FormateurManagementController::class, 'destroy'])->name('formateurs.destroy');
 });
 
-// Portail Formateur
-Route::prefix('formateur')->name('formateur.')->group(function () {
-    Route::get('/login', [FormateurController::class, 'showLogin'])->name('login');
-    Route::post('/login', [FormateurController::class, 'login']);
-
-    Route::middleware(['auth:web'])->group(function () {
-        Route::get('/sessions', [FormateurController::class, 'selectionSession'])->name('sessions');
-        Route::get('/dashboard/{session}', [FormateurController::class, 'dashboard'])->name('dashboard');
-        Route::post('/logout', [FormateurController::class, 'logout'])->name('logout');
-        
-        // Actions AJAX
-        Route::post('/status/{ticket}', [FormateurController::class, 'updateTicketStatus'])->name('update-status');
-        Route::post('/reorder/{session}', [FormateurController::class, 'updateTicketOrder'])->name('reorder');
-    });
-});
