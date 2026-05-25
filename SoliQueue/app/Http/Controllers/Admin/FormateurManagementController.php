@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Formateur;
+use App\Services\FormateurService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
 class FormateurManagementController extends Controller
 {
+    protected $formateurService;
+
+    public function __construct(FormateurService $formateurService)
+    {
+        $this->formateurService = $formateurService;
+    }
+
     public function index()
     {
-        $formateurs = Formateur::with('user')->orderBy('id', 'desc')->get();
+        $formateurs = $this->formateurService->getAllWithUsers();
         return view('admin.formateurs.index', compact('formateurs'));
     }
 
@@ -27,21 +32,14 @@ class FormateurManagementController extends Controller
             'specialite' => 'required|string|max:255',
         ]);
 
-        DB::transaction(function () use ($request) {
-            $user = User::create([
-                'nom' => $request->nom,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-
-            Formateur::create([
-                'user_id' => $user->id,
-                'codeInterne' => $request->codeInterne,
-                'specialite' => $request->specialite,
-            ]);
-        });
-
-        return redirect()->back()->with('success', 'Formateur créé avec succès.');
+        try {
+            $this->formateurService->createFormateur($request->only([
+                'nom', 'email', 'password', 'codeInterne', 'specialite'
+            ]));
+            return redirect()->back()->with('success', 'Formateur créé avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la création : ' . $e->getMessage()]);
+        }
     }
 
     public function update(Request $request, Formateur $formateur)
@@ -53,35 +51,23 @@ class FormateurManagementController extends Controller
             'specialite' => 'required|string|max:255',
         ]);
 
-        DB::transaction(function () use ($request, $formateur) {
-            $formateur->user->update([
-                'nom' => $request->nom,
-                'email' => $request->email,
-            ]);
-
-            if ($request->filled('password')) {
-                $formateur->user->update([
-                    'password' => Hash::make($request->password),
-                ]);
-            }
-
-            $formateur->update([
-                'codeInterne' => $request->codeInterne,
-                'specialite' => $request->specialite,
-            ]);
-        });
-
-        return redirect()->back()->with('success', 'Formateur mis à jour avec succès.');
+        try {
+            $this->formateurService->updateFormateur($formateur->id, $request->only([
+                'nom', 'email', 'password', 'codeInterne', 'specialite'
+            ]));
+            return redirect()->back()->with('success', 'Formateur mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la mise à jour : ' . $e->getMessage()]);
+        }
     }
 
     public function destroy(Formateur $formateur)
     {
-        DB::transaction(function () use ($formateur) {
-            $user = $formateur->user;
-            $formateur->delete();
-            $user->delete();
-        });
-
-        return redirect()->back()->with('success', 'Formateur supprimé avec succès.');
+        try {
+            $this->formateurService->deleteFormateur($formateur->id);
+            return redirect()->back()->with('success', 'Formateur supprimé avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
+        }
     }
 }

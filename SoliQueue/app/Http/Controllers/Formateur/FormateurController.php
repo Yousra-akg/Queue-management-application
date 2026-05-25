@@ -7,13 +7,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Session;
 use App\Models\Ticket;
-use App\Models\Formateur;
+use App\Services\SessionService;
+use App\Services\TicketService;
+use App\Services\QueueService;
 
 class FormateurController extends Controller
 {
+    protected $sessionService;
+    protected $ticketService;
+    protected $queueService;
+
+    public function __construct(
+        SessionService $sessionService,
+        TicketService $ticketService,
+        QueueService $queueService
+    ) {
+        $this->sessionService = $sessionService;
+        $this->ticketService = $ticketService;
+        $this->queueService = $queueService;
+    }
+
     public function showLogin()
     {
-        if (Auth::check()) {
+        if (Auth::guard('web')->check()) {
             return redirect()->route('formateur.sessions');
         }
         return view('formateur.login');
@@ -53,21 +69,13 @@ class FormateurController extends Controller
 
     public function selectionSession()
     {
-        /** @var \Illuminate\Database\Eloquent\Collection<int, Session> $sessions */
-        $sessions = Session::orderBy('dateEntretien', 'desc')->get();
-        foreach ($sessions as $session) {
-            $session->updateStatusBasedOnTime();
-        }
+        $sessions = $this->sessionService->getSessionsWithStatusUpdate();
         return view('formateur.selection', compact('sessions'));
     }
 
     public function dashboard(Session $session)
     {
-        $tickets = Ticket::where('session_id', $session->id)
-            ->with('candidat')
-            ->orderBy('numeroOrdre', 'asc')
-            ->get();
-            
+        $tickets = $this->ticketService->getLiveQueue($session->id);
         $waitingCount = $tickets->where('statut', 'en attente')->count();
 
         return view('formateur.dashboard', compact('session', 'tickets', 'waitingCount'));
@@ -83,9 +91,12 @@ class FormateurController extends Controller
             'statut' => 'required|in:en attente,en cours,terminée'
         ]);
 
-        $ticket->update(['statut' => $request->statut]);
-
-        return response()->json(['success' => true, 'message' => 'Statut mis à jour.']);
+        try {
+            $this->queueService->updateCandidatStatus($ticket->id, $request->statut);
+            return response()->json(['success' => true, 'message' => 'Statut mis à jour.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
     }
 
     public function updateTicketOrder(Request $request, Session $session)
@@ -99,10 +110,11 @@ class FormateurController extends Controller
             'order.*' => 'exists:tickets,id'
         ]);
 
-        foreach ($request->order as $index => $id) {
-            Ticket::where('id', $id)->update(['numeroOrdre' => $index + 1]);
+        try {
+            $this->queueService->reorderQueue($session->id, $request->order);
+            return response()->json(['success' => true, 'message' => 'Ordre mis à jour.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
-        return response()->json(['success' => true, 'message' => 'Ordre mis à jour.']);
     }
 }

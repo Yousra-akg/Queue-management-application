@@ -78,33 +78,22 @@ class CandidatPortalController extends Controller
             return response()->json(['success' => false, 'message' => 'Non authentifié'], 401);
         }
 
-        // Validation du code secret de la session
-        $inputCode = str_replace(' ', '', $request->code);
-        if ($candidat->session->codePresence !== $inputCode) {
-            return response()->json(['success' => false, 'message' => 'Code de présence invalide.'], 422);
+        try {
+            $candidat = $this->candidatService->validateAndConfirmPresence($candidat->id, $request->code);
+            $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Présence confirmée !',
+                'time' => now()->format('H:i'),
+                'queue' => $queue,
+                'candidat_id' => $candidat->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
-
-        // Marquer la présence
-        $this->candidatService->markPresence($candidat->id);
-        
-        // Mettre à jour le statut du ticket à "en attente" ou "en cours" ? 
-        // L'énoncé suggère que la présence débloque l'affichage de la file.
-        // On peut aussi passer le ticket à "en cours" si nécessaire.
-        if ($candidat->ticket && $candidat->ticket->statut === 'en attente') {
-            $candidat->ticket->update(['statut' => 'en cours']);
-        }
-
-        // Récupérer la file d'attente en temps réel
-        $queue = $this->ticketService->getLiveQueue($candidat->session_id);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Présence confirmée !',
-            'time' => now()->format('H:i'),
-            'queue' => $queue,
-            'candidat_id' => $candidat->id
-        ]);
     }
+
     /**
      * Endpoint pour le polling de l'état de la file d'attente (live update).
      */

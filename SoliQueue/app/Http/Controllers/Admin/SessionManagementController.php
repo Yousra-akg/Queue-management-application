@@ -6,80 +6,42 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Session;
 use App\Models\Candidat;
+use App\Services\SessionService;
+use App\Services\CandidatService;
 use App\Services\TicketService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class SessionManagementController extends Controller
 {
+    protected $sessionService;
+    protected $candidatService;
     protected $ticketService;
 
-    public function __construct(TicketService $ticketService)
-    {
+    public function __construct(
+        SessionService $sessionService,
+        CandidatService $candidatService,
+        TicketService $ticketService
+    ) {
+        $this->sessionService = $sessionService;
+        $this->candidatService = $candidatService;
         $this->ticketService = $ticketService;
     }
 
     public function dashboard()
     {
-        $totalCandidats = Candidat::count();
-        $totalSessions = Session::count();
-        $sessionsTerminees = Session::where('statut', 'terminée')->count();
-        
-        $totalPresents = Candidat::where('is_present', true)->count();
-        $tauxPresence = $totalCandidats > 0 ? round(($totalPresents / $totalCandidats) * 100, 1) : 0;
+        $stats = $this->sessionService->getDashboardStatsAdmin();
+        $sessions = $this->sessionService->getSessionsWithStatusUpdate()->take(4);
+        $sessions->loadCount('candidats');
+        $activites = $this->sessionService->getRecentActivitiesFeed(5);
 
-        $sessions = Session::withCount('candidats')->orderBy('dateEntretien', 'desc')->take(4)->get();
-        foreach ($sessions as $session) {
-            $session->updateStatusBasedOnTime();
-        }
-        
-        // Dynamic Activity Feed
-        $latestSessions = Session::orderBy('created_at', 'desc')->take(2)->get()->map(function($s) {
-            return [
-                'type' => 'session',
-                'titre' => 'Nouvelle Session : ' . $s->nom,
-                'temps' => $s->created_at->diffForHumans(),
-                'couleur' => 'blue-600',
-                'date' => $s->created_at
-            ];
-        });
-
-        $latestAssignments = Candidat::whereNotNull('session_id')
-            ->with('session')
-            ->orderBy('updated_at', 'desc')
-            ->take(3)
-            ->get()
-            ->map(function($c) {
-                return [
-                    'type' => 'candidat',
-                    'titre' => $c->prenom . ' ' . $c->nom . ' assigné à ' . ($c->session->nom ?? 'Session'),
-                    'temps' => $c->updated_at->diffForHumans(),
-                    'couleur' => 'emerald-500',
-                    'date' => $c->updated_at
-                ];
-            });
-
-        $activites = $latestSessions->merge($latestAssignments)->sortByDesc('date')->take(5);
-
-        return view('admin.dashboard', compact(
-            'totalCandidats',
-            'totalSessions',
-            'sessionsTerminees',
-            'tauxPresence',
-            'sessions',
-            'activites'
-        ));
+        return view('admin.dashboard', array_merge($stats, compact('sessions', 'activites')));
     }
 
     public function affectations()
     {
-        $availableCandidates = Candidat::whereNull('session_id')->get();
-        $allSessions = Session::all();
-        foreach ($allSessions as $session) {
-            $session->updateStatusBasedOnTime();
-        }
-
-        $sessions = Session::with('candidats')->withCount('candidats')->orderBy('dateEntretien', 'desc')->get();
+        $availableCandidates = $this->candidatService->getUnassigned();
+        $sessions = $this->sessionService->getSessionsWithStatusUpdate();
+        $sessions->load(['candidats'])->loadCount('candidats');
         
         return view('admin.affectations', [
             'availableCandidates' => $availableCandidates,
@@ -89,11 +51,8 @@ class SessionManagementController extends Controller
 
     public function sessions()
     {
-        // View for CRUD sessions only
-        $sessions = Session::withCount('candidats')->orderBy('dateEntretien', 'desc')->get();
-        foreach ($sessions as $session) {
-            $session->updateStatusBasedOnTime();
-        }
+        $sessions = $this->sessionService->getSessionsWithStatusUpdate();
+        $sessions->loadCount('candidats');
         return view('admin.sessions.index', [
             'sessions' => $sessions
         ]);
@@ -101,8 +60,8 @@ class SessionManagementController extends Controller
 
     public function candidats()
     {
-        // View for CRUD candidats only
-        $candidats = Candidat::with('session')->orderBy('id', 'desc')->get();
+        $candidats = $this->candidatService->all()->sortByDesc('id')->values();
+        $candidats->load('session');
         return view('admin.candidats.index', [
             'candidats' => $candidats
         ]);
@@ -120,15 +79,12 @@ class SessionManagementController extends Controller
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
         ]);
 
-        $validated['user_id'] = Auth::guard('web')->id();
-
-        if (stripos($validated['nom'], 'session ') !== 0) {
-            $validated['nom'] = 'Session ' . ucfirst($validated['nom']);
+        try {
+            $this->sessionService->createSession($validated, Auth::guard('web')->id());
+            return redirect()->back()->with('success', 'Session créée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la création : ' . $e->getMessage()]);
         }
-
-        Session::create($validated);
-
-        return redirect()->back()->with('success', 'Session créée avec succès.');
     }
 
     public function updateSession(Request $request, Session $session)
@@ -143,19 +99,22 @@ class SessionManagementController extends Controller
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
         ]);
 
-        if (stripos($validated['nom'], 'session ') !== 0) {
-            $validated['nom'] = 'Session ' . ucfirst($validated['nom']);
+        try {
+            $this->sessionService->updateSession($session->id, $validated);
+            return redirect()->back()->with('success', 'Session mise à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la mise à jour : ' . $e->getMessage()]);
         }
-
-        $session->update($validated);
-
-        return redirect()->back()->with('success', 'Session mise à jour avec succès.');
     }
 
     public function destroySession(Session $session)
     {
-        $session->delete();
-        return redirect()->back()->with('success', 'Session supprimée avec succès.');
+        try {
+            $this->sessionService->deleteSession($session->id);
+            return redirect()->back()->with('success', 'Session supprimée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
+        }
     }
 
     public function storeCandidate(Request $request)
@@ -168,13 +127,12 @@ class SessionManagementController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('candidats', 'public');
+        try {
+            $this->candidatService->createCandidate($validated, $request->file('photo'));
+            return redirect()->back()->with('success', 'Candidat ajouté avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de l\'ajout : ' . $e->getMessage()]);
         }
-
-        Candidat::create($validated);
-
-        return redirect()->back()->with('success', 'Candidat ajouté avec succès.');
     }
 
     public function updateCandidate(Request $request, Candidat $candidat)
@@ -187,25 +145,22 @@ class SessionManagementController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        if ($request->hasFile('photo')) {
-            if ($candidat->photo) {
-                Storage::disk('public')->delete($candidat->photo);
-            }
-            $validated['photo'] = $request->file('photo')->store('candidats', 'public');
+        try {
+            $this->candidatService->updateCandidate($candidat->id, $validated, $request->file('photo'));
+            return redirect()->back()->with('success', 'Candidat mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la mise à jour : ' . $e->getMessage()]);
         }
-
-        $candidat->update($validated);
-
-        return redirect()->back()->with('success', 'Candidat mis à jour avec succès.');
     }
 
     public function destroyCandidate(Candidat $candidat)
     {
-        if ($candidat->photo) {
-            Storage::disk('public')->delete($candidat->photo);
+        try {
+            $this->candidatService->deleteCandidate($candidat->id);
+            return redirect()->back()->with('success', 'Candidat supprimé avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
         }
-        $candidat->delete();
-        return redirect()->back()->with('success', 'Candidat supprimé avec succès.');
     }
 
     public function assignCandidates(Request $request, Session $session)
@@ -215,37 +170,25 @@ class SessionManagementController extends Controller
             'candidate_ids.*' => 'exists:candidats,id'
         ]);
 
-        $currentCount = $session->candidats()->count();
-        $newCount = count($request->candidate_ids);
-
-        if ($currentCount + $newCount > $session->capaciteMax) {
+        try {
+            $this->candidatService->assignCandidatesToSession($session->id, $request->candidate_ids);
+            return response()->json(['message' => 'Candidats affectés avec succès.', 'session_id' => $session->id]);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'La session a atteint sa capacité maximale (' . $session->capaciteMax . ' places).'
+                'message' => $e->getMessage()
             ], 422);
         }
-
-        foreach ($request->candidate_ids as $candidateId) {
-            $candidat = Candidat::find($candidateId);
-            $candidat->update(['session_id' => $session->id]);
-            // Generate ticket automatically SOLI-XX
-            $this->ticketService->generateTicket($candidat->id);
-        }
-        return response()->json(['message' => 'Candidats affectés avec succès.', 'session_id' => $session->id]);
     }
 
     public function unassignCandidate(Candidat $candidate)
     {
-        // Bloquer le retrait si la session est terminée et que le candidat était présent
-        if ($candidate->session && $candidate->session->statut === 'terminée' && $candidate->is_present) {
+        try {
+            $this->candidatService->unassignCandidateFromSession($candidate->id);
+            return response()->json(['message' => 'Candidat retiré de la session.']);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Impossible de retirer un candidat présent d\'une session terminée.'
+                'message' => $e->getMessage()
             ], 422);
         }
-
-        $candidate->update(['session_id' => null]);
-        // Supprimer le ticket s'il existe
-        $candidate->ticket()->delete();
-
-        return response()->json(['message' => 'Candidat retiré de la session.']);
     }
 }

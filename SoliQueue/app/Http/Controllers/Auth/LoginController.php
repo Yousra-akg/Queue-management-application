@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Candidat;
+use App\Services\CandidatService;
 
 class LoginController extends Controller
 {
@@ -23,6 +23,8 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    protected $candidatService;
+
     /**
      * Vers où rediriger après connexion.
      */
@@ -33,8 +35,9 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(CandidatService $candidatService)
     {
+        $this->candidatService = $candidatService;
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
@@ -54,16 +57,16 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validateLogin($request);
-        $candidat = Candidat::where('cin', $request->cin)->first();
 
-        if ($candidat) {
+        try {
+            $candidat = $this->candidatService->loginByCin($request->cin);
             Auth::login($candidat, $request->filled('remember'));
             // On redirige explicitement vers la page de bienvenue pour éviter d'être renvoyé 
             // vers des routes internes de données (comme /queue-status) par le système "intended" de Laravel.
             return redirect()->route('candidat.bienvenue');
+        } catch (\Exception $e) {
+            return $this->sendFailedLoginResponse($request);
         }
-
-        return $this->sendFailedLoginResponse($request);
     }
 
     /**
