@@ -1,0 +1,54 @@
+@startuml SoliQueue_Sprint2
+left to right direction
+skinparam actorStyle awesome
+
+skinparam package {
+    BackgroundColor White
+    BorderColor #2C3E50
+}
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+    ArrowColor #117864
+}
+
+actor "Candidat" as C
+actor "Formateur" as F
+actor "Administrateur" as Admin
+
+package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
+
+    ' ========================
+    ' Améliorations Candidat
+    ' ========================
+    usecase "Recevoir notifications visuelles prioritaires" as UC1
+    
+    C -- UC1
+
+
+    ' ========================
+    ' Améliorations Formateur
+    ' ========================
+    usecase "Visualiser statistiques de présence session" as UC4
+
+    F -- UC4
+
+
+    ' ========================
+    ' Améliorations Administrateur
+    ' ========================
+    usecase "Suivi de l'activité en temps réel" as UC5
+    usecase "Gérer les paramètres de sécurité" as UC6
+
+    Admin -- UC5
+    Admin -- UC6
+
+    usecase "S'authentifier" as Auth
+
+    UC4 ..> Auth : <<include>>
+    UC5 ..> Auth : <<include>>
+    UC6 ..> Auth : <<include>>
+}
+
+@enduml

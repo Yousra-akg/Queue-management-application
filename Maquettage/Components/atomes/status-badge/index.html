@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex flex-wrap gap-4">
+        <!-- Session Status -->
+        <span
+            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-black bg-blue-100 text-blue-800 uppercase tracking-tight">
+            <span class="size-1.5 rounded-full bg-blue-600"></span>
+            En cours
+        </span>
+
+        <span
+            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-black bg-green-100 text-green-800 uppercase tracking-tight">
+            <span class="size-1.5 rounded-full bg-green-600"></span>
+            Terminée
+        </span>
+
+        <span
+            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-black bg-orange-100 text-orange-800 uppercase tracking-tight">
+            <span class="size-1.5 rounded-full bg-orange-600"></span>
+            Planifiée
+        </span>
+
+        <span
+            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-black bg-red-100 text-red-800 uppercase tracking-tight">
+            <span class="size-1.5 rounded-full bg-red-600"></span>
+            Annulée
+        </span>
+
+        <!-- Candidate Status -->
+        <span
+            class="py-1 px-2.5 inline-flex items-center text-[10px] font-black uppercase tracking-widest bg-slate-900 text-white rounded-lg">
+            Admis QCM
+        </span>
+
+        <span
+            class="py-1 px-2.5 inline-flex items-center text-[10px] font-black uppercase tracking-widest bg-indigo-600 text-white rounded-lg">
+            En attente
+        </span>
+    </div>
+</body>
+
+</html>

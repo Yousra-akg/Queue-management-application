@@ -1,0 +1,86 @@
+classDiagram
+    %% Classe Parent
+    class Utilisateur {
+        +int id
+        +string nom
+        +string email
+        +string motDePasse
+    }
+
+    %% Héritage avec attributs uniques pour le Staff
+    class Administrateur {
+        +gererSessions()
+        +consulterStats()
+    }
+
+    class Formateur {
+        +string codeInterne
+        +string specialite
+        +appelerSuivant()
+        +validerPresence()
+    }
+
+    Utilisateur <|-- Administrateur : hérite
+    Utilisateur <|-- Formateur : hérite
+
+    %% Entité Notification
+    class Notification {
+        +int id
+        +string titre
+        +string message
+        +datetime dateEnvoi
+        +bool estLu
+        +envoyer()
+    }
+
+    class Role {
+        +int id
+        +string nom
+    }
+
+    class Permission {
+        +int id
+        +string nom
+    }
+
+    class Session {
+        +int id
+        +string nom
+        +date dateEntretien
+        +time heureDebut
+        +time heureFin
+        +int capaciteMax
+        +string codePresence
+        +string statut
+        +calculerStatistiques()
+    }
+
+    class Candidat {
+        +int id
+        +string cin
+        +string photo
+        +string nom
+        +string prenom
+        +float scoreQCM
+        +bool isPresent
+    }
+
+    class Ticket {
+        +int id
+        +string codeUnique
+        +int numeroOrdre
+        +string statut
+        +datetime heureArrivee
+    }
+
+    %% Relations
+    Utilisateur "0..*" -- "1" Role : possède
+    Role "1" -- "0..*" Permission : contient
+    Utilisateur "1" -- "0..*" Session : gère
+    
+    %% SEUL LE CANDIDAT REÇOIT DES NOTIFICATIONS
+    Candidat "1" -- "0..*" Notification : reçoit
+
+    Session "1" -- "0..*" Candidat : est assigné à
+    Candidat "1" -- "0..1" Ticket : génère
+    Session "1" *-- "0..*" Ticket : contient

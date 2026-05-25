@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bouton Atome (Action) - SoliCode</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="p-10 bg-gray-50 flex items-center justify-center min-h-screen font-sans">
+  <!-- Atom: Button (Exactly as in generation-ticket.html) -->
+  <button type="button" onclick="alert('Action déclenchée')"
+    class="py-4 px-8 inline-flex justify-center items-center gap-x-3 text-lg font-bold rounded-2xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-600/30 group">
+    Obtenir ma place dans la file
+    <svg class="flex-shrink-0 size-5 transition-transform duration-300 group-hover:translate-x-1"
+      xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+      <path d="M13 5v2" />
+      <path d="M13 17v2" />
+      <path d="M13 11v2" />
+    </svg>
+  </button>
+</body>
+
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoliCode UI Kit - Design System</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#e0e7ff',
+                            500: '#1A73E8',
+                            600: '#1557B0',
+                            700: '#1C54A3',
+                            900: '#0a2351'
+                        },
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-btn {
+            @apply w-full text-left text-xs px-4 py-2.5 rounded-xl text-slate-500 font-bold uppercase tracking-tight hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 flex items-center gap-2;
+        }
+
+        .nav-btn.active {
+            @apply bg-blue-600 text-white shadow-lg shadow-blue-200;
+        }
+
+        #preview-frame {
+            transition: opacity 0.2s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8fafc] flex h-full overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside
+        class="w-80 bg-white border-r border-slate-200 flex flex-col h-full flex-shrink-0 z-20 shadow-[-10px_0_30px_rgba(0,0,0,0.05)]">
+        <!-- Header -->
+        <div class="p-8 border-b border-slate-100">
+            <div class="flex items-center gap-4 mb-8">
+                <div
+                    class="size-12 bg-primary-900 rounded-[1.25rem] flex items-center justify-center shadow-xl shadow-blue-900/20">
+                    <span class="text-white font-black text-xl italic">S</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-primary-900 tracking-tighter uppercase leading-none">Soli<span
+                            class="text-blue-600">Admin</span></h1>
+                    <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Design System</p>
+                </div>
+            </div>
+
+            <!-- Viewport buttons -->
+            <div class="flex bg-slate-100 rounded-2xl p-1 text-[10px] font-black uppercase tracking-wider">
+                <button onclick="resizeIframe('100%', this)"
+                    class="flex-1 py-2.5 rounded-xl bg-white shadow-sm text-blue-700 vp-btn active-vp">Desktop</button>
+                <button onclick="resizeIframe('768px', this)"
+                    class="flex-1 py-2.5 rounded-xl hover:bg-white/50 text-slate-500 transition-all vp-btn">Tablet</button>
+                <button onclick="resizeIframe('390px', this)"
+                    class="flex-1 py-2.5 rounded-xl hover:bg-white/50 text-slate-500 transition-all vp-btn">Mobile</button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav id="sidebar-nav" class="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
+            <!-- Identity & Design -->
+            <div>
+                <p
+                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-2 border-l-2 border-primary-500">
+                    🎨 Identité & Design</p>
+                <div class="space-y-1">
+                    <button onclick="loadComponent('charte-graphique/index.html', 'Design: Charte Graphique', this)"
+                        class="nav-btn"><span>✨</span> Charte Graphique</button>
+                    <button
+                        onclick="loadComponent('Maquette-mobile/admin-dashboard.html', 'Admin: Mobile Mockup', this)"
+                        class="nav-btn"><span>📱</span> Mobile Admin (New)</button>
+                </div>
+            </div>
+
+            <!-- Mockups -->
+            <div>
+                <p
+                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-2 border-l-2 border-blue-600">
+                    🖥️ Mockups Complets</p>
+                <div class="space-y-1">
+                    <button onclick="loadComponent('Components/mockups/admin/dashboard.html', 'Admin: Dashboard', this)"
+                        class="nav-btn"><span>📊</span> Dashboard Admin</button>
+                    <button
+                        onclick="loadComponent('Components/mockups/admin/session-manager.html', 'Admin: Sessions', this)"
+                        class="nav-btn"><span>📋</span> Gestion Sessions</button>
+                    <button
+                        onclick="loadComponent('Components/mockups/admin/add-session.html', 'Admin: Configuration', this)"
+                        class="nav-btn"><span>⚙️</span> Config Session</button>
+                    <button onclick="loadComponent('Components/mockups/admin/login.html', 'Admin: Login', this)"
+                        class="nav-btn"><span>🔐</span> Login Admin</button>
+                    <div class="h-px bg-slate-100 my-4"></div>
+                    <button
+                        onclick="loadComponent('Components/mockups/formateur/dashboard.html', 'Trainer: Dashboard', this)"
+                        class="nav-btn"><span>👨‍🏫</span> Dashboard Formateur</button>
+                    <button
+                        onclick="loadComponent('Components/mockups/formateur/selection-session.html', 'Trainer: Sessions', this)"
+                        class="nav-btn"><span>📅</span> Sélection Session</button>
+                    <button onclick="loadComponent('Components/mockups/formateur/login.html', 'Trainer: Login', this)"
+                        class="nav-btn"><span>🔑</span> Login Formateur</button>
+                    <div class="h-px bg-slate-100 my-4"></div>
+                    <button
+                        onclick="loadComponent('Components/mockups/condidat/portail-candidat-interactif.html', 'Candidat: Portail', this)"
+                        class="nav-btn"><span>🎯</span> Portail Candidat</button>
+                    <button
+                        onclick="loadComponent('Components/mockups/condidat/generation-ticket.html', 'Candidat: Ticket', this)"
+                        class="nav-btn"><span>🎫</span> Génération Ticket</button>
+                </div>
+            </div>
+
+            <!-- Atomes -->
+            <div>
+                <p
+                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-2 border-l-2 border-slate-200">
+                    ⚛️ Atomes UI</p>
+                <div class="space-y-1">
+                    <button onclick="loadComponent('Components/atomes/button/index.html', 'Atome: Button', this)"
+                        class="nav-btn"><span>🔘</span> Buttons Standard</button>
+                    <button
+                        onclick="loadComponent('Components/atomes/button-login/index.html', 'Atome: Login Button', this)"
+                        class="nav-btn"><span>🚪</span> Button Login</button>
+                    <button onclick="loadComponent('Components/atomes/input/index.html', 'Atome: Input', this)"
+                        class="nav-btn"><span>📝</span> Form Inputs</button>
+                    <button onclick="loadComponent('Components/atomes/badge/index.html', 'Atome: Badge', this)"
+                        class="nav-btn"><span>🏷️</span> Status Badges</button>
+                    <button onclick="loadComponent('Components/atomes/avatar/index.html', 'Atome: Avatar', this)"
+                        class="nav-btn"><span>👤</span> User Avatars</button>
+                    <button onclick="loadComponent('Components/atomes/stats/stat-card.html', 'Atome: Stat Card', this)"
+                        class="nav-btn"><span>📈</span> Stats Cards</button>
+                    <button
+                        onclick="loadComponent('Components/atomes/progress/session-bar.html', 'Atome: Progress', this)"
+                        class="nav-btn"><span>⏳</span> Progress Bars</button>
+                    <button onclick="loadComponent('Components/atomes/modals/index.html', 'Atome: Modal', this)"
+                        class="nav-btn"><span>🪟</span> Modals & Overlays</button>
+                    <button onclick="loadComponent('Components/atomes/countdown/index.html', 'Atome: Countdown', this)"
+                        class="nav-btn"><span>⏲️</span> Countdowns</button>
+                </div>
+            </div>
+
+            <!-- Molecules -->
+            <div>
+                <p
+                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-2 border-l-2 border-slate-200">
+                    🧩 Molécules</p>
+                <div class="space-y-1">
+                    <button
+                        onclick="loadComponent('Components/molecules/admin-nav/index.html', 'Molécule: Sidebar', this)"
+                        class="nav-btn"><span>🧭</span> Admin Sidebar</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/queue-table/index.html', 'Molécule: Queue Table', this)"
+                        class="nav-btn"><span>📜</span> File d'attente</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/candidate-row/index.html', 'Molécule: Cand. Row', this)"
+                        class="nav-btn"><span>👤</span> Ligne Candidat</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/day-session-card/index.html', 'Molécule: Session Card', this)"
+                        class="nav-btn"><span>📅</span> Carte Session</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/login-form/index.html', 'Molécule: Login Form', this)"
+                        class="nav-btn"><span>📦</span> Formulaire Login</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/notification-banner/index.html', 'Molécule: Notif', this)"
+                        class="nav-btn"><span>🔔</span> Bannière Notif</button>
+                    <button
+                        onclick="loadComponent('Components/molecules/ticket-code/index.html', 'Molécule: Ticket', this)"
+                        class="nav-btn"><span>🔢</span> Code Ticket</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+            <div class="flex items-center gap-2">
+                <span class="size-2 rounded-full bg-green-500 animate-pulse"></span>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Version 1.0.4 - Maquettage
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full bg-[#f8fafc] overflow-hidden relative">
+        <div
+            class="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-5 flex justify-between items-center z-10 shrink-0">
+            <div class="flex items-center gap-6 min-w-0">
+                <div id="component-icon"
+                    class="size-10 rounded-2xl bg-slate-100 flex items-center justify-center text-lg shrink-0 shadow-inner">
+                    👋</div>
+                <div>
+                    <h2 id="component-title"
+                        class="text-sm font-black text-primary-900 truncate uppercase tracking-tight">Bienvenue sur le
+                        Kit SoliAdmin</h2>
+                    <p id="component-path" class="text-[9px] text-slate-400 font-bold font-mono truncate">Sélectionnez
+                        un élément pour commencer</p>
+                </div>
+            </div>
+            <a id="open-new-tab" href="#" target="_blank"
+                class="hidden shrink-0 text-[10px] font-black uppercase px-6 py-3 bg-white border border-slate-200 rounded-2xl hover:bg-slate-50 text-slate-600 flex items-center gap-2 transition-all shadow-sm hover:shadow-md active:scale-95">
+                <span>Plein écran</span>
+                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="flex-1 overflow-hidden flex items-stretch justify-center relative p-12"
+            style="background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px); background-size: 32px 32px;">
+
+            <div id="welcome-state"
+                class="absolute inset-0 flex flex-col items-center justify-center gap-8 text-center z-0 px-6">
+                <!-- Decorative Element -->
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-500 blur-3xl opacity-10 animate-pulse"></div>
+                    <div
+                        class="relative size-24 bg-white rounded-[2.5rem] shadow-2xl flex items-center justify-center transform hover:rotate-12 transition-transform duration-500">
+                        <svg class="size-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m7.5 4.27 9 5.15" />
+                            <path
+                                d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                            <path d="m3.3 7 8.7 5 8.7-5" />
+                            <path d="M12 22V12" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="font-black text-4xl text-primary-900 uppercase tracking-tighter mb-4">Bibliothèque
+                        SoliCode</h2>
+                    <p class="text-slate-500 text-sm max-w-sm font-medium leading-relaxed">Explorez l'ensemble des
+                        atomes, molécules et mockups validés pour l'administration.</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6 w-full max-w-md">
+                    <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <p class="text-xl font-black text-blue-600 line-none">21</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Atomes</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <p class="text-xl font-black text-blue-600 line-none">12</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Molécules</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <p class="text-xl font-black text-blue-600 line-none">11</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Mockups</p>
+                    </div>
+                </div>
+            </div>
+
+            <iframe id="preview-frame" src=""
+                class="w-full h-full border-0 bg-white shadow-[0_50px_100px_-20px_rgba(0,31,63,0.15)] rounded-[2.5rem] opacity-0 relative z-10 origin-center transition-all duration-500"></iframe>
+        </div>
+    </main>
+
+    <script>
+        let currentBtn = null;
+        function loadComponent(path, title, btn) {
+            const frame = document.getElementById('preview-frame');
+            const titleEl = document.getElementById('component-title');
+            const pathEl = document.getElementById('component-path');
+            const welcome = document.getElementById('welcome-state');
+            const iconEl = document.getElementById('component-icon');
+            const openLink = document.getElementById('open-new-tab');
+
+            if (currentBtn) currentBtn.classList.remove('active');
+            btn.classList.add('active');
+            currentBtn = btn;
+
+            welcome.style.display = 'none';
+            frame.classList.add('opacity-0', 'scale-[0.98]');
+
+            setTimeout(() => {
+                frame.src = path;
+                titleEl.textContent = title;
+                pathEl.textContent = path;
+                iconEl.textContent = btn.querySelector('span').textContent;
+                openLink.href = path;
+                openLink.classList.remove('hidden');
+                frame.onload = () => {
+                    frame.classList.remove('opacity-0', 'scale-[0.98]');
+                };
+            }, 200);
+        }
+        function resizeIframe(width, btn) {
+            document.querySelectorAll('.vp-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-blue-700');
+                b.classList.add('text-slate-500');
+            });
+            btn.classList.add('bg-white', 'shadow-sm', 'text-blue-700');
+            btn.classList.remove('text-slate-500');
+            document.getElementById('preview-frame').style.width = width;
+        }
+    </script>
+</body>
+
+</html>

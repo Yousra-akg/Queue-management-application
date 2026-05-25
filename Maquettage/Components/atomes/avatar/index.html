@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Atome - SoliCode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body class="p-10 bg-gray-50 flex flex-wrap gap-8 items-center justify-center min-h-screen font-sans">
+    <!-- Atom: Avatar (Gray Variant - Default) -->
+    <div class="flex flex-col items-center gap-2">
+        <div
+            class="size-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-base border border-gray-200 shadow-sm">
+            YA
+        </div>
+        <span class="text-[10px] font-black uppercase text-gray-400">Défaut</span>
+    </div>
+
+    <!-- Atom: Avatar (Blue Variant - Active/Primary) -->
+    <div class="flex flex-col items-center gap-2">
+        <div
+            class="size-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-base border border-blue-200 shadow-sm">
+            AM
+        </div>
+        <span class="text-[10px] font-black uppercase text-blue-600">Primaire</span>
+    </div>
+
+    <!-- Atom: Avatar (Brand Variant - Dark) -->
+    <div class="flex flex-col items-center gap-2">
+        <div
+            class="size-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30">
+            SC
+        </div>
+        <span class="text-[10px] font-black uppercase text-blue-800">Brand</span>
+    </div>
+</body>
+
+</html>

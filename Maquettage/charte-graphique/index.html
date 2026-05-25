@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charte Graphique - SoliCode Queue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #1A73E8;
+            --success: #34A853;
+            --alert: #FBBC05;
+            --danger: #EA4335;
+            --bg-surface: #F8F9FA;
+            --text-dark: #202124;
+            --white: #ffffff;
+            --gray-light: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-surface);
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            border-bottom: 2px solid var(--bg-surface);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-top: 40px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        /* Palette Styles */
+        .palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .color-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* UI Preview Styles */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ui-card {
+            border: 1px solid var(--gray-light);
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--bg-surface);
+        }
+
+        .ticket-mockup {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .ticket-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: #e6f4ea;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .icon-list {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: #eee;
+            border-radius: 8px;
+        }
+
+        .icon-item {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>SoliCode Queue</h1>
+            <p><strong>Projet :</strong> Charte Graphique Application Mobile & Web</p>
+            <p><i data-lucide="calendar" style="width:16px; vertical-align:middle"></i> 3 Mars 2026</p>
+        </header>
+
+        <section>
+            <h2>1. Identité Visuelle</h2>
+            <p>Un design <strong>épuré</strong> pour réduire le stress du candidat et optimiser l'administration.</p>
+        </section>
+
+        <section>
+            <h2>2. Palette de Couleurs</h2>
+            <div class="palette">
+                <div class="color-card" style="background: var(--primary);">Bleu Primaire<br>#1A73E8</div>
+                <div class="color-card" style="background: var(--success);">Succès<br>#34A853</div>
+                <div class="color-card" style="background: var(--alert); color: #000;">Alerte<br>#FBBC05</div>
+                <div class="color-card" style="background: var(--danger);">Danger<br>#EA4335</div>
+                <div class="color-card" style="background: var(--text-dark);">Menu Admin<br>#202124</div>
+                <div class="color-card"
+                    style="background: var(--bg-surface); color: var(--text-dark); border: 1px solid var(--gray-light);">
+                    Surface<br>#F8F9FA</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Typographie</h2>
+            <p style="font-size: 18px;">Police principale : <strong>Inter Sans-Serif</strong></p>
+            <div style="background: #f1f1f1; padding: 20px; border-radius: 8px;">
+                <span class="ticket-number">A-124</span>
+                <p style="text-align: center; margin: 0;">Exemple de numéro de ticket (48px Extra-Bold)</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Composants d'Interface</h2>
+            <div class="preview-grid">
+                <div class="ui-card">
+                    <h3><i data-lucide="smartphone"></i> Mobile Candidat</h3>
+                    <div class="ticket-mockup">
+                        <p><i data-lucide="clock"></i> Temps estimé : 12 min</p>
+                        <span class="ticket-number">B-42</span>
+                        <p>Votre tour approche</p>
+                    </div>
+                </div>
+                <div class="ui-card">
+                    <h3><i data-lucide="layout-dashboard"></i> Admin Desktop</h3>
+                    <div class="badge badge-success badge-pulse">
+                        <i data-lucide="user-check" style="width:14px"></i> Candidat Appelé
+                    </div>
+                    <p style="margin-top:10px">Statut : <strong>En cours</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Iconographie (Lucide)</h2>
+            <div class="icon-list">
+                <div class="icon-item"><i data-lucide="clock"></i><br>Attente</div>
+                <div class="icon-item"><i data-lucide="user"></i><br>Position</div>
+                <div class="icon-item"><i data-lucide="bell"></i><br>Alerte</div>
+                <div class="icon-item"><i data-lucide="calendar-days"></i><br>Session</div>
+                <div class="icon-item"><i data-lucide="log-out"></i><br>Quitter</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>6. Micro-interactions</h2>
+            <ul>
+                <li><strong>Pulse :</strong> Utilisé pour l'appel du candidat (voir badge vert ci-dessus).</li>
+                <li><strong>Slide :</strong> Transition latérale entre les étapes de la file.</li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>
