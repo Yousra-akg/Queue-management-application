@@ -15,6 +15,12 @@
             background-size: 60px 60px;
             background-position: 0 0, 30px 30px;
         }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+        .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
     </style>
 </head>
 <body class="bg-bgSurface flex min-h-screen items-center py-6 font-sans geometric-bg">
@@ -31,6 +37,15 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Console de contrôle sécurisée</p>
                 </div>
             </div>
+
+            @if($errors->any())
+            <div class="mb-6 py-3.5 px-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl flex items-center gap-3 animate-shake">
+                <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <p class="text-xs font-black uppercase tracking-tight">{{ $errors->first() }}</p>
+            </div>
+            @endif
 
             <form action="{{ route('admin.login') }}" method="POST" class="space-y-6">
                 @csrf

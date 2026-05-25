@@ -122,6 +122,10 @@ class SessionManagementController extends Controller
 
         $validated['user_id'] = Auth::guard('web')->id();
 
+        if (stripos($validated['nom'], 'session ') !== 0) {
+            $validated['nom'] = 'Session ' . ucfirst($validated['nom']);
+        }
+
         Session::create($validated);
 
         return redirect()->back()->with('success', 'Session créée avec succès.');
@@ -138,6 +142,10 @@ class SessionManagementController extends Controller
             'codePresence' => 'required|string|max:10',
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
         ]);
+
+        if (stripos($validated['nom'], 'session ') !== 0) {
+            $validated['nom'] = 'Session ' . ucfirst($validated['nom']);
+        }
 
         $session->update($validated);
 
@@ -207,6 +215,15 @@ class SessionManagementController extends Controller
             'candidate_ids.*' => 'exists:candidats,id'
         ]);
 
+        $currentCount = $session->candidats()->count();
+        $newCount = count($request->candidate_ids);
+
+        if ($currentCount + $newCount > $session->capaciteMax) {
+            return response()->json([
+                'message' => 'La session a atteint sa capacité maximale (' . $session->capaciteMax . ' places).'
+            ], 422);
+        }
+
         foreach ($request->candidate_ids as $candidateId) {
             $candidat = Candidat::find($candidateId);
             $candidat->update(['session_id' => $session->id]);
@@ -218,8 +235,15 @@ class SessionManagementController extends Controller
 
     public function unassignCandidate(Candidat $candidate)
     {
+        // Bloquer le retrait si la session est terminée et que le candidat était présent
+        if ($candidate->session && $candidate->session->statut === 'terminée' && $candidate->is_present) {
+            return response()->json([
+                'message' => 'Impossible de retirer un candidat présent d\'une session terminée.'
+            ], 422);
+        }
+
         $candidate->update(['session_id' => null]);
-        // Optionnel : Supprimer le ticket s'il existe
+        // Supprimer le ticket s'il existe
         $candidate->ticket()->delete();
 
         return response()->json(['message' => 'Candidat retiré de la session.']);

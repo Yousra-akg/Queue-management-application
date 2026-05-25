@@ -26,7 +26,7 @@
 
 @endphp
 
-<div class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
+<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
 
     <!-- [STATE: INITIAL] Success Message -->
     <div id="initial-header" class="text-center transition-all duration-500 {{ $confirmed ? 'hidden' : '' }}">
@@ -122,6 +122,9 @@
 
 </div>
 
+@endsection
+
+@push('modals')
 <!-- Presence Modal -->
 <div id="presence-modal"
     class="hidden fixed inset-0 z-[110] overflow-y-auto bg-slate-900/60 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0"
@@ -139,10 +142,11 @@
                 <h3 class="mb-2 text-2xl font-black text-slate-800 tracking-tight">Vérification</h3>
                 <p class="text-slate-500 font-medium mb-8 leading-relaxed text-base">Veuillez saisir le code d'arrivée.</p>
                 
-                <div class="flex justify-center gap-x-3 mb-8">
-                    <input type="text" id="presence-code-input" maxlength="4"
-                        class="block w-48 py-4 px-3 text-center text-4xl font-black text-slate-800 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-blue-600 focus:ring-blue-600 focus:outline-none transition-all tracking-[0.4em] placeholder-slate-200"
-                        placeholder="••••">
+                <div class="flex justify-center gap-x-2 sm:gap-x-3 mb-8" id="otp-container">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
+                    <input type="text" maxlength="1" class="otp-input w-14 h-16 sm:w-16 sm:h-20 text-center text-3xl sm:text-4xl font-black text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#1A73E8] focus:ring-4 focus:ring-blue-600/20 focus:outline-none transition-all placeholder-slate-300 shadow-sm" placeholder="•">
                 </div>
 
                 <div class="flex flex-col gap-3">
@@ -159,312 +163,8 @@
         </div>
     </div>
 </div>
-@endsection
+@endpush
 
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let pollInterval;
-        // --- DATA ---
-        const targetTimestamp = {{ $startTime->timestamp }} * 1000;
-        const isAlreadyPresent = {{ $confirmed ? 'true' : 'false' }};
-        const candidatId = {{ $candidat->id }};
 
-        // --- ELEMENTS ---
-        const timerEls = {
-            days: document.getElementById('days'),
-            hours: document.getElementById('hours'),
-            minutes: document.getElementById('minutes'),
-            seconds: document.getElementById('seconds')
-        };
-        const timerSection = document.getElementById('timer-section');
-        const initialHeader = document.getElementById('initial-header');
-        const notifBanner = document.getElementById('notif-banner');
-        const presenceBtn = document.getElementById('presence-btn');
-        const presenceHint = document.getElementById('presence-hint');
-        const presenceActionArea = document.getElementById('presence-action-area');
-        const infoFooter = document.getElementById('info-footer');
-        const queueSection = document.getElementById('queue-section');
-        const queueBody = document.getElementById('queue-body');
-        const modal = document.getElementById('presence-modal');
-        const modalContent = document.getElementById('modal-content');
-        const confirmBtn = document.getElementById('confirm-presence-btn');
-        const closeBtn = document.getElementById('close-modal-btn');
-        const presenceCodeInput = document.getElementById('presence-code-input');
-        const confirmedBadge = document.getElementById('presence-confirmed-badge');
-        const confirmTimeEl = document.getElementById('confirm-time');
-
-        // --- TIMER LOGIC ---
-        let timerInterval;
-        if (!isAlreadyPresent) {
-            const updateTimer = () => {
-                const diff = targetTimestamp - Date.now();
-
-                if (diff <= 0) {
-                    if (timerInterval) clearInterval(timerInterval);
-                    switchToLiveState();
-                    return;
-                }
-
-                if(timerEls.days) {
-                    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-                    timerEls.days.textContent = String(d).padStart(2, '0');
-                    timerEls.hours.textContent = String(h).padStart(2, '0');
-                    timerEls.minutes.textContent = String(m).padStart(2, '0');
-                    timerEls.seconds.textContent = String(s).padStart(2, '0');
-                }
-            };
-            
-            // Check immediately before setting interval to prevent 1-second lag
-            updateTimer();
-            if (targetTimestamp - Date.now() > 0) {
-                timerInterval = setInterval(updateTimer, 1000);
-            }
-        } else {
-            startPolling();
-        }
-
-        // --- STATE TRANSITIONS ---
-        function switchToLiveState() {
-            if (timerSection) {
-                timerSection.classList.add('opacity-0', '-translate-y-8');
-                setTimeout(() => timerSection.classList.add('hidden'), 500);
-            }
-            if (initialHeader) {
-                initialHeader.classList.add('opacity-0', '-translate-y-8');
-                setTimeout(() => initialHeader.classList.add('hidden'), 500);
-            }
-
-            if (notifBanner) {
-                notifBanner.classList.remove('hidden');
-            }
-
-            if (presenceBtn) {
-                presenceBtn.disabled = false;
-                presenceBtn.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'shadow-slate-200/50');
-                presenceBtn.classList.add('bg-[#1A73E8]', 'text-white', 'hover:bg-blue-700', 'shadow-blue-600/30', 'animate-pulse');
-            }
-            if (presenceHint) {
-                presenceHint.textContent = "C'est le moment ! Validez votre présence maintenant.";
-                presenceHint.classList.replace('text-slate-400', 'text-[#1A73E8]');
-            }
-
-            if (infoFooter) {
-                infoFooter.classList.replace('bg-blue-50/50', 'bg-green-50');
-                infoFooter.classList.replace('border-blue-100', 'border-green-100');
-            }
-            const footerText = document.getElementById('footer-text');
-            if (footerText) {
-                footerText.textContent = "C'est votre tour bientôt. Restez vigilant !";
-                footerText.classList.replace('text-blue-800', 'text-[#34A853]');
-            }
-        }
-
-
-        async function fetchQueue() {
-            try {
-                const response = await fetch('{{ route('candidat.queue-status') }}');
-                const result = await response.json();
-                if (result.success) {
-                    renderQueue(result.queue);
-                    
-                    // Si le candidat change de statut (ex: passe à "en cours"), 
-                    // on peut aussi mettre à jour l'UI globale ici si besoin.
-                }
-            } catch (error) {
-                console.error("Erreur polling queue:", error);
-            }
-        }
-
-        function startPolling() {
-            if (pollInterval) clearInterval(pollInterval);
-            fetchQueue(); // Premier appel immédiat
-            pollInterval = setInterval(fetchQueue, 3000); // Poll toutes les 3 secondes
-        }
-
-        function renderQueue(tickets) {
-            queueBody.innerHTML = '';
-            let enAttenteCount = 0;
-
-            tickets.forEach((t, index) => {
-                let rowClass = 'bg-white';
-                let statusBadgeClass = '';
-                let statusText = '';
-                let isMe = t.candidat_id === candidatId;
-
-                if (t.statut === 'en cours') {
-                    rowClass = 'bg-[#10b981] text-white font-bold shadow-sm z-20'; // Vert principal, moderne
-                    statusBadgeClass = 'bg-white/20 border border-white/30 text-white';
-                    statusText = 'En cours';
-                } else if (t.statut === 'en attente') {
-                    enAttenteCount++;
-                    if (enAttenteCount <= 3) {
-                        rowClass = 'bg-emerald-50/80 text-emerald-800 border-b border-emerald-100'; // Vert trÃ¨s clair et calme
-                        statusBadgeClass = 'bg-emerald-100 text-emerald-700 border border-emerald-200';
-                        statusText = 'Suivant';
-                    } else {
-                        rowClass = 'bg-white text-slate-400';
-                        statusBadgeClass = 'bg-slate-50 text-slate-400 border border-slate-100';
-                        statusText = 'En attente';
-                    }
-                } else if (t.statut === 'terminé' || t.statut === 'terminée') {
-                    rowClass = 'bg-[#064e3b] text-white font-bold'; // Vert foncÃ© pour terminÃ©
-                    statusBadgeClass = 'bg-white/10 border border-white/30 text-white';
-                    statusText = 'TerminÃ©';
-                }
-
-                if (isMe) {
-                    rowClass += ' border-l-[6px] border-blue-500 ring-1 ring-blue-100';
-                }
-
-                const initials = (t.candidat.prenom[0] + t.candidat.nom[0]).toUpperCase();
-
-                const row = `
-                    <tr class="${rowClass} transition-all duration-300">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-black w-24 text-[11px]">Pos ${index + 1}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-x-4">
-                                <div class="size-9 rounded-full ${isMe ? 'bg-blue-100 text-[#1A73E8]' : 'bg-white/20'} flex items-center justify-center font-bold text-xs shadow-inner">
-                                    ${initials}
-                                </div>
-                                <div>
-                                    <p class="font-bold text-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
-                                    ${isMe ? '<p class="text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-end">
-                            ${statusText ? `<span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${statusBadgeClass}">${statusText}</span>` : ''}
-                        </td>
-                    </tr>
-                `;
-                queueBody.innerHTML += row;
-            });
-
-            // Show queue section
-            queueSection.classList.remove('hidden');
-            setTimeout(() => queueSection.classList.remove('opacity-0', 'translate-y-6'), 50);
-        }
-
-        // --- MODAL LOGIC ---
-        function openModal() {
-            modal.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-            setTimeout(() => {
-                modal.classList.add('opacity-100');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            }, 10);
-            presenceCodeInput.focus();
-        }
-
-        function closeModal() {
-            modal.classList.remove('opacity-100');
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }, 300);
-        }
-
-        if (presenceBtn) {
-            presenceBtn.addEventListener('click', () => {
-                if (!presenceBtn.disabled) openModal();
-            });
-        }
-        
-        if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-        confirmBtn.addEventListener('click', async () => {
-            const code = presenceCodeInput.value;
-            if (!code) return;
-
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<span class="inline-block animate-spin border-2 border-white border-t-transparent rounded-full size-4 mr-2"></span>';
-
-            try {
-                const response = await fetch('{{ route('candidat.mark-presence') }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ code: code })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    closeModal();
-                    switchToConfirmedState(result.time, result.queue);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                presenceCodeInput.classList.add('border-red-500', 'text-red-600', 'animate-shake');
-                confirmBtn.innerHTML = 'Erreur';
-                confirmBtn.classList.replace('bg-green-600', 'bg-red-600');
-                
-                setTimeout(() => {
-                    presenceCodeInput.classList.remove('border-red-500', 'text-red-600', 'animate-shake');
-                    confirmBtn.disabled = false;
-                    confirmBtn.innerHTML = 'Confirmer';
-                    confirmBtn.classList.replace('bg-red-600', 'bg-[#34A853]');
-                }, 1000);
-            }
-        });
-
-        function switchToConfirmedState(time, queueData) {
-            confirmTimeEl.textContent = time;
-
-            // UI Changes
-            if (presenceBtn) {
-                presenceBtn.classList.add('hidden');
-                presenceBtn.style.display = 'none';
-            }
-            if (presenceHint) {
-                presenceHint.classList.add('hidden');
-                presenceHint.style.display = 'none';
-            }
-            confirmedBadge.classList.remove('hidden');
-            confirmedBadge.classList.add('inline-flex');
-
-            // Header & Footer
-            const globalBanner = document.getElementById('notif-banner');
-            const notifText = document.getElementById('notif-text');
-            if (globalBanner) {
-                globalBanner.classList.remove('hidden');
-                if (notifText) {
-                    notifText.textContent = "C'est le jour de votre entretien ! Bonne chance pour votre passage.";
-                }
-            }
-
-            const footerText = document.getElementById('footer-text');
-            footerText.textContent = "C'est votre tour bientôt. Restez vigilant !";
-            infoFooter.classList.replace('bg-blue-50/50', 'bg-green-50');
-            infoFooter.classList.replace('border-blue-100', 'border-green-100');
-            footerText.classList.replace('text-blue-800', 'text-[#34A853]');
-
-            // Render Queue
-            renderQueue(queueData);
-            startPolling();
-        }
-
-        // Si déjà présent au chargement
-        if (isAlreadyPresent) {
-            const initialQueue = @json($queue);
-            if (initialQueue && initialQueue.length > 0) {
-                renderQueue(initialQueue);
-            }
-            const globalBanner = document.getElementById('notif-banner');
-            if (globalBanner) {
-                globalBanner.classList.remove('hidden');
-            }
-        }
-    });
-</script>
 @endsection

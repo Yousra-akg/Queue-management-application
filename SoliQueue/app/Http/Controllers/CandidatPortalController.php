@@ -42,6 +42,10 @@ class CandidatPortalController extends Controller
             return redirect()->route('login');
         }
 
+        if (!$candidat->session_id) {
+            return redirect()->route('candidat.bienvenue')->with('error', 'Vous n\'êtes affecté à aucune session pour le moment.');
+        }
+
         // Si le ticket n'existe pas encore, on le génère
         if (!$candidat->ticket) {
             $this->ticketService->generateTicket($candidat->id);

@@ -20,13 +20,8 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-50 h-full font-sans">
@@ -78,7 +73,7 @@
     @endcannot
 
     <!-- Main Content -->
-    <main x-data="dashboardManager()" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($session) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $session->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <!-- Dashboard Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div class="space-y-4">
@@ -287,95 +282,7 @@
         </div>
     </main>
 
-    <script>
-        function dashboardManager() {
-            return {
-                tickets: @json($tickets),
-                searchQuery: '',
-                session: @json($session),
 
-                get waitingCount() {
-                    return this.tickets.filter(t => t.statut === 'en attente').length;
-                },
-
-                get filteredTickets() {
-                    if (!this.searchQuery) return this.tickets;
-                    const q = this.searchQuery.toLowerCase();
-                    return this.tickets.filter(t =>
-                        t.candidat.nom.toLowerCase().includes(q) ||
-                        t.candidat.prenom.toLowerCase().includes(q)
-                    );
-                },
-
-                init() {
-                    @can('manage_queue')
-                        const el = document.getElementById('candidate-list');
-                        Sortable.create(el, {
-                            handle: '.drag-handle',
-                            animation: 150,
-                            ghostClass: 'bg-blue-50',
-                            onEnd: (evt) => {
-                                const newOrder = Array.from(el.querySelectorAll('.candidate-card'))
-                                    .map(card => card.getAttribute('data-id'));
-                                this.saveNewOrder(newOrder);
-                            }
-                        });
-                    @endcan
-                },
-
-                async updateStatus(ticket, newStatus) {
-                    try {
-                        const response = await axios.post(`/formateur/status/${ticket.id}`, {
-                            statut: newStatus,
-                            _token: "{{ csrf_token() }}"
-                        });
-                        if (response.data.success) {
-                            ticket.statut = newStatus;
-                            // Sort by order locally if needed, but here simple state update is fine
-                            this.tickets = [...this.tickets];
-                        }
-                    } catch (err) {
-                        Swal.fire('Erreur', 'Impossible de mettre à jour le statut.', 'error');
-                    }
-                },
-
-                async saveNewOrder(orderIds) {
-                    try {
-                        const response = await axios.post("{{ route('formateur.reorder', $session->id) }}", {
-                            order: orderIds,
-                            _token: "{{ csrf_token() }}"
-                        });
-                        if (response.data.success) {
-                            // Update local tickets order numbers
-                            orderIds.forEach((id, index) => {
-                                const ticket = this.tickets.find(t => t.id == id);
-                                if (ticket) ticket.numeroOrdre = index + 1;
-                            });
-                            // Resort local array
-                            this.tickets.sort((a, b) => a.numeroOrdre - b.numeroOrdre);
-                            this.tickets = [...this.tickets];
-                        }
-                    } catch (err) {
-                        Swal.fire('Erreur', 'Impossible de mettre à jour l\'ordre.', 'error');
-                    }
-                },
-
-                callNext() {
-                    const next = this.tickets.find(t => t.statut === 'en attente');
-                    if (next) {
-                        this.updateStatus(next, 'en cours');
-                    } else {
-                        Swal.fire({
-                            title: 'Plus personne !',
-                            text: 'Tous les candidats en attente ont été appelés.',
-                            icon: 'info',
-                            confirmButtonColor: '#1d4ed8'
-                        });
-                    }
-                }
-            }
-        }
-    </script>
 </body>
 
 </html>

@@ -15,8 +15,12 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('web')->check() && Auth::guard('web')->user() instanceof User) {
-            return $next($request);
+        if (Auth::guard('web')->check()) {
+            /** @var \App\Models\User $user */
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('admin')) {
+                return $next($request);
+            }
         }
 
         return redirect()->route('admin.login')->with('error', 'Accès réservé aux administrateurs.');

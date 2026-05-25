@@ -32,14 +32,10 @@ class RolesAndPermissionsSeeder extends Seeder
         foreach (User::all() as $user) {
             if (in_array($user->id, $formateurUserIds)) {
                 // This user is a formateur
-                if (!$user->hasRole('formateur')) {
-                    $user->assignRole('formateur');
-                }
+                $user->syncRoles('formateur');
             } else {
                 // This user is an admin
-                if (!$user->hasRole('admin')) {
-                    $user->assignRole('admin');
-                }
+                $user->syncRoles('admin');
             }
         }
     }

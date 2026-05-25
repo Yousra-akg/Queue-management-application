@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Affectations')
 
 @section('content')
-<div x-data="sessionManager()" x-init="init()" class="space-y-8">
+<div x-data="affectationsManager({{ json_encode($availableCandidates) }}, {{ json_encode($sessions) }})" x-init="init()" class="space-y-8">
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -93,7 +93,7 @@
                 <div class="capacity-container flex justify-between items-center mb-6 p-4 bg-[#F8F9FA] border border-slate-100 rounded-2xl">
                     <div class="flex-grow mr-4">
                         <p class="text-xs font-black text-slate-900 tracking-tight uppercase" x-text="'Capacité ' + (selectedSession.nom.includes('Session') ? selectedSession.nom.replace('Session ', '') : selectedSession.nom)"></p>
-                        <div class="w-48 h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+                        <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
                             <div class="bg-[#1A73E8] h-full rounded-full transition-all duration-500" 
                                  :style="'width: ' + (selectedSession.candidats_count / selectedSession.capaciteMax * 100) + '%'">
                             </div>
@@ -120,10 +120,14 @@
                                         <div class="size-10 rounded-xl bg-slate-50 text-xs font-black flex items-center justify-center text-slate-500 italic shadow-inner" x-text="c.prenom[0] + c.nom[0]"></div>
                                         <div>
                                             <p class="text-sm font-black text-slate-800 uppercase tracking-tight" x-text="c.prenom + ' ' + c.nom"></p>
-                                            <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-0.5" x-text="c.cin"></p>
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase" x-text="c.cin"></p>
+                                                <span class="size-1.5 rounded-full" :class="c.is_present ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-slate-300'"></span>
+                                                <span class="text-[9px] font-black uppercase tracking-wider" :class="c.is_present ? 'text-green-600' : 'text-slate-400'" x-text="c.is_present ? 'Présent' : 'Absent'"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <button @click="unassignCandidate(c.id)" class="size-8 flex items-center justify-center rounded-lg text-slate-200 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100">
+                                    <button x-show="selectedSession.statut !== 'terminée' || !c.is_present" @click="unassignCandidate(c.id)" class="size-8 flex items-center justify-center rounded-lg text-slate-200 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100" title="Retirer de la session">
                                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                                     </button>
                                 </div>
@@ -156,7 +160,7 @@
                 <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mt-2">Nouveau candidat QCM</p>
             </div>
 
-            <form action="{{ route('admin.candidates.store') }}" method="POST" class="flex flex-col flex-1 overflow-hidden">
+            <form action="{{ route('admin.candidates.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 overflow-hidden">
                 @csrf
                 <!-- Scrollable Body -->
                 <div class="px-8 sm:px-10 pb-4 overflow-y-auto space-y-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300">
@@ -184,6 +188,12 @@
                         <input type="number" name="scoreQCM" min="0" max="100" step="0.1" required placeholder="85"
                             class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
                     </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Photo de profil (Optionnel)</label>
+                        <input type="file" name="photo" accept="image/jpeg,image/png,image/jpg"
+                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer file:cursor-pointer">
+                    </div>
                 </div>
 
                 <!-- Actions Footer (Fixed) -->
@@ -202,255 +212,6 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-    function sessionManager() {
-        return {
-            availableCandidates: @json($availableCandidates).map(c => ({...c, selected: false})),
-            sessions: @json($sessions),
-            selectedSessionId: '',
-            searchQuery: '',
-            statusFilter: 'all',
-            showAddCandidateModal: false,
-            showSessionModal: false,
-            isDragging: false,
-            sessionForm: {
-                id: null,
-                nom: '',
-                dateEntretien: '',
-                capaciteMax: '',
-                heureDebut: '',
-                heureFin: '',
-                codePresence: '',
-                statut: 'planifiée'
-            },
 
-            get selectedSession() {
-                return this.sessions.find(s => s.id == this.selectedSessionId);
-            },
-
-            get allSelected() {
-                return this.availableCandidates.length > 0 && this.availableCandidates.every(c => c.selected);
-            },
-
-            get filteredSessions() {
-                return this.sessions.filter(s => {
-                    const matchesSearch = s.nom.toLowerCase().includes(this.searchQuery.toLowerCase());
-                    const matchesStatus = this.statusFilter === 'all' || s.statut === this.statusFilter;
-                    return matchesSearch && matchesStatus;
-                });
-            },
-
-            init() {
-                // Select first session by default
-                if (this.sessions.length > 0) {
-                    this.selectedSessionId = this.sessions[0].id;
-                }
-
-                // Initialize Sortable on candidates pool
-                new Sortable(document.getElementById('candidate-pool'), {
-                    group: {
-                        name: 'candidates',
-                        pull: 'clone',
-                        put: false
-                    },
-                    sort: false,
-                    animation: 150,
-                    revertClone: true, // Crucial for Alpine: don't mess with the source DOM
-                    onStart: () => { this.isDragging = true; },
-                    onEnd: () => { this.isDragging = false; }
-                });
-
-                // Initialize Sortable on drop zone
-                new Sortable(document.getElementById('drop-zone'), {
-                    group: 'candidates',
-                    animation: 150,
-                    onAdd: (evt) => {
-                        const candidateId = evt.item.dataset.id;
-                        this.assignCandidate(candidateId);
-                        evt.item.remove(); // Remove the element Sortable just added
-                    }
-                });
-            },
-
-            toggleAllCandidates() {
-                const newState = !this.allSelected;
-                this.availableCandidates.forEach(c => c.selected = newState);
-            },
-
-            async assignCandidate(id) {
-                if (!this.selectedSessionId) {
-                    alert('Veuillez sélectionner une session.');
-                    return;
-                }
-
-                // If multiple are selected, assign all selected ones
-                let selectedItems = this.availableCandidates.filter(c => c.selected);
-                let selectedIds = selectedItems.map(c => c.id);
-                
-                if (!selectedIds.includes(parseInt(id))) {
-                    const targetCand = this.availableCandidates.find(c => c.id == id);
-                    if (targetCand) {
-                        selectedItems.push(targetCand);
-                        selectedIds.push(parseInt(id));
-                    }
-                }
-
-                try {
-                    const response = await fetch(`/admin/sessions/${this.selectedSessionId}/assign`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({ candidate_ids: selectedIds })
-                    });
-
-                    if (response.ok) {
-                        // Update local state: move from available to session
-                        const sessionIndex = this.sessions.findIndex(s => s.id == this.selectedSessionId);
-                        
-                        selectedItems.forEach(cand => {
-                            this.sessions[sessionIndex].candidats.push({...cand, selected: false});
-                        });
-                        
-                        this.availableCandidates = this.availableCandidates.filter(c => !selectedIds.includes(c.id));
-                        this.sessions[sessionIndex].candidats_count = this.sessions[sessionIndex].candidats.length;
-
-                        // Show bottom alert
-                        Swal.fire({
-                            icon: 'success',
-                            text: 'Candidats affectés avec succès.',
-                            position: 'bottom',
-                            toast: true,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            background: '#0B1120',
-                            color: '#fff',
-                            customClass: {
-                                popup: 'rounded-full px-6'
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error assigning candidates:', error);
-                }
-            },
-
-            async unassignCandidate(id) {
-                const result = await Swal.fire({
-                    title: 'Retrait du candidat',
-                    text: 'Voulez-vous vraiment retirer ce candidat de la session ?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#1A73E8',
-                    cancelButtonColor: '#f3f4f6',
-                    confirmButtonText: 'Oui, retirer',
-                    cancelButtonText: 'Annuler'
-                });
-                if (!result.isConfirmed) return;
-
-                try {
-                    // We can reuse a route or add a new one. For simplicity, let's assume we update the session_id to null.
-                    // I will need a route for this too if I want it robust, but let's assume I add it.
-                    const response = await fetch(`/admin/candidates/${id}/unassign`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    });
-
-                    if (response.ok) {
-                        const sessionIndex = this.sessions.findIndex(s => s.id == this.selectedSessionId);
-                        const candIndex = this.sessions[sessionIndex].candidats.findIndex(c => c.id == id);
-                        const cand = this.sessions[sessionIndex].candidats[candIndex];
-                        
-                        this.availableCandidates.push({...cand, selected: false});
-                        this.sessions[sessionIndex].candidats.splice(candIndex, 1);
-                        this.sessions[sessionIndex].candidats_count = this.sessions[sessionIndex].candidats.length;
-
-                        // Show bottom alert
-                        Swal.fire({
-                            icon: 'success',
-                            text: 'Candidat retiré de la session.',
-                            position: 'bottom',
-                            toast: true,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            background: '#0B1120',
-                            color: '#fff',
-                            customClass: {
-                                popup: 'rounded-full px-6'
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error unassigning candidate:', error);
-                }
-            },
-
-            formatDate(dateStr) {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-            },
-
-            editSession(session) {
-                this.sessionForm = { ...session };
-                this.showSessionModal = true;
-            },
-
-            async deleteSession(id) {
-                const result = await Swal.fire({
-                    title: 'Supprimer la session ?',
-                    text: 'Cette action est irréversible.',
-                    icon: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444',
-                    cancelButtonColor: '#f3f4f6',
-                    confirmButtonText: 'Oui, supprimer',
-                    cancelButtonText: 'Annuler'
-                });
-                if (!result.isConfirmed) return;
-                
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/admin/sessions/${id}`;
-                form.innerHTML = `
-                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                    <input type="hidden" name="_method" value="DELETE">
-                `;
-                document.body.appendChild(form);
-                form.submit();
-            },
-
-            openAddSessionModal() {
-                this.resetSessionForm();
-                this.generateSessionCode();
-                this.showSessionModal = true;
-            },
-
-            generateSessionCode() {
-                this.sessionForm.codePresence = Math.floor(1000 + Math.random() * 9000).toString();
-            },
-
-            resetSessionForm() {
-                this.sessionForm = {
-                    id: null,
-                    nom: '',
-                    dateEntretien: '',
-                    capaciteMax: '60',
-                    heureDebut: '09:00',
-                    heureFin: '17:00',
-                    codePresence: '',
-                    statut: 'planifiée'
-                };
-            }
-        }
-    }
-</script>
-@endpush
 
 @endsection

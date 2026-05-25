@@ -74,6 +74,7 @@
             </div>
         </main>
     </div>
+    @stack('modals')
     @yield('scripts')
 </body>
 </html>
