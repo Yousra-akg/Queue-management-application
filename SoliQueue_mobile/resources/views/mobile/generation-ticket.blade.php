@@ -118,7 +118,7 @@
 
     <!-- Fixed Bottom CTA -->
     <footer class="fixed bottom-0 w-full max-w-[430px] p-6 bg-white border-t border-gray-100 z-50">
-        <form action="{{ route('mobile.generate', ['etudiant_id' => $etudiant['id'] ?? '']) }}" method="POST">
+        <form action="/generate-ticket" method="POST">
             @csrf
             <input type="hidden" name="etudiant_id" value="{{ $etudiant['id'] ?? '' }}">
             <input type="hidden" name="etudiant_name" value="{{ trim(($etudiant['nom'] ?? '') . ' ' . ($etudiant['prenom'] ?? '')) }}">

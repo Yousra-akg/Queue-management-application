@@ -77,7 +77,7 @@
 
         <!-- Login Form -->
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <form action="{{ route('mobile.login') }}" method="POST" class="space-y-6">
+            <form action="/login" method="POST" class="space-y-6">
                 @csrf
                 <div>
                     <label for="cin" class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2.5">

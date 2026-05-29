@@ -287,7 +287,7 @@
                 confirmBtn.innerText = 'Vérification...';
                 
                 try {
-                    const response = await fetch("{{ route('mobile.validate') }}", {
+                    const response = await fetch("/validate-presence", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -322,7 +322,7 @@
             
             async function loadLiveQueue() {
                 try {
-                    const res = await fetch("{{ route('mobile.queue') }}");
+                    const res = await fetch("/live-queue");
                     const data = await res.json();
                     
                     if (data.success && data.data) {
