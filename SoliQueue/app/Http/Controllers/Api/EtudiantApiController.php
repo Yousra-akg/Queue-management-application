@@ -61,4 +61,25 @@ class EtudiantApiController extends Controller
             'data'    => $etudiant
         ], 200);
     }
+
+    /**
+     * GET /api/mobile/candidates/{id}
+     * Retourne un candidat spécifique par son ID.
+     */
+    public function getCandidate(int $id): JsonResponse
+    {
+        $etudiant = \App\Models\Candidat::find($id);
+
+        if (!$etudiant) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Candidat non trouvé.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data'    => $etudiant
+        ], 200);
+    }
 }

@@ -100,4 +100,25 @@ class TicketApiController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * GET /api/mobile/tickets/{id}
+     * Retourne un ticket spécifique par son ID.
+     */
+    public function getTicket(int $id): JsonResponse
+    {
+        $ticket = \App\Models\Ticket::find($id);
+
+        if (!$ticket) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ticket non trouvé.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data'    => $ticket
+        ], 200);
+    }
 }

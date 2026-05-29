@@ -293,7 +293,7 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ code_presence: code })
+                        body: JSON.stringify({ code_presence: code, ticket_id: {{ $ticket['id'] }} })
                     });
 
                     const data = await response.json();
@@ -322,7 +322,7 @@
             
             async function loadLiveQueue() {
                 try {
-                    const res = await fetch("/live-queue");
+                    const res = await fetch("/live-queue?session_id=" + {{ $ticket['session_id'] }});
                     const data = await res.json();
                     
                     if (data.success && data.data) {

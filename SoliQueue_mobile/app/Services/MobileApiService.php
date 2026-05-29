@@ -11,6 +11,16 @@ class MobileApiService extends BaseService
         ]);
     }
 
+    public function getCandidateById(int $id)
+    {
+        return $this->get("candidates/{$id}");
+    }
+
+    public function getTicketById(int $id)
+    {
+        return $this->get("tickets/{$id}");
+    }
+
     public function getRandomStudent()
     {
         return $this->get('random-student');

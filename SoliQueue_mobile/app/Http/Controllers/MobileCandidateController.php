@@ -27,20 +27,27 @@ class MobileCandidateController extends Controller
 
         try {
             $response = $this->apiService->login($request->input('cin'));
-            session(['auth_student' => $response['data']]);
-            return redirect()->route('mobile.ticket_ready');
+            $etudiant = $response['data'];
+            return redirect()->route('mobile.ticket_ready', ['candidate_id' => $etudiant['id']]);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
 
-    public function showGenerationTicket()
+    public function showGenerationTicket(Request $request)
     {
-        $etudiant = session('auth_student');
-        if (!$etudiant) {
+        $studentId = $request->query('candidate_id');
+        if (!$studentId) {
             return redirect()->route('mobile.home');
         }
-        return view('mobile.generation-ticket', compact('etudiant'));
+
+        try {
+            $response = $this->apiService->getCandidateById($studentId);
+            $etudiant = $response['data'];
+            return view('mobile.generation-ticket', compact('etudiant'));
+        } catch (\Exception $e) {
+            return redirect()->route('mobile.home')->with('error', 'Candidat introuvable.');
+        }
     }
 
     public function generateTicket(Request $request)
@@ -52,52 +59,63 @@ class MobileCandidateController extends Controller
                 throw new \Exception("ID étudiant invalide ou manquant.");
             }
             $response = $this->apiService->generateTicket($studentId);
+            $ticket = $response['data'];
             
-            session(['current_ticket' => $response['data']]);
-            session(['current_student_name' => $request->input('etudiant_name')]);
-            
-            return redirect()->route('mobile.portal');
+            return redirect()->route('mobile.portal', [
+                'ticket_id' => $ticket['id'],
+                'student_name' => $request->input('etudiant_name') ?? 'Candidat'
+            ]);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
 
-    public function showPortal()
+    public function showPortal(Request $request)
     {
-        $ticket = session('current_ticket');
-        $studentName = session('current_student_name', 'Candidat');
-        if (!$ticket) {
+        $ticketId = $request->query('ticket_id');
+        $studentName = $request->query('student_name', 'Candidat');
+        if (!$ticketId) {
             return redirect()->route('mobile.home');
         }
 
         try {
+            $response = $this->apiService->getTicketById($ticketId);
+            $ticket = $response['data'];
+
             $sessionStatus = $this->apiService->getSessionStatus($ticket['session_id']);
             $sessionInfo = $sessionStatus['data'];
             
             return view('mobile.portail-interactif', compact('ticket', 'sessionInfo', 'studentName'));
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return redirect()->route('mobile.home')->with('error', 'Session ou ticket introuvable.');
         }
     }
 
     public function validatePresence(Request $request)
     {
         try {
-            $ticket = session('current_ticket');
+            $ticketId = (int) $request->input('ticket_id');
             $code = $request->input('code_presence');
             
-            $this->apiService->validatePresence($ticket['id'], $code);
+            if (!$ticketId) {
+                throw new \Exception("Identifiant du ticket manquant.");
+            }
+
+            $this->apiService->validatePresence($ticketId, $code);
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     
-    public function getQueueData()
+    public function getQueueData(Request $request)
     {
         try {
-            $ticket = session('current_ticket');
-            $response = $this->apiService->getLiveQueue($ticket['session_id']);
+            $sessionId = (int) $request->query('session_id');
+            if (!$sessionId) {
+                throw new \Exception("Session manquante.");
+            }
+            $response = $this->apiService->getLiveQueue($sessionId);
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
