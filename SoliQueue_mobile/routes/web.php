@@ -14,6 +14,9 @@ use App\Http\Controllers\MobileAdminController;
 */
 
 Route::get('/', [MobileCandidateController::class, 'showLogin'])->name('mobile.home');
+Route::get('/login', function() {
+    return redirect()->route('mobile.home');
+});
 Route::post('/login', [MobileCandidateController::class, 'login'])->name('mobile.login');
 Route::get('/ticket-ready', [MobileCandidateController::class, 'showGenerationTicket'])->name('mobile.ticket_ready');
 Route::post('/generate-ticket', [MobileCandidateController::class, 'generateTicket'])->name('mobile.generate');
