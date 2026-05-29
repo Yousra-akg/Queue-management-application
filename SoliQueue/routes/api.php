@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\SessionApiController;
 
 Route::prefix('mobile')->group(function () {
     
+    // 0. Authentification du candidat par son CIN
+    Route::post('/login', [EtudiantApiController::class, 'login']);
+    
     // 1. Retourne un étudiant (candidat) aléatoire
     Route::get('/random-student', [EtudiantApiController::class, 'getRandomStudent']);
 

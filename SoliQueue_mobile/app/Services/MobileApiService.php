@@ -4,6 +4,13 @@ namespace App\Services;
 
 class MobileApiService extends BaseService
 {
+    public function login(string $cin)
+    {
+        return $this->post('login', [
+            'cin' => $cin
+        ]);
+    }
+
     public function getRandomStudent()
     {
         return $this->get('random-student');

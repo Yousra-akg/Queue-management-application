@@ -14,25 +14,42 @@ class MobileCandidateController extends Controller
         $this->apiService = $apiService;
     }
 
+    public function showLogin()
+    {
+        return view('mobile.login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'cin' => 'required|string'
+        ]);
+
+        try {
+            $response = $this->apiService->login($request->input('cin'));
+            session(['auth_student' => $response['data']]);
+            return redirect()->route('mobile.ticket_ready');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     public function showGenerationTicket()
     {
-        try {
-            $response = $this->apiService->getRandomStudent();
-            $etudiant = $response['data'];
-            return view('mobile.generation-ticket', compact('etudiant'));
-        } catch (\Exception $e) {
-            return response("Erreur API : " . $e->getMessage(), 500);
+        $etudiant = session('auth_student');
+        if (!$etudiant) {
+            return redirect()->route('mobile.home');
         }
+        return view('mobile.generation-ticket', compact('etudiant'));
     }
 
     public function generateTicket(Request $request)
     {
         try {
-            // On accepte l'ID depuis le formulaire OU l'URL pour plus de fiabilité
             $studentId = (int) ($request->input('etudiant_id') ?? $request->query('etudiant_id'));
             
             if (!$studentId) {
-                throw new \Exception("ID étudiant invalide ou manquant dans la requête.");
+                throw new \Exception("ID étudiant invalide ou manquant.");
             }
             $response = $this->apiService->generateTicket($studentId);
             

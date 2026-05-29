@@ -35,4 +35,30 @@ class EtudiantApiController extends Controller
             'data'    => $etudiant
         ], 200);
     }
+
+    /**
+     * POST /api/mobile/login
+     * Authentifie un candidat avec son CIN.
+     */
+    public function login(\Illuminate\Http\Request $request): JsonResponse
+    {
+        $request->validate([
+            'cin' => 'required|string'
+        ]);
+
+        $cin = trim($request->input('cin'));
+        $etudiant = \App\Models\Candidat::where('cin', $cin)->first();
+
+        if (!$etudiant) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Aucun candidat trouvé avec ce CIN.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data'    => $etudiant
+        ], 200);
+    }
 }
