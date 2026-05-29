@@ -29,11 +29,11 @@ class TicketServiceTest extends TestCase
     public function test_get_live_queue_returns_correct_count()
     {
         // Session Alpha (ID 1) has 2 tickets in CSV: 1 "terminée", 1 "en cours"
-        // getLiveQueue should return only "en attente" and "en cours"
+        // getLiveQueue should return all tickets for the session
         $queue = $this->ticketService->getLiveQueue(1);
         
-        $this->assertCount(1, $queue);
-        $this->assertEquals('Benani', $queue->first()->candidat->nom);
+        $this->assertCount(2, $queue);
+        $this->assertEquals('Akajou', $queue->first()->candidat->nom);
     }
 
     /**

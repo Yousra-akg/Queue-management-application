@@ -4,17 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Services\CandidatService;
 use App\Services\TicketService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class CandidatPortalController extends Controller
 {
     protected $candidatService;
     protected $ticketService;
+    protected $notificationService;
 
-    public function __construct(CandidatService $candidatService, TicketService $ticketService)
-    {
+    public function __construct(
+        CandidatService $candidatService,
+        TicketService $ticketService,
+        NotificationService $notificationService
+    ) {
         $this->candidatService = $candidatService;
         $this->ticketService = $ticketService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -106,12 +112,28 @@ class CandidatPortalController extends Controller
         }
 
         $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+        $notifications = $this->notificationService->getUnreadNotifications($candidat->id);
         
         return response()->json([
             'success' => true,
             'queue' => $queue,
             'my_ticket_status' => $candidat->ticket->statut ?? 'en attente',
-            'my_position' => $queue->where('candidat_id', $candidat->id)->keys()->first() + 1
+            'my_position' => $queue->where('candidat_id', $candidat->id)->keys()->first() + 1,
+            'notifications' => $notifications
         ]);
     }
+
+    /**
+     * Marquer une notification comme lue.
+     */
+    public function markNotificationRead(int $notificationId)
+    {
+        try {
+            $this->notificationService->markAsRead($notificationId);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 }
+

@@ -17,7 +17,7 @@ class QueueServiceTest extends TestCase
     {
         parent::setUp();
         $this->seed();
-        $this->queueService = new QueueService(new Ticket());
+        $this->queueService = app(QueueService::class);
     }
 
     /**

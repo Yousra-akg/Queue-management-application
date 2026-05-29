@@ -44,7 +44,7 @@ class CandidatServiceTest extends TestCase
             'prenom' => 'Ticket',
             'cin' => 'TEST000',
             'scoreQCM' => 14,
-            'session_id' => 1
+            'session_id' => null
         ]);
 
         $unassigned = $this->candidatService->getUnassigned();

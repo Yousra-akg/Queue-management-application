@@ -8,6 +8,13 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
     csrfToken,
     pollInterval: null,
     timerInterval: null,
+    notifications: [],
+    showNotifDropdown: false,
+    priorityAlert: null,
+
+    get unreadCount() {
+        return this.notifications.filter(n => !n.estLu).length;
+    },
 
     // --- ELEMENTS CACHÉS ---
     timerEls: {},
@@ -175,10 +182,45 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
             const result = await response.json();
             if (result.success) {
                 this.renderQueue(result.queue);
+                
+                const newNotifs = result.notifications || [];
+                
+                newNotifs.forEach(notif => {
+                    const exists = this.notifications.some(n => n.id === notif.id);
+                    if (!exists && (notif.titre.includes("tour") || notif.titre.includes("Terminé"))) {
+                        this.priorityAlert = notif;
+                    }
+                });
+
+                this.notifications = newNotifs;
             }
         } catch (error) {
             console.error("Erreur polling queue:", error);
         }
+    },
+
+    async markAsRead(notificationId) {
+        try {
+            const response = await fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': this.csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            const result = await response.json();
+            if (result.success) {
+                this.notifications = this.notifications.filter(n => n.id !== notificationId);
+            }
+        } catch (error) {
+            console.error("Erreur lecture notification:", error);
+        }
+    },
+
+    async dismissPriorityAlert(notificationId) {
+        await this.markAsRead(notificationId);
+        this.priorityAlert = null;
     },
 
     startPolling() {

@@ -4,6 +4,7 @@ use App\Http\Controllers\CandidatPortalController;
 use App\Http\Controllers\Admin\SessionManagementController;
 use App\Http\Controllers\Admin\FormateurManagementController;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\ImportExportController;
 use App\Http\Controllers\Formateur\FormateurController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ticket-details', [CandidatPortalController::class, 'ticketDetails'])->name('candidat.ticket-details');
     Route::post('/mark-presence', [CandidatPortalController::class, 'markPresence'])->name('candidat.mark-presence');
     Route::get('/queue-status', [CandidatPortalController::class, 'getQueueStatus'])->name('candidat.queue-status');
+    Route::post('/notifications/{notification}/read', [CandidatPortalController::class, 'markNotificationRead'])->name('candidat.notification.read');
 });
 
 // Admin Auth Routes
@@ -55,6 +57,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::post('/formateurs', [FormateurManagementController::class, 'store'])->name('formateurs.store');
     Route::put('/formateurs/{formateur}', [FormateurManagementController::class, 'update'])->name('formateurs.update');
     Route::delete('/formateurs/{formateur}', [FormateurManagementController::class, 'destroy'])->name('formateurs.destroy');
+
+    // Import & Export
+    Route::get('/candidats/export', [ImportExportController::class, 'exportCandidats'])->name('candidats.export');
+    Route::post('/candidats/import', [ImportExportController::class, 'importCandidats'])->name('candidats.import');
+    Route::get('/sessions/export', [ImportExportController::class, 'exportSessions'])->name('sessions.export');
 });
 
 // Portail Formateur
