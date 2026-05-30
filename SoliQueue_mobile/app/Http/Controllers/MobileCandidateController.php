@@ -17,6 +17,7 @@ class MobileCandidateController extends Controller
     public function showLogin(Request $request)
     {
         $error = $request->query('error');
+        \Illuminate\Support\Facades\Log::info("LOADED EXTENSIONS: " . implode(', ', get_loaded_extensions()));
         return view('mobile.login', compact('error'));
     }
 
