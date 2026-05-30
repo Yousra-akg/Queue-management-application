@@ -66,9 +66,9 @@
 
     <main class="flex-grow pb-32 px-6 flex flex-col justify-center animate-fade-in-up">
         
-        @if(session('error'))
+        @if(session('error') || isset($error))
             <div class="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-bold mb-4 text-center">
-                {{ session('error') }}
+                {{ session('error') ?? $error }}
             </div>
         @endif
 

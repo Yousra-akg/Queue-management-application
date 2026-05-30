@@ -14,9 +14,10 @@ class MobileCandidateController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function showLogin()
+    public function showLogin(Request $request)
     {
-        return view('mobile.login');
+        $error = $request->query('error');
+        return view('mobile.login', compact('error'));
     }
 
     public function login(Request $request)
@@ -28,9 +29,9 @@ class MobileCandidateController extends Controller
         try {
             $response = $this->apiService->login($request->input('cin'));
             $etudiant = $response['data'];
-            return redirect()->route('mobile.ticket_ready', ['candidate_id' => $etudiant['id']]);
+            return response('', 302)->header('Location', '/ticket-ready?candidate_id=' . $etudiant['id']);
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return response('', 302)->header('Location', '/?error=' . urlencode($e->getMessage()));
         }
     }
 
@@ -38,15 +39,16 @@ class MobileCandidateController extends Controller
     {
         $studentId = $request->query('candidate_id');
         if (!$studentId) {
-            return redirect()->route('mobile.home');
+            return response('', 302)->header('Location', '/');
         }
 
         try {
             $response = $this->apiService->getCandidateById($studentId);
             $etudiant = $response['data'];
-            return view('mobile.generation-ticket', compact('etudiant'));
+            $error = $request->query('error');
+            return view('mobile.generation-ticket', compact('etudiant', 'error'));
         } catch (\Exception $e) {
-            return redirect()->route('mobile.home')->with('error', 'Candidat introuvable.');
+            return response('', 302)->header('Location', '/?error=' . urlencode('Candidat introuvable.'));
         }
     }
 
@@ -61,12 +63,11 @@ class MobileCandidateController extends Controller
             $response = $this->apiService->generateTicket($studentId);
             $ticket = $response['data'];
             
-            return redirect()->route('mobile.portal', [
-                'ticket_id' => $ticket['id'],
-                'student_name' => $request->input('etudiant_name') ?? 'Candidat'
-            ]);
+            $studentName = $request->input('etudiant_name') ?? 'Candidat';
+            return response('', 302)->header('Location', '/portal?ticket_id=' . $ticket['id'] . '&student_name=' . urlencode($studentName));
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            $studentId = (int) ($request->input('etudiant_id') ?? $request->query('etudiant_id'));
+            return response('', 302)->header('Location', '/ticket-ready?candidate_id=' . $studentId . '&error=' . urlencode($e->getMessage()));
         }
     }
 
@@ -75,7 +76,7 @@ class MobileCandidateController extends Controller
         $ticketId = $request->query('ticket_id');
         $studentName = $request->query('student_name', 'Candidat');
         if (!$ticketId) {
-            return redirect()->route('mobile.home');
+            return response('', 302)->header('Location', '/');
         }
 
         try {
@@ -87,7 +88,7 @@ class MobileCandidateController extends Controller
             
             return view('mobile.portail-interactif', compact('ticket', 'sessionInfo', 'studentName'));
         } catch (\Exception $e) {
-            return redirect()->route('mobile.home')->with('error', 'Session ou ticket introuvable.');
+            return response('', 302)->header('Location', '/?error=' . urlencode('Session ou ticket introuvable.'));
         }
     }
 
