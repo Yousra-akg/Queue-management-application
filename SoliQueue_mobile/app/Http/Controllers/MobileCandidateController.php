@@ -16,7 +16,7 @@ class MobileCandidateController extends Controller
 
     public function showLogin(Request $request)
     {
-        $error = $request->query('error');
+        $error = session('error') ?? $request->query('error');
         \Illuminate\Support\Facades\Log::info("LOADED EXTENSIONS: " . implode(', ', get_loaded_extensions()));
         return view('mobile.login', compact('error'));
     }
@@ -30,35 +30,35 @@ class MobileCandidateController extends Controller
         try {
             $response = $this->apiService->login($request->input('cin'));
             $etudiant = $response['data'];
-            return redirect('/ticket-ready?candidate_id=' . $etudiant['id']);
+            return redirect('/ticket-ready')->with('candidate_id', $etudiant['id']);
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("Login exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine());
-            return redirect('/?error=' . urlencode($e->getMessage()));
+            return redirect('/')->with('error', $e->getMessage());
         }
     }
 
     public function showGenerationTicket(Request $request)
     {
-        $studentId = $request->query('candidate_id');
+        $studentId = session('candidate_id') ?? $request->query('candidate_id');
         if (!$studentId) {
             return redirect('/');
         }
 
         try {
-            $response = $this->apiService->getCandidateById($studentId);
+            $response = $this->apiService->getCandidateById((int)$studentId);
             $etudiant = $response['data'];
-            $error = $request->query('error');
+            $error = session('error') ?? $request->query('error');
             return view('mobile.generation-ticket', compact('etudiant', 'error'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("showGenerationTicket exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
-            return redirect('/?error=' . urlencode('Candidat introuvable.'));
+            return redirect('/')->with('error', 'Candidat introuvable.');
         }
     }
 
     public function generateTicket(Request $request)
     {
         try {
-            $studentId = (int) ($request->input('etudiant_id') ?? $request->query('etudiant_id'));
+            $studentId = (int) ($request->input('etudiant_id') ?? session('candidate_id'));
             
             if (!$studentId) {
                 throw new \Exception("ID étudiant invalide ou manquant.");
@@ -67,24 +67,28 @@ class MobileCandidateController extends Controller
             $ticket = $response['data'];
             
             $studentName = $request->input('etudiant_name') ?? 'Candidat';
-            return redirect('/portal?ticket_id=' . $ticket['id'] . '&student_name=' . urlencode($studentName));
+            return redirect('/portal')
+                ->with('ticket_id', $ticket['id'])
+                ->with('student_name', $studentName);
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("generateTicket exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine());
-            $studentId = (int) ($request->input('etudiant_id') ?? $request->query('etudiant_id'));
-            return redirect('/ticket-ready?candidate_id=' . $studentId . '&error=' . urlencode($e->getMessage()));
+            $studentId = (int) ($request->input('etudiant_id') ?? session('candidate_id'));
+            return redirect('/ticket-ready')
+                ->with('candidate_id', $studentId)
+                ->with('error', $e->getMessage());
         }
     }
 
     public function showPortal(Request $request)
     {
-        $ticketId = $request->query('ticket_id');
-        $studentName = $request->query('student_name', 'Candidat');
+        $ticketId = session('ticket_id') ?? $request->query('ticket_id');
+        $studentName = session('student_name') ?? $request->query('student_name', 'Candidat');
         if (!$ticketId) {
             return redirect('/');
         }
 
         try {
-            $response = $this->apiService->getTicketById($ticketId);
+            $response = $this->apiService->getTicketById((int)$ticketId);
             $ticket = $response['data'];
 
             $sessionStatus = $this->apiService->getSessionStatus($ticket['session_id']);
@@ -93,7 +97,7 @@ class MobileCandidateController extends Controller
             return view('mobile.portail-interactif', compact('ticket', 'sessionInfo', 'studentName'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("showPortal exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
-            return redirect('/?error=' . urlencode('Session ou ticket introuvable.'));
+            return redirect('/')->with('error', 'Session ou ticket introuvable.');
         }
     }
 
@@ -128,3 +132,4 @@ class MobileCandidateController extends Controller
         }
     }
 }
+
