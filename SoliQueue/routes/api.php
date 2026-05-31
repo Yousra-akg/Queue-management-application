@@ -39,4 +39,7 @@ Route::prefix('mobile')->group(function () {
     // 5. Dashboard Admin : Statistiques des tickets
     Route::get('/admin/dashboard', [SessionApiController::class, 'getDashboardStats']);
 
+    // 6. Notifications
+    Route::post('/notifications/{id}/read', [TicketApiController::class, 'markNotificationRead']);
+
 });

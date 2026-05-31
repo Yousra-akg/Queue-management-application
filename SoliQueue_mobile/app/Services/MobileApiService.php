@@ -49,9 +49,18 @@ class MobileApiService extends BaseService
         ]);
     }
 
-    public function getLiveQueue(int $sessionId)
+    public function getLiveQueue(int $sessionId, ?int $candidateId = null)
     {
-        return $this->get("sessions/{$sessionId}/queue");
+        $url = "sessions/{$sessionId}/queue";
+        if ($candidateId) {
+            $url .= "?candidate_id={$candidateId}";
+        }
+        return $this->get($url);
+    }
+
+    public function markNotificationRead(int $notificationId)
+    {
+        return $this->post("notifications/{$notificationId}/read", []);
     }
 
     public function getDashboardStats()

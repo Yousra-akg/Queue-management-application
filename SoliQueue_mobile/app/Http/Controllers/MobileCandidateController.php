@@ -91,6 +91,13 @@ class MobileCandidateController extends Controller
             $response = $this->apiService->getTicketById((int)$ticketId);
             $ticket = $response['data'];
 
+            // Sauvegarder dans la session de façon persistante
+            session([
+                'ticket_id' => (int)$ticketId,
+                'student_name' => $studentName,
+                'candidate_id' => (int)($ticket['candidat_id'] ?? 0)
+            ]);
+
             $sessionStatus = $this->apiService->getSessionStatus($ticket['session_id']);
             $sessionInfo = $sessionStatus['data'];
             
@@ -125,7 +132,18 @@ class MobileCandidateController extends Controller
             if (!$sessionId) {
                 throw new \Exception("Session manquante.");
             }
-            $response = $this->apiService->getLiveQueue($sessionId);
+            $candidateId = session('candidate_id');
+            $response = $this->apiService->getLiveQueue($sessionId, $candidateId);
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function markNotificationRead(int $id)
+    {
+        try {
+            $response = $this->apiService->markNotificationRead($id);
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

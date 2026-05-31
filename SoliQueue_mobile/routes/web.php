@@ -24,5 +24,6 @@ Route::post('/generate-ticket', [MobileCandidateController::class, 'generateTick
 Route::get('/portal', [MobileCandidateController::class, 'showPortal'])->name('mobile.portal');
 Route::post('/validate-presence', [MobileCandidateController::class, 'validatePresence'])->name('mobile.validate');
 Route::get('/live-queue', [MobileCandidateController::class, 'getQueueData'])->name('mobile.queue');
+Route::post('/notifications/{id}/read', [MobileCandidateController::class, 'markNotificationRead']);
 
 Route::get('/admin', [MobileAdminController::class, 'dashboard'])->name('mobile.admin');

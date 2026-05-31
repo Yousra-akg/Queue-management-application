@@ -85,18 +85,45 @@ class TicketApiController extends Controller
      * GET /api/mobile/sessions/{id}/queue
      * Retourne la file d'attente en direct pour une session.
      */
-    public function getQueue($sessionId): JsonResponse
+    public function getQueue(Request $request, $sessionId): JsonResponse
     {
         try {
             $queue = $this->ticketService->getLiveQueue($sessionId);
+            
+            $notifications = [];
+            $candidatId = $request->query('candidate_id');
+            if ($candidatId) {
+                $notificationService = app(\App\Services\NotificationService::class);
+                $notifications = $notificationService->getUnreadNotifications((int)$candidatId);
+            }
+
             return response()->json([
                 'success' => true,
-                'data'    => $queue
+                'data'    => $queue,
+                'notifications' => $notifications
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur lors de la récupération de la file : ' . $e->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * POST /api/mobile/notifications/{id}/read
+     * Marquer une notification comme lue via API Mobile.
+     */
+    public function markNotificationRead(int $id): JsonResponse
+    {
+        try {
+            $notificationService = app(\App\Services\NotificationService::class);
+            $notificationService->markAsRead($id);
+            return response()->json(['success' => true], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors du marquage de la notification : ' . $e->getMessage()
             ], 400);
         }
     }
