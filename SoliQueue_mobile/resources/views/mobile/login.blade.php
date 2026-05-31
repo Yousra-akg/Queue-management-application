@@ -69,7 +69,7 @@
         </div>
 
         <!-- Alert messages -->
-        @if(session('error') || isset($error))
+        @if(session('error') || !empty($error))
             <div class="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-xs font-bold mb-6 text-center animate-pulse">
                 {{ session('error') ?? $error }}
             </div>

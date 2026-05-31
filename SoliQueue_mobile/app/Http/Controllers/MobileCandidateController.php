@@ -32,6 +32,7 @@ class MobileCandidateController extends Controller
             $etudiant = $response['data'];
             return redirect('/ticket-ready?candidate_id=' . $etudiant['id']);
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Login exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine());
             return redirect('/?error=' . urlencode($e->getMessage()));
         }
     }
@@ -49,6 +50,7 @@ class MobileCandidateController extends Controller
             $error = $request->query('error');
             return view('mobile.generation-ticket', compact('etudiant', 'error'));
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("showGenerationTicket exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
             return redirect('/?error=' . urlencode('Candidat introuvable.'));
         }
     }
@@ -67,6 +69,7 @@ class MobileCandidateController extends Controller
             $studentName = $request->input('etudiant_name') ?? 'Candidat';
             return redirect('/portal?ticket_id=' . $ticket['id'] . '&student_name=' . urlencode($studentName));
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("generateTicket exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine());
             $studentId = (int) ($request->input('etudiant_id') ?? $request->query('etudiant_id'));
             return redirect('/ticket-ready?candidate_id=' . $studentId . '&error=' . urlencode($e->getMessage()));
         }
@@ -89,6 +92,7 @@ class MobileCandidateController extends Controller
             
             return view('mobile.portail-interactif', compact('ticket', 'sessionInfo', 'studentName'));
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("showPortal exception: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
             return redirect('/?error=' . urlencode('Session ou ticket introuvable.'));
         }
     }
