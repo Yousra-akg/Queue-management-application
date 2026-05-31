@@ -78,14 +78,18 @@
         <div class="max-w-md mx-auto space-y-6">
 
             <!-- Success Header -->
-            <div id="initial-header" class="text-center transition-all duration-500 mt-4 {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
+            <div id="initial-header" class="text-center transition-all duration-500 mt-4">
                 <h1 class="text-2xl font-black text-gray-900 tracking-tight">Félicitations !</h1>
                 <p class="text-sm text-gray-500 mt-2 font-medium">Votre accès pour l'entretien est prêt.</p>
             </div>
 
+            @php
+                $confirmTime = isset($ticket['updated_at']) ? \Carbon\Carbon::parse($ticket['updated_at'])->timezone(config('app.timezone', 'UTC'))->format('h:i A') : '--:--';
+            @endphp
+
             <!-- Main Interactive Card -->
             <div id="presence-card"
-                class="bg-white border border-gray-100 rounded-[2.5rem] shadow-xl shadow-blue-500/5 p-8 text-center transition-all duration-500 relative overflow-hidden {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
+                class="bg-white border border-gray-100 rounded-[2.5rem] shadow-xl shadow-blue-500/5 p-8 text-center transition-all duration-500 relative overflow-hidden">
                 <div class="absolute top-0 inset-x-0 h-1.5 bg-blue-600"></div>
 
                 <p class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 mb-6">Votre Numéro</p>
@@ -93,7 +97,7 @@
 
                 <!-- Timer Section -->
                 <div id="timer-section"
-                    class="bg-blue-50/50 rounded-3xl p-6 border border-blue-50 mb-8 transition-all duration-500">
+                    class="bg-blue-50/50 rounded-3xl p-6 border border-blue-50 mb-8 transition-all duration-500 {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                     <p class="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-4">Début dans :</p>
                     <div class="flex justify-center items-center gap-5">
                         <div class="flex flex-col items-center">
@@ -121,7 +125,7 @@
                 <!-- Presence Action -->
                 <div id="presence-action-area" class="space-y-4">
                     <button type="button" id="presence-btn" disabled
-                        class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-3 text-lg font-black rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed transition-all duration-500 tap-scale">
+                        class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-3 text-lg font-black rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed transition-all duration-500 tap-scale {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                         <svg class="size-6 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -132,16 +136,16 @@
 
                     <!-- Confirmation Badge -->
                     <div id="presence-confirmed-badge"
-                        class="hidden animate-bounce inline-flex items-center gap-x-2 py-3 px-6 rounded-2xl bg-green-50 text-green-700 font-extrabold text-xs shadow-sm border border-green-100 mx-auto uppercase">
+                        class="{{ $ticket['statut'] !== 'en attente' ? '' : 'hidden' }} animate-bounce inline-flex items-center gap-x-2 py-3 px-6 rounded-2xl bg-green-50 text-green-700 font-extrabold text-xs shadow-sm border border-green-100 mx-auto uppercase">
                         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        Confirmé à <span id="confirm-time">--:--</span>
+                        Confirmé à <span id="confirm-time">{{ $confirmTime }}</span>
                     </div>
 
-                    <p id="presence-hint" class="text-[10px] text-gray-400 font-black uppercase tracking-widest px-4">
+                    <p id="presence-hint" class="text-[10px] text-gray-400 font-black uppercase tracking-widest px-4 {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                         Activé après le compte à rebours
                     </p>
                 </div>
@@ -286,7 +290,8 @@
                     btn.classList.add('shadow-xl', 'shadow-blue-500/20', 'animate-pulse');
 
                     document.getElementById('presence-hint').classList.replace('text-gray-400', 'text-blue-600');
-                    document.getElementById('presence-hint').textContent = "C'es                }, 500);
+                    document.getElementById('presence-hint').textContent = "C'est le moment d'entrer !";
+                }, 500);
             }
 
             // Modal Logic
