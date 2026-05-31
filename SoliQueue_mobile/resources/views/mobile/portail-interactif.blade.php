@@ -198,9 +198,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
 
-            let dateRaw = "{{ $sessionInfo['dateEntretien'] ?? '' }}";
-            // For testing/visibility: set timer to 10 seconds from now
-            let targetDate = new Date(Date.now() + 10000);
+            @php
+                $startTime = \Carbon\Carbon::parse(($sessionInfo['dateEntretien'] ?? now()->toDateString()) . ' ' . ($sessionInfo['heureDebut'] ?? '00:00:00'));
+                $startTimeMs = $startTime->timestamp * 1000;
+            @endphp
+            let targetDate = new Date({{ $startTimeMs }});
             
             // Si la date est déjà passée, afficher le bouton "présent" directement
             if (targetDate <= new Date()) {
@@ -355,7 +357,7 @@
                                             </div>
                                             <div>
                                                 <div class="flex items-center gap-x-2">
-                                                    <p class="text-base font-black text-gray-900 leading-none">${item.candidat ? item.candidat.nom : 'Moi'}</p>
+                                                    <p class="text-base font-black text-gray-900 leading-none">${item.candidat ? item.candidat.nom + ' ' + item.candidat.prenom : 'Moi'}</p>
                                                     <span class="py-1 px-2 bg-blue-100 text-blue-600 rounded-lg text-[8px] font-black uppercase">Moi</span>
                                                 </div>
                                                 <p class="text-[10px] font-bold ${statusColor} mt-1 uppercase tracking-tight">
@@ -373,17 +375,26 @@
                                 let circleColor = 'bg-gray-50 text-gray-400';
                                 let statusText = item.statut;
                                 let statusTextColor = 'text-gray-400';
+                                let nameTextColor = 'text-gray-900';
 
-                                if (isCurrent) {
-                                    bgColor = 'bg-green-50'; // Fond très léger
-                                    circleColor = 'bg-green-600 text-white'; // Vert foncé
+                                if (item.statut === 'terminée') {
+                                    bgColor = 'bg-green-800 text-white'; // Vert foncé
+                                    circleColor = 'bg-green-950 text-green-200';
+                                    statusText = "Terminée";
+                                    statusTextColor = 'text-green-300';
+                                    nameTextColor = 'text-white';
+                                } else if (isCurrent) {
+                                    bgColor = 'bg-green-500 text-white'; // Vert un peu clair
+                                    circleColor = 'bg-green-700 text-white';
                                     statusText = "En cours";
-                                    statusTextColor = 'text-green-600';
+                                    statusTextColor = 'text-green-100';
+                                    nameTextColor = 'text-white';
                                 } else if (isNext) {
-                                    bgColor = 'bg-green-50/30'; // Fond encore plus léger
-                                    circleColor = 'bg-green-300 text-white'; // Vert clair
+                                    bgColor = 'bg-green-100'; // Vert plus clair
+                                    circleColor = 'bg-green-300 text-green-900';
                                     statusText = "Suivant";
-                                    statusTextColor = 'text-green-500';
+                                    statusTextColor = 'text-green-600';
+                                    nameTextColor = 'text-green-900';
                                 }
                                 
                                 html += `
@@ -393,11 +404,11 @@
                                             ${item.numeroOrdre}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-bold text-gray-900">${item.candidat ? item.candidat.nom : 'Candidat'}</p>
+                                            <p class="text-sm font-bold ${nameTextColor}">${item.candidat ? item.candidat.nom + ' ' + item.candidat.prenom : 'Candidat'}</p>
                                             <p class="text-[9px] font-black uppercase tracking-tighter ${statusTextColor}">${statusText}</p>
                                         </div>
                                     </div>
-                                    ${isCurrent ? '<span class="relative flex size-2 mr-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-green-500"></span></span>' : ''}
+                                    ${isCurrent ? '<span class="relative flex size-2 mr-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-white"></span></span>' : ''}
                                 </div>`;
                             }
                         });
