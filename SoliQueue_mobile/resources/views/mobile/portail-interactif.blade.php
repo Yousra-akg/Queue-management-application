@@ -341,15 +341,31 @@
                             
                             if (isMe) {
                                 // Style spécial pour la carte "Moi"
+                                let cardBg = 'bg-white';
+                                let nameColor = 'text-gray-900';
                                 let statusColor = 'text-blue-500';
-                                if (isCurrent) statusColor = 'text-green-600';
-                                if (isNext) statusColor = 'text-green-500';
+                                let cardBorder = 'border-blue-600';
+                                let badgeColor = 'bg-blue-600';
+                                let moiBadgeClass = 'bg-blue-100 text-blue-600';
 
-                                let cardBorder = isCurrent ? 'border-green-600' : (isNext ? 'border-green-400' : 'border-blue-600');
-                                let badgeColor = isCurrent ? 'bg-green-600' : (isNext ? 'bg-green-400' : 'bg-blue-600');
+                                if (isCurrent) {
+                                    cardBg = 'bg-green-500';
+                                    nameColor = 'text-white';
+                                    statusColor = 'text-green-100';
+                                    cardBorder = 'border-green-600';
+                                    badgeColor = 'bg-green-700';
+                                    moiBadgeClass = 'bg-white text-green-700';
+                                } else if (isNext) {
+                                    cardBg = 'bg-green-100';
+                                    nameColor = 'text-green-900';
+                                    statusColor = 'text-green-600';
+                                    cardBorder = 'border-green-400';
+                                    badgeColor = 'bg-green-300 text-green-900';
+                                    moiBadgeClass = 'bg-green-200 text-green-800';
+                                }
 
                                 html += `
-                                <div class="p-5 bg-white border-y-2 ${cardBorder} relative z-10 shadow-lg transition-all">
+                                <div class="p-5 ${cardBg} border-y-2 ${cardBorder} relative z-10 shadow-lg transition-all">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-x-4">
                                             <div class="size-11 rounded-2xl ${badgeColor} text-white flex items-center justify-center font-black text-lg italic tracking-tighter shadow-md">
@@ -357,8 +373,8 @@
                                             </div>
                                             <div>
                                                 <div class="flex items-center gap-x-2">
-                                                    <p class="text-base font-black text-gray-900 leading-none">${item.candidat ? item.candidat.nom + ' ' + item.candidat.prenom : 'Moi'}</p>
-                                                    <span class="py-1 px-2 bg-blue-100 text-blue-600 rounded-lg text-[8px] font-black uppercase">Moi</span>
+                                                    <p class="text-base font-black ${nameColor} leading-none">${item.candidat ? item.candidat.nom + ' ' + item.candidat.prenom : 'Moi'}</p>
+                                                    <span class="py-1 px-2 ${moiBadgeClass} rounded-lg text-[8px] font-black uppercase">Moi</span>
                                                 </div>
                                                 <p class="text-[10px] font-bold ${statusColor} mt-1 uppercase tracking-tight">
                                                     ${isCurrent ? 'C\'est votre tour !' : (isNext ? 'Vous êtes le prochain !' : 'Patientez...')}
