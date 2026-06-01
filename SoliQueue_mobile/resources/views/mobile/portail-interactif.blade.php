@@ -39,7 +39,9 @@
     <!-- Header -->
     <header
         class="sticky top-0 w-full bg-white border-b border-gray-100 py-4 px-6 z-40 flex items-center justify-between">
-        <a class="text-xl font-black text-blue-600 tracking-tighter" href="#">SoliCode</a>
+        <a href="#">
+            <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 w-auto">
+        </a>
         <div class="flex items-center gap-x-3">
             <!-- Notification Bell -->
             <div class="relative">
@@ -523,8 +525,19 @@
                             
                             let notifHtml = '';
                             unreadNotifs.forEach(n => {
-                                // Déclenchement de l'alerte prioritaire
-                                if (n.titre.toLowerCase().includes("tour") || n.titre.toLowerCase().includes("terminé") || n.titre.toLowerCase().includes("en cours")) {
+                                // Déclenchement de l'alerte prioritaire si urgent (insensible à la casse/accents)
+                                const titreClean = n.titre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                const msgClean = n.message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                const isUrgent = titreClean.includes("tour") || 
+                                                 titreClean.includes("termine") || 
+                                                 titreClean.includes("cours") || 
+                                                 titreClean.includes("ordre") || 
+                                                 titreClean.includes("passage") || 
+                                                 titreClean.includes("position") ||
+                                                 msgClean.includes("tour") ||
+                                                 msgClean.includes("termine");
+
+                                if (isUrgent) {
                                     if (currentPriorityAlertId !== n.id && priorityAlertModal.classList.contains('hidden')) {
                                         currentPriorityAlertId = n.id;
                                         priorityAlertTitle.textContent = n.titre;
@@ -563,10 +576,8 @@
                 }
             }
 
-            if ("{{ $ticket['statut'] }}" !== 'en attente') {
-                loadLiveQueue();
-                window.queueInterval = setInterval(loadLiveQueue, 5000);
-            }
+            loadLiveQueue();
+            window.queueInterval = setInterval(loadLiveQueue, 5000);
         });
     </script>
 
