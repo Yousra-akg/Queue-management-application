@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor Candidat as c
+actor Web as w
+
+rectangle "Application Mobile (Sprint 2)" {
+    usecase "Obtenir ticket (SOLI-XX)" as UC1
+    usecase "Suivre position en temps réel" as UC2
+    usecase "Valider présence (Code Secret)" as UC3
+    usecase "Recevoir notification quand il est appelé" as UC4
+    usecase "S'authentifier via CIN" as UC5
+    usecase "Fournir l'API mobile" as UC6
+
+    UC1 ..> UC5 : <<include>>
+    UC2 ..> UC5 : <<include>>
+    UC3 ..> UC5 : <<include>>
+    UC4 ..> UC5 : <<include>>
+}
+
+c --> UC1
+c --> UC2
+c --> UC3
+c --> UC4
+w --> UC6
+@enduml

@@ -11,19 +11,48 @@
             <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Gestion des Candidats</h1>
             <p class="text-sm text-slate-400 font-medium">Gérez la liste de tous les candidats inscrits</p>
         </div>
-        <button @click="openAddModal()"
-            class="py-3 px-6 bg-[#1A73E8] text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 flex items-center gap-2">
-            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M19 8v6" />
-                <path d="M22 11h-6" />
-            </svg>
-            Ajouter un candidat
-        </button>
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ route('admin.candidats.export') }}"
+                class="py-3 px-6 bg-slate-100 text-slate-700 text-xs font-black rounded-2xl uppercase hover:bg-slate-200 transition-all flex items-center gap-2">
+                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Exporter
+            </a>
+            <button @click="showImportModal = true"
+                class="py-3 px-6 bg-slate-100 text-slate-700 text-xs font-black rounded-2xl uppercase hover:bg-slate-200 transition-all flex items-center gap-2">
+                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Importer
+            </button>
+            <button @click="openAddModal()"
+                class="py-3 px-6 bg-[#1A73E8] text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 flex items-center gap-2">
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M19 8v6" />
+                    <path d="M22 11h-6" />
+                </svg>
+                Ajouter un candidat
+            </button>
+        </div>
     </div>
+
+    @if(session('success'))
+        <div class="p-4 bg-green-50 border border-green-200 text-green-700 text-xs font-bold rounded-2xl flex items-center gap-2">
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            {{ session('success') }}
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="p-4 bg-red-50 border border-red-200 text-red-700 text-xs font-bold rounded-2xl flex flex-col gap-1">
+            @foreach($errors->all() as $error)
+                <div class="flex items-center gap-2">
+                    <svg class="size-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span>{{ $error }}</span>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
     <!-- Filters Bar -->
     <div class="mb-6 relative max-w-full">
@@ -204,6 +233,46 @@
                 <button type="button" @click="showDeleteModal = false" class="px-6 py-3 text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-colors">Annuler</button>
                 <button type="button" @click="confirmDelete()" class="px-6 py-3 text-sm font-bold text-white bg-red-600 hover:bg-red-700 shadow-lg shadow-red-200 rounded-2xl transition-all">Oui, supprimer</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Import Candidates Modal -->
+    <div x-show="showImportModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm w-full h-full min-h-screen" @click.self="showImportModal = false">
+        <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-md animate-in fade-in zoom-in duration-200 overflow-hidden">
+            <div class="px-8 pt-8 pb-4 relative shrink-0">
+                <button @click="showImportModal = false" class="absolute top-6 right-6 p-2.5 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-colors">
+                    <svg class="size-4.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+                <h2 class="text-2xl font-black text-gray-900 tracking-tight">Importer les Candidats</h2>
+                <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mt-2">Formats supportés : Excel (.xlsx, .xls) ou CSV</p>
+            </div>
+
+            <form action="{{ route('admin.candidats.import') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+                @csrf
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest">Sélectionner un fichier</label>
+                    <input type="file" name="file" accept=".csv,.xlsx,.xls" required
+                        class="w-full py-2.5 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                </div>
+                
+                <div class="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-2 text-[11px] font-medium text-slate-500 leading-relaxed">
+                    <p class="font-black text-slate-700 uppercase tracking-wider text-[9px] mb-1">Structure attendue (Excel ou CSV) :</p>
+                    <p>La première ligne (en-tête) doit contenir :</p>
+                    <code class="block bg-slate-200 p-2 rounded text-slate-800 font-bold overflow-x-auto whitespace-nowrap">CIN;Nom;Prenom;Score QCM</code>
+                    <p>Pour le CSV, le séparateur point-virgule (;) ou virgule (,) est détecté automatiquement.</p>
+                </div>
+
+                <div class="flex gap-4 justify-end pt-4">
+                    <button type="button" @click="showImportModal = false"
+                        class="px-6 py-3 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-6 py-3 text-xs font-bold text-white bg-[#1A73E8] hover:bg-blue-700 shadow-xl shadow-blue-200 rounded-xl transition-all">
+                        Importer
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -39,11 +39,39 @@
     <!-- Header -->
     <header
         class="sticky top-0 w-full bg-white border-b border-gray-100 py-4 px-6 z-40 flex items-center justify-between">
-        <a class="text-xl font-black text-blue-600 tracking-tighter" href="#">SoliCode</a>
+        <a href="#">
+            <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 w-auto">
+        </a>
         <div class="flex items-center gap-x-3">
+            <!-- Notification Bell -->
+            <div class="relative">
+                <button type="button" id="notif-btn" class="relative p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
+                    <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <span id="notif-badge" class="absolute top-1 right-1 flex h-2.5 w-2.5 hidden">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                    </span>
+                </button>
+                
+                <!-- Notification Dropdown -->
+                <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-[150]">
+                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-black text-gray-800 uppercase tracking-widest text-[9px]">Notifications</span>
+                        <span id="notif-count" class="bg-red-50 text-red-600 text-[8px] font-black px-2 py-0.5 rounded-full">0 non lue(s)</span>
+                    </div>
+                    <div id="notif-list" class="max-h-60 overflow-y-auto divide-y divide-gray-50">
+                        <div class="p-6 text-center text-gray-400 text-xs font-medium">
+                            Aucune notification récente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <span class="text-[10px] font-black text-gray-400 uppercase truncate max-w-[100px]">{{ $studentName }}</span>
             <div
-                class="size-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold border border-blue-100 text-xs italic">
+                class="size-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold border border-blue-100 text-xs italic shrink-0">
                 {{ strtoupper(substr($studentName, 0, 2)) }}</div>
         </div>
     </header>
@@ -57,8 +85,12 @@
                 <p class="text-sm text-gray-500 mt-2 font-medium">Votre accès pour l'entretien est prêt.</p>
             </div>
 
+            @php
+                $confirmTime = isset($ticket['updated_at']) ? \Carbon\Carbon::parse($ticket['updated_at'])->timezone(config('app.timezone', 'UTC'))->format('h:i A') : '--:--';
+            @endphp
+
             <!-- Main Interactive Card -->
-            <div
+            <div id="presence-card"
                 class="bg-white border border-gray-100 rounded-[2.5rem] shadow-xl shadow-blue-500/5 p-8 text-center transition-all duration-500 relative overflow-hidden">
                 <div class="absolute top-0 inset-x-0 h-1.5 bg-blue-600"></div>
 
@@ -67,7 +99,7 @@
 
                 <!-- Timer Section -->
                 <div id="timer-section"
-                    class="bg-blue-50/50 rounded-3xl p-6 border border-blue-50 mb-8 transition-all duration-500">
+                    class="bg-blue-50/50 rounded-3xl p-6 border border-blue-50 mb-8 transition-all duration-500 {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                     <p class="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-4">Début dans :</p>
                     <div class="flex justify-center items-center gap-5">
                         <div class="flex flex-col items-center">
@@ -95,7 +127,7 @@
                 <!-- Presence Action -->
                 <div id="presence-action-area" class="space-y-4">
                     <button type="button" id="presence-btn" disabled
-                        class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-3 text-lg font-black rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed transition-all duration-500 tap-scale">
+                        class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-3 text-lg font-black rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed transition-all duration-500 tap-scale {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                         <svg class="size-6 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -106,16 +138,16 @@
 
                     <!-- Confirmation Badge -->
                     <div id="presence-confirmed-badge"
-                        class="hidden animate-bounce inline-flex items-center gap-x-2 py-3 px-6 rounded-2xl bg-green-50 text-green-700 font-extrabold text-xs shadow-sm border border-green-100 mx-auto uppercase">
+                        class="{{ $ticket['statut'] !== 'en attente' ? '' : 'hidden' }} animate-bounce inline-flex items-center gap-x-2 py-3 px-6 rounded-2xl bg-green-50 text-green-700 font-extrabold text-xs shadow-sm border border-green-100 mx-auto uppercase">
                         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        Confirmé à <span id="confirm-time">--:--</span>
+                        Confirmé à <span id="confirm-time">{{ $confirmTime }}</span>
                     </div>
 
-                    <p id="presence-hint" class="text-[10px] text-gray-400 font-black uppercase tracking-widest px-4">
+                    <p id="presence-hint" class="text-[10px] text-gray-400 font-black uppercase tracking-widest px-4 {{ $ticket['statut'] !== 'en attente' ? 'hidden' : '' }}">
                         Activé après le compte à rebours
                     </p>
                 </div>
@@ -123,13 +155,13 @@
 
             <!-- Queue Section (Live) -->
             <div id="queue-section"
-                class="hidden opacity-0 transform translate-y-8 transition-all duration-700 space-y-4">
+                class="{{ $ticket['statut'] !== 'en attente' ? '' : 'hidden opacity-0 transform translate-y-8' }} transition-all duration-700 space-y-4">
                 <div class="flex items-center justify-between px-2">
                     <h3 class="text-xs font-black text-gray-800 uppercase tracking-widest">En direct</h3>
                     <span class="text-[10px] font-bold text-blue-600 italic">Session {{ $sessionInfo['nom'] ?? 'Active' }}</span>
                 </div>
 
-                <div class="bg-white border border-gray-100 rounded-[2.5rem] shadow-sm overflow-hidden">
+                <div class="bg-[#0c4a34] rounded-[2.5rem] shadow-sm overflow-hidden border border-gray-100">
                     <div id="queue-list" class="divide-y divide-gray-50">
                         <!-- AJAX content will populate here -->
                         <div class="p-6 text-center text-sm font-medium text-gray-400">
@@ -198,9 +230,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
 
-            let dateRaw = "{{ $sessionInfo['dateEntretien'] ?? '' }}";
-            // For testing/visibility: set timer to 10 seconds from now
-            let targetDate = new Date(Date.now() + 10000);
+            @php
+                $startTime = \Carbon\Carbon::parse(($sessionInfo['dateEntretien'] ?? now()->toDateString()) . ' ' . ($sessionInfo['heureDebut'] ?? '00:00:00'));
+                $startTimeMs = $startTime->timestamp * 1000;
+            @endphp
+            let targetDate = new Date({{ $startTimeMs }});
             
             // Si la date est déjà passée, afficher le bouton "présent" directement
             if (targetDate <= new Date()) {
@@ -287,28 +321,31 @@
                 confirmBtn.innerText = 'Vérification...';
                 
                 try {
-                    const response = await fetch("{{ route('mobile.validate') }}", {
+                    const response = await fetch("/validate-presence", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ code_presence: code })
+                        body: JSON.stringify({ code_presence: code, ticket_id: {{ $ticket['id'] }} })
                     });
 
                     const data = await response.json();
                     if (data.success) {
                         closeM();
-                        document.getElementById('presence-btn').classList.add('hidden');
-                        document.getElementById('presence-hint').classList.add('hidden');
-                        document.getElementById('presence-confirmed-badge').classList.remove('hidden');
-                        document.getElementById('confirm-time').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        
+                        // Cacher l'en-tête initial et la carte de présence
+                        document.getElementById('initial-header').classList.add('hidden');
+                        if (document.getElementById('presence-card')) {
+                            document.getElementById('presence-card').classList.add('hidden');
+                        }
 
                         document.getElementById('queue-section').classList.remove('hidden');
-                        setTimeout(() => document.getElementById('queue-section').classList.remove('opacity-0', 'translate-y-8'), 100);
                         
                         loadLiveQueue();
-                        setInterval(loadLiveQueue, 5000); // refresh every 5s
+                        if (!window.queueInterval) {
+                            window.queueInterval = setInterval(loadLiveQueue, 5000);
+                        }
                     } else {
                         throw new Error(data.message || 'Code invalide');
                     }
@@ -319,97 +356,246 @@
                     confirmBtn.innerText = 'Confirmer';
                 }
             };
+
+            // Notification dropdown logic
+            const notifBtn = document.getElementById('notif-btn');
+            const notifDropdown = document.getElementById('notif-dropdown');
+            const notifBadge = document.getElementById('notif-badge');
+            const notifCount = document.getElementById('notif-count');
+            const notifList = document.getElementById('notif-list');
+
+            if (notifBtn) {
+                notifBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    notifDropdown.classList.toggle('hidden');
+                };
+            }
+
+            document.addEventListener('click', () => {
+                if (notifDropdown) notifDropdown.classList.add('hidden');
+            });
+
+            if (notifDropdown) {
+                notifDropdown.onclick = (e) => e.stopPropagation();
+            }
+
+            // Priority alert elements
+            const priorityAlertModal = document.getElementById('priority-alert-modal');
+            const priorityAlertTitle = document.getElementById('priority-alert-title');
+            const priorityAlertMessage = document.getElementById('priority-alert-message');
+            const priorityAlertDismiss = document.getElementById('priority-alert-dismiss');
+            let currentPriorityAlertId = null;
+
+            if (priorityAlertDismiss) {
+                priorityAlertDismiss.onclick = async () => {
+                    if (currentPriorityAlertId) {
+                        await markNotificationAsRead(currentPriorityAlertId);
+                    }
+                    priorityAlertModal.classList.add('hidden');
+                };
+            }
+
+            async function markNotificationAsRead(notifId) {
+                try {
+                    const response = await fetch(`/notifications/${notifId}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    });
+                    const resData = await response.json();
+                    if (resData.success) {
+                        loadLiveQueue();
+                    }
+                } catch (err) {
+                    console.error("Erreur marquage notification:", err);
+                }
+            }
+            window.markNotificationAsRead = markNotificationAsRead;
             
             async function loadLiveQueue() {
                 try {
-                    const res = await fetch("{{ route('mobile.queue') }}");
+                    const res = await fetch("/live-queue?session_id=" + {{ $ticket['session_id'] }} + "&candidate_id=" + {{ $ticket['candidat_id'] }});
                     const data = await res.json();
                     
                     if (data.success && data.data) {
                         let html = '';
                         const myTicketId = {{ $ticket['id'] }};
                         
-                        // Trouver le premier "en attente" qui sera le "Suivant"
-                        const nextIndex = data.data.findIndex(item => item.statut === 'en attente');
+                        // Trouver tous les index des tickets "en attente" pour marquer les 3 premiers comme "Suivant"
+                        const pendingTickets = [];
+                        data.data.forEach((item, index) => {
+                            if (item.statut === 'en attente') {
+                                pendingTickets.push(index);
+                            }
+                        });
+                        const nextThreeIndices = pendingTickets.slice(0, 3);
                         
                         data.data.forEach((item, index) => {
                             const isMe = item.id === myTicketId;
                             const isCurrent = item.statut === 'en cours';
-                            const isNext = (index === nextIndex);
+                            const isNext = nextThreeIndices.includes(index);
                             
-                            if (isMe) {
-                                // Style spécial pour la carte "Moi"
-                                let statusColor = 'text-blue-500';
-                                if (isCurrent) statusColor = 'text-green-600';
-                                if (isNext) statusColor = 'text-green-500';
-
-                                let cardBorder = isCurrent ? 'border-green-600' : (isNext ? 'border-green-400' : 'border-blue-600');
-                                let badgeColor = isCurrent ? 'bg-green-600' : (isNext ? 'bg-green-400' : 'bg-blue-600');
-
-                                html += `
-                                <div class="p-5 bg-white border-y-2 ${cardBorder} relative z-10 shadow-lg transition-all">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-x-4">
-                                            <div class="size-11 rounded-2xl ${badgeColor} text-white flex items-center justify-center font-black text-lg italic tracking-tighter shadow-md">
-                                                ${item.numeroOrdre}
-                                            </div>
-                                            <div>
-                                                <div class="flex items-center gap-x-2">
-                                                    <p class="text-base font-black text-gray-900 leading-none">${item.candidat ? item.candidat.nom : 'Moi'}</p>
-                                                    <span class="py-1 px-2 bg-blue-100 text-blue-600 rounded-lg text-[8px] font-black uppercase">Moi</span>
-                                                </div>
-                                                <p class="text-[10px] font-bold ${statusColor} mt-1 uppercase tracking-tight">
-                                                    ${isCurrent ? 'C\'est votre tour !' : (isNext ? 'Vous êtes le prochain !' : 'Patientez...')}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`;
+                            let bgColor = 'bg-white';
+                            let posColor = 'text-gray-400';
+                            let circleColor = 'bg-gray-100 text-gray-500';
+                            let nameTextColor = 'text-gray-700 font-bold';
+                            let vousColor = 'text-blue-500 font-black';
+                            let badgeClass = 'bg-gray-50 text-gray-400 border-gray-100';
+                            let statusText = 'EN ATTENTE';
+                            
+                            if (item.statut === 'terminée' || item.statut === 'terminé') {
+                                bgColor = 'bg-[#0c4a34] text-white border-b border-white/5';
+                                posColor = 'text-green-200';
+                                circleColor = 'bg-white/10 text-white';
+                                nameTextColor = 'text-white font-bold';
+                                badgeClass = 'border-white/20 text-white bg-white/5';
+                                statusText = 'TERMINÉ';
+                            } else if (isCurrent) {
+                                bgColor = 'bg-[#10b981] text-white border-b border-white/5';
+                                posColor = 'text-green-100';
+                                circleColor = 'bg-white text-[#10b981]';
+                                nameTextColor = 'text-white font-extrabold';
+                                vousColor = 'text-blue-200 font-extrabold';
+                                badgeClass = 'border-white/30 text-white bg-white/20';
+                                statusText = 'EN COURS';
+                            } else if (isNext) {
+                                bgColor = 'bg-[#e6fcf5] border-b border-[#c3fae8]';
+                                posColor = 'text-[#0c4a34]';
+                                circleColor = 'bg-white text-[#0c4a34] border border-[#c3fae8]';
+                                nameTextColor = 'text-[#0c4a34] font-bold';
+                                vousColor = 'text-blue-600 font-black';
+                                badgeClass = 'bg-[#c3fae8] text-[#0c4a34] border-[#c3fae8]';
+                                statusText = 'SUIVANT';
                             } else {
-                                const opacity = index > 5 ? 'opacity-40' : 'opacity-100';
-                                
-                                // Couleurs selon le statut
-                                let bgColor = 'bg-white';
-                                let circleColor = 'bg-gray-50 text-gray-400';
-                                let statusText = item.statut;
-                                let statusTextColor = 'text-gray-400';
-
-                                if (isCurrent) {
-                                    bgColor = 'bg-green-50'; // Fond très léger
-                                    circleColor = 'bg-green-600 text-white'; // Vert foncé
-                                    statusText = "En cours";
-                                    statusTextColor = 'text-green-600';
-                                } else if (isNext) {
-                                    bgColor = 'bg-green-50/30'; // Fond encore plus léger
-                                    circleColor = 'bg-green-300 text-white'; // Vert clair
-                                    statusText = "Suivant";
-                                    statusTextColor = 'text-green-500';
-                                }
-                                
-                                html += `
-                                <div class="p-4 ${bgColor} flex items-center justify-between ${opacity} transition-all border-b border-gray-50">
-                                    <div class="flex items-center gap-x-3">
-                                        <div class="size-9 rounded-2xl ${circleColor} flex items-center justify-center font-black text-[10px] italic">
-                                            ${item.numeroOrdre}
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-gray-900">${item.candidat ? item.candidat.nom : 'Candidat'}</p>
-                                            <p class="text-[9px] font-black uppercase tracking-tighter ${statusTextColor}">${statusText}</p>
-                                        </div>
-                                    </div>
-                                    ${isCurrent ? '<span class="relative flex size-2 mr-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-green-500"></span></span>' : ''}
-                                </div>`;
+                                bgColor = 'bg-white border-b border-gray-50';
+                                posColor = 'text-gray-400';
+                                circleColor = 'bg-gray-100 text-gray-400';
+                                nameTextColor = 'text-gray-900';
+                                vousColor = 'text-blue-500 font-black';
+                                badgeClass = 'bg-gray-50 text-gray-400 border-gray-100';
+                                statusText = 'EN ATTENTE';
                             }
+
+                            // Bordure d'accentuation si c'est Moi
+                            let borderAccent = '';
+                            if (isMe) {
+                                borderAccent = 'border-l-[6px] border-blue-500';
+                            }
+
+                            // Calcul des initiales
+                            let initials = '??';
+                            if (item.candidat && item.candidat.prenom && item.candidat.nom) {
+                                initials = (item.candidat.prenom[0] + item.candidat.nom[0]).toUpperCase();
+                            } else if (isMe) {
+                                initials = 'ME';
+                            }
+                            
+                            const fullName = item.candidat ? (item.candidat.prenom + ' ' + item.candidat.nom) : 'Candidat';
+                            
+                            html += `
+                            <div class="px-6 py-4 flex items-center justify-between transition-all ${bgColor} ${borderAccent}">
+                                <div class="flex items-center gap-x-4">
+                                    <span class="text-xs font-black w-14 ${posColor}">Pos ${index + 1}</span>
+                                    <div class="size-9 rounded-full ${circleColor} flex items-center justify-center font-bold text-xs shadow-inner shrink-0">
+                                        ${initials}
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-xs ${nameTextColor}">${fullName}</p>
+                                        ${isMe ? `<p class="text-[9px] ${vousColor} font-black uppercase">C'est vous</p>` : ''}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-x-2">
+                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${badgeClass}">
+                                        ${statusText}
+                                    </span>
+                                    ${isCurrent ? '<span class="relative flex size-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-white"></span></span>' : ''}
+                                </div>
+                            </div>`;
                         });
                         
                         document.getElementById('queue-list').innerHTML = html;
+
+                        // Gestion des notifications
+                        const unreadNotifs = data.notifications || [];
+                        if (unreadNotifs.length > 0) {
+                            notifBadge.classList.remove('hidden');
+                            notifCount.textContent = `${unreadNotifs.length} non lue(s)`;
+                            
+                            let notifHtml = '';
+                            unreadNotifs.forEach(n => {
+                                // Déclenchement de l'alerte prioritaire si urgent (insensible à la casse/accents)
+                                const titreClean = n.titre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                const msgClean = n.message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                const isUrgent = titreClean.includes("tour") || 
+                                                 titreClean.includes("termine") || 
+                                                 titreClean.includes("cours") || 
+                                                 titreClean.includes("ordre") || 
+                                                 titreClean.includes("passage") || 
+                                                 titreClean.includes("position") ||
+                                                 msgClean.includes("tour") ||
+                                                 msgClean.includes("termine");
+
+                                if (isUrgent) {
+                                    if (currentPriorityAlertId !== n.id && priorityAlertModal.classList.contains('hidden')) {
+                                        currentPriorityAlertId = n.id;
+                                        priorityAlertTitle.textContent = n.titre;
+                                        priorityAlertMessage.textContent = n.message;
+                                        priorityAlertModal.classList.remove('hidden');
+                                        setTimeout(() => {
+                                            priorityAlertModal.firstElementChild.classList.remove('scale-95', 'opacity-0');
+                                            priorityAlertModal.firstElementChild.classList.add('scale-100', 'opacity-100');
+                                        }, 10);
+                                    }
+                                }
+
+                                notifHtml += `
+                                    <div class="p-4 hover:bg-gray-50/50 transition-colors flex justify-between items-start gap-x-3">
+                                        <div class="space-y-1">
+                                            <p class="text-xs font-black text-gray-800">${n.titre}</p>
+                                            <p class="text-[10px] text-gray-500 font-medium leading-relaxed">${n.message}</p>
+                                        </div>
+                                        <button onclick="markNotificationAsRead(${n.id})" class="text-[9px] font-black text-blue-600 hover:text-blue-700 uppercase tracking-wider shrink-0 mt-0.5">
+                                            OK
+                                        </button>
+                                    </div>`;
+                            });
+                            notifList.innerHTML = notifHtml;
+                        } else {
+                            notifBadge.classList.add('hidden');
+                            notifCount.textContent = '0 non lue(s)';
+                            notifList.innerHTML = `
+                                <div class="p-6 text-center text-gray-400 text-xs font-medium">
+                                    Aucune notification récente.
+                                </div>`;
+                        }
                     }
                 } catch (e) {
                     console.error("Erreur chargement file", e);
                 }
             }
+
+            loadLiveQueue();
+            window.queueInterval = setInterval(loadLiveQueue, 5000);
         });
     </script>
+
+    <!-- Priority Alert Modal -->
+    <div id="priority-alert-modal" class="hidden fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl text-center transform scale-95 opacity-0 transition-all duration-300">
+            <div class="size-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="size-8 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
+            </div>
+            <h4 id="priority-alert-title" class="text-lg font-black text-gray-900 mb-2"></h4>
+            <p id="priority-alert-message" class="text-sm font-medium text-gray-500 mb-6"></p>
+            <button type="button" id="priority-alert-dismiss" class="w-full py-4 px-6 text-sm font-black rounded-2xl bg-blue-600 text-white shadow-lg tap-scale">
+                J'AI COMPRIS
+            </button>
+        </div>
+    </div>
 </body>
 
 </html>

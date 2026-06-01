@@ -37,6 +37,7 @@ class SessionApiController extends Controller
                 'nom'           => $session->nom,
                 'statut'        => $session->statut,
                 'dateEntretien' => $session->dateEntretien,
+                'heureDebut'    => $session->heureDebut,
                 'capaciteMax'   => $session->capaciteMax
             ]
         ], 200);

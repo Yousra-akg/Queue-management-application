@@ -28,6 +28,45 @@
 
 <div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
 
+    <!-- Teleported Notification Bell to Navbar -->
+    <template x-teleport="#navbar-notif-target">
+        <div class="relative">
+            <button @click="showNotifDropdown = !showNotifDropdown" type="button" class="relative p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-300">
+                <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <span x-show="unreadCount > 0" class="absolute top-1.5 right-1.5 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+            </button>
+            
+            <!-- Notification Dropdown -->
+            <div x-show="showNotifDropdown" @click.away="showNotifDropdown = false" class="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-[150]" style="display: none;">
+                <div class="px-4 py-3 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+                    <span class="font-black text-slate-800 uppercase tracking-widest text-[10px]">Notifications</span>
+                    <span class="bg-red-50 text-red-600 text-[9px] font-black px-2 py-0.5 rounded-full" x-text="unreadCount + ' non lue(s)'"></span>
+                </div>
+                <div class="max-h-60 overflow-y-auto divide-y divide-slate-100">
+                    <template x-if="notifications.length === 0">
+                        <div class="p-6 text-center text-slate-400 text-xs font-medium">
+                            Aucune notification récente.
+                        </div>
+                    </template>
+                    <template x-for="n in notifications" :key="n.id">
+                        <div class="p-4 hover:bg-slate-50/50 transition-colors flex justify-between items-start gap-x-3">
+                            <div class="space-y-1">
+                                <p class="text-xs font-black text-slate-800" x-text="n.titre"></p>
+                                <p class="text-[11px] text-slate-500 font-medium leading-relaxed" x-text="n.message"></p>
+                            </div>
+                            <button @click="markAsRead(n.id)" class="text-[9px] font-black text-[#1A73E8] hover:text-blue-700 uppercase tracking-wider shrink-0 mt-0.5">
+                                OK
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <!-- [STATE: INITIAL] Success Message -->
     <div id="initial-header" class="text-center transition-all duration-500 {{ $confirmed ? 'hidden' : '' }}">
         <h1 class="text-xl font-bold text-[#202124] tracking-tight">Félicitations pour votre réussite !</h1>
@@ -163,6 +202,29 @@
         </div>
     </div>
 </div>
+
+<!-- Priority Alert Modal -->
+<template x-if="priorityAlert">
+    <div class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
+        <div class="bg-white border-2 border-red-500 rounded-[2.5rem] shadow-2xl max-w-md w-full overflow-hidden transform transition-all duration-300">
+            <div class="h-3 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 animate-pulse"></div>
+            <div class="p-8 sm:p-10 text-center">
+                <div class="mb-6 flex justify-center">
+                    <span class="inline-flex justify-center items-center size-16 rounded-full bg-red-50 text-red-600 animate-bounce">
+                        <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </span>
+                </div>
+                <h3 class="mb-2 text-2xl font-black text-red-600 tracking-tight" x-text="priorityAlert.titre"></h3>
+                <p class="text-slate-600 font-bold mb-8 leading-relaxed text-sm" x-text="priorityAlert.message"></p>
+                
+                <button type="button" @click="dismissPriorityAlert(priorityAlert.id)"
+                    class="w-full py-4 px-6 text-base font-black rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-xl shadow-red-600/20 transform hover:-translate-y-0.5 transition-all">
+                    J'ai compris !
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
 @endpush
 
 @section('scripts')
