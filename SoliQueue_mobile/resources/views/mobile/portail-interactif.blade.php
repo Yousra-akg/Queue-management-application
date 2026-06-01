@@ -414,7 +414,7 @@
             
             async function loadLiveQueue() {
                 try {
-                    const res = await fetch("/live-queue?session_id=" + {{ $ticket['session_id'] }});
+                    const res = await fetch("/live-queue?session_id=" + {{ $ticket['session_id'] }} + "&candidate_id=" + {{ $ticket['candidat_id'] }});
                     const data = await res.json();
                     
                     if (data.success && data.data) {

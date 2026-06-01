@@ -132,7 +132,7 @@ class MobileCandidateController extends Controller
             if (!$sessionId) {
                 throw new \Exception("Session manquante.");
             }
-            $candidateId = session('candidate_id');
+            $candidateId = (int) ($request->query('candidate_id') ?? session('candidate_id'));
             $response = $this->apiService->getLiveQueue($sessionId, $candidateId);
             return response()->json($response);
         } catch (\Exception $e) {
