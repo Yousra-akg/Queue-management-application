@@ -1,38 +1,29 @@
+%%{init: { 'theme': 'default', 'themeVariables': { 'fontSize': '18px', 'fontFamily': 'Arial' }}}%%
 classDiagram
-    %% Classe Parent
+    %% Classe Parent (Regroupe les utilisateurs)
     class Utilisateur {
         +int id
         +string nom
         +string email
         +string motDePasse
-    }
-
-    %% Héritage avec attributs uniques pour le Staff
-    class Administrateur {
+        +gererUtilisateurs()
         +gererSessions()
+        +importerCandidats()
         +consulterStats()
     }
 
+    %% Héritage : Seul le Formateur a des attributs/méthodes métiers spécifiques différents
     class Formateur {
         +string codeInterne
         +string specialite
         +appelerSuivant()
-        +validerPresence()
+        +terminerEntretien()
+        +consulterFileAttente()
     }
 
-    Utilisateur <|-- Administrateur : hérite
     Utilisateur <|-- Formateur : hérite
 
-    %% Entité Notification
-    class Notification {
-        +int id
-        +string titre
-        +string message
-        +datetime dateEnvoi
-        +bool estLu
-        +envoyer()
-    }
-
+    %% Gestion des Droits et Rôles (L'Admin sera une instance dans la table Role)
     class Role {
         +int id
         +string nom
@@ -43,6 +34,7 @@ classDiagram
         +string nom
     }
 
+    %% Entités Métier
     class Session {
         +int id
         +string nom
@@ -73,12 +65,21 @@ classDiagram
         +datetime heureArrivee
     }
 
+    class Notification {
+        +int id
+        +string titre
+        +string message
+        +datetime dateEnvoi
+        +bool estLu
+        +envoyer()
+    }
+
     %% Relations
     Utilisateur "0..*" -- "1" Role : possède
     Role "1" -- "0..*" Permission : contient
     Utilisateur "1" -- "0..*" Session : gère
     
-    %% SEUL LE CANDIDAT REÇOIT DES NOTIFICATIONS
+    %% Le Candidat reçoit des notifications
     Candidat "1" -- "0..*" Notification : reçoit
 
     Session "1" -- "0..*" Candidat : est assigné à

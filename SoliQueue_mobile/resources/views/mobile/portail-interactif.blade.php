@@ -45,8 +45,8 @@
         <div class="flex items-center gap-x-3">
             <!-- Notification Bell -->
             <div class="relative">
-                <button type="button" id="notif-btn" class="relative p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
-                    <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <button type="button" id="notif-btn" class="relative z-50 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer">
+                    <svg class="size-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                     </svg>
                     <span id="notif-badge" class="absolute top-1 right-1 flex h-2.5 w-2.5 hidden">
@@ -416,7 +416,8 @@
             
             async function loadLiveQueue() {
                 try {
-                    const res = await fetch("/live-queue?session_id=" + {{ $ticket['session_id'] }} + "&candidate_id=" + {{ $ticket['candidat_id'] }});
+                    const url = "/live-queue?session_id=" + {{ $ticket['session_id'] }} + "&candidate_id=" + {{ $ticket['candidat_id'] }} + "&t=" + Date.now();
+                    const res = await fetch(url, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' } });
                     const data = await res.json();
                     
                     if (data.success && data.data) {

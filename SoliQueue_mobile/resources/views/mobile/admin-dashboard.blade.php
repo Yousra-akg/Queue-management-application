@@ -81,10 +81,9 @@
         <!-- Header -->
         <header class="bg-white border-b border-slate-200 py-4 px-6 fixed top-0 w-full max-w-[430px] z-40 flex items-center justify-between">
             <div class="flex items-center gap-x-2">
-                <div class="size-8 bg-solicode-blue rounded-xl flex items-center justify-center">
-                    <i data-lucide="layout-dashboard" class="text-white size-4"></i>
-                </div>
-                <span class="text-xl font-black text-slate-900 tracking-tighter">SoliCode</span>
+                <a href="#">
+                    <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 w-auto">
+                </a>
             </div>
             <button class="size-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 tap-scale border border-slate-100">
                 <i data-lucide="bell" class="size-5"></i>
