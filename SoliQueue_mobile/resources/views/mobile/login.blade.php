@@ -44,7 +44,9 @@
 
     <!-- Top Bar -->
     <header class="sticky top-0 w-full h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 z-50">
-        <span class="text-xl font-black text-blue-600 tracking-tighter">SoliQueue</span>
+        <a href="#">
+            <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 w-auto">
+        </a>
         <span class="text-[10px] font-black uppercase text-gray-400 tracking-wider">Mobile Portal</span>
     </header>
 

@@ -57,7 +57,9 @@
     <!-- Top Bar -->
     <header
         class="sticky top-0 w-full h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 z-50">
-        <a class="text-xl font-black text-blue-600 tracking-tighter" href="#">SoliCode</a>
+        <a href="#">
+            <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 w-auto">
+        </a>
         <div
             class="size-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100 italic">
             {{ strtoupper(substr($etudiant['nom'] ?? 'C', 0, 1)) }}
