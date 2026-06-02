@@ -2,6 +2,7 @@ export default (initialCandidats = []) => ({
     candidats: initialCandidats,
     searchQuery: '',
     showAddCandidateModal: false,
+    showImportModal: false,
     showDeleteModal: false,
     candidatToDelete: null,
     candidatForm: { id: null, prenom: '', nom: '', cin: '', scoreQCM: '' },

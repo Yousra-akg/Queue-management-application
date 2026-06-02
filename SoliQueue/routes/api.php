@@ -18,11 +18,16 @@ use App\Http\Controllers\Api\SessionApiController;
 
 Route::prefix('mobile')->group(function () {
     
+    // 0. Authentification du candidat par son CIN
+    Route::post('/login', [EtudiantApiController::class, 'login']);
+    Route::get('/candidates/{id}', [EtudiantApiController::class, 'getCandidate']);
+    
     // 1. Retourne un étudiant (candidat) aléatoire
     Route::get('/random-student', [EtudiantApiController::class, 'getRandomStudent']);
 
     // 2. Génère un ticket pour un étudiant spécifique
     Route::post('/tickets/generate', [TicketApiController::class, 'generate']);
+    Route::get('/tickets/{id}', [TicketApiController::class, 'getTicket']);
 
     // 3. Statut d'une session et son chrono
     Route::get('/sessions/{id}/status', [SessionApiController::class, 'getStatus']);
@@ -33,5 +38,8 @@ Route::prefix('mobile')->group(function () {
 
     // 5. Dashboard Admin : Statistiques des tickets
     Route::get('/admin/dashboard', [SessionApiController::class, 'getDashboardStats']);
+
+    // 6. Notifications
+    Route::post('/notifications/{id}/read', [TicketApiController::class, 'markNotificationRead']);
 
 });

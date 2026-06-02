@@ -195,7 +195,7 @@ class CandidatService extends BaseService
      */
     public function getRandomCandidate(): ?Candidat
     {
-        return $this->model->orderByRaw('RANDOM()')->first();
+        return $this->model->inRandomOrder()->first();
     }
 
     /**

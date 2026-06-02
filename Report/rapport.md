@@ -1,233 +1,194 @@
-# Rapport de Projet de Fin de Formation  
-## Application de gestion de files d’attente  
-### Formation de Développement Mobile – Mode Bootcamp  
+# Rapport de Projet  
+## Application de Gestion de Files d’Attente (SoliQueue)
+
+**Réalisé par :** Youssra Akajou  
+**Encadré par :** Monsieur ESSARRAJ Fouad  
+**Date :** Juin 2026  
 
 ---
 
-**Réalisée par :** Yousra Akajou  
-**Encadré par :** Mr. Essarraj Fouad  
+## Table des matières
 
-**Année de Formation :** 2025/2026  
-
----
-
-# Table des matières
-
-1. [Liste des figures](#liste-des-figures)  
-2. [Remerciement](#remerciement)  
-3. [Introduction](#introduction)  
-4. [Contexte de projet](#contexte-de-projet)  
-5. [Objectif de Project](#objectif-de-project)  
-6. [Cahier de charge](#cahier-de-charge)  
-7. [Méthode de travail](#méthode-de-travail)  
-8. [Scrum](#scrum)  
-9. [La méthodologie 2TUP](#la-méthodologie-2tup)  
-10. [Design Thinking](#design-thinking)  
-11. [Branche fonctionnelle](#branche-fonctionnelle)  
-12. [Carte d’empathie](#carte-dempathie)  
-13. [Définition de problème](#définition-de-problème)  
-14. [Diagramme de cas d’utilisation générale](#diagramme-de-cas-dutilisation-générale)  
-15. [Diagramme de cas d’utilisation Sprint 1](#diagramme-de-cas-dutilisation-sprint-1)  
-16. [Diagramme de cas d’utilisation Sprint 2](#diagramme-de-cas-dutilisation-sprint-2)  
-17. [Branche technique](#branche-technique)  
-18. [Choix technologiques](#choix-technologiques)  
-19. [Architecture de projet](#architecture-de-projet)  
-20. [Prototype (Fonctionnalités, Classes)](#prototype-fonctionnalités-classes)  
-21. [Conception](#conception)  
-22. [Diagramme de classe](#diagramme-de-classe)  
-23. [Maquettes](#maquettes)  
-24. [Charte graphique](#charte-graphique)  
-25. [Réalisation](#réalisation)  
-26. [Interfaces](#interfaces)  
-27. [Conclusion](#conclusion)  
+- [Liste des figures](#liste-des-figures)
+- [Remerciement](#remerciement)
+- [Introduction](#introduction)
+- [Contexte de projet](#contexte-de-projet)
+- [Cahier de charge](#cahier-de-charge)
+- [Méthode de travail](#méthode-de-travail)
+- [Branche fonctionnelle](#branche-fonctionnelle)
+- [Branche technique](#branche-technique)
+- [Conception](#conception)
+- [Réalisation](#réalisation)
+- [Conclusion](#conclusion)
 
 ---
 
-# Remerciement
-Je tiens à exprimer ma profonde gratitude à toutes les personnes qui ont contribué au succès de ce projet de fin de formation.
+## Liste des figures
 
-Mes remerciements s'adressent tout d'abord à mon encadrant, M. ESSARRAJ Fouad, pour sa disponibilité, ses conseils précieux et son accompagnement technique tout au long de ce parcours. Ses critiques constructives m'ont permis de relever les défis complexes de ce projet.
-
-Je remercie également l'équipe pédagogique du centre SoliCode pour la qualité de la formation reçue et pour nous avoir offert un environnement propice à l'apprentissage et à l'innovation.
-
-Enfin, je remercie mes collègues et mes proches pour leur soutien moral et leurs encouragements constants, qui m'ont aidé à mener à bien ce travail.
-
-# Introduction
-
-Dans le cadre de la digitalisation des processus administratifs à SoliCode, la gestion des entretiens de recrutement représente un défi logistique majeur. Actuellement, l'absence de système automatisé pour gérer l'ordre de passage des candidats crée une attente opaque, génératrice de stress pour les étudiants et de désorganisation pour l'administration. Le projet SoliQueue a été conçu pour répondre à ce besoin en transformant une file d'attente physique invisible en une expérience numérique transparente, permettant un suivi en temps réel pour toutes les parties prenantes. 
-
----
-
-# Contexte de projet
-
-Lors de ma formation en développement web à SoliCode, j’ai observé que la gestion manuelle des flux de candidats après la réussite de leur QCM reposait sur des listes papier ou des appels oraux dispersés. Ce manque de structure entraîne une perte de temps considérable et une incertitude constante pour les candidats. SoliQueue naît de la volonté de moderniser ce parcours en offrant un ticket numérique unique et un monitoring centralisé pour les formateurs et les administrateurs.
+**Figure 1 :** Contexte de projet  
+**Figure 2 :** Méthode Scrum  
+**Figure 3 :** Méthode 2TUP  
+**Figure 4 :** Design thinking  
+**Figure 5 :** Carte d’empathie de candidat  
+**Figure 6 :** Carte d’empathie de formateur  
+**Figure 7 :** Carte d’empathie d’Administrateur  
+**Figure 8 à 16 :** Diagrammes de cas d’utilisation  
+**Figure 18 :** Architecture globale de projet  
+**Figure 19 :** Diagramme de classes  
+**Figure 20 :** Charte graphique  
+**Figure 21 à 24 :** Maquettes  
+**Figure 24 à 33 :** Interfaces Web Sprint 1
 
 ---
 
-# Objectif de Project
-Le projet SoliQueue a été développé avec des objectifs précis visant à transformer radicalement l'expérience des entretiens de sélection :
+## Remerciement
 
-## Objectifs Opérationnels :
-- **Automatisation du flux :** Éliminer la gestion manuelle (papier/tableur) pour réduire les erreurs humaines dans l'affectation des candidats.
+Je tiens à exprimer ma profonde gratitude à Monsieur **ESSARRAJ Fouad** pour avoir encadré ce projet de fin d'études avec autant d'implication. Ses orientations précieuses, sa grande réactivité et la rigueur de son suivi ont été des piliers essentiels pour mener à bien ce travail et enrichir mes compétences professionnelles.
 
-- **Validation de présence :** Garantir que seuls les candidats physiquement présents peuvent être appelés grâce au système de code secret à 4 chiffres.
+Je le remercie chaleureusement pour sa bienveillance, ses critiques toujours constructives et ses encouragements constants.
 
-- **Accessibilité Mobile :** Permettre aux candidats de suivre leur progression sans rester immobiles devant une salle, favorisant ainsi une attente plus confortable.
+Mes remerciements s'adressent également au corps professoral et à l'équipe pédagogique pour l'excellence de leur enseignement.
 
-## Objectifs Stratégiques :
-- **Transparence :** Restaurer la confiance des candidats envers le processus de sélection en offrant une visibilité totale sur l'ordre de passage.
-
-- **Pilotage par la donnée :** Fournir à l'administration des statistiques fiables (temps moyen d'entretien, taux d'absentéisme) pour optimiser l'organisation des futures cohortes.
-
-- **Modernisation de l'image :** Aligner les outils internes de SoliCode avec son identité de centre d'excellence technologique.
----
-
-# Cahier de charge
-
-## Description :
-
-SoliQueue est une solution hybride (Web/Mobile) permettant d'automatiser la file d'attente des entretiens. Elle assure la transition fluide du candidat du statut "Admis au QCM" vers l'entretien final.
-
-## Objectifs principaux
-- Digitaliser le ticket de passage : Attribution automatique d'un rang (ex: SOLI-88).
-
-- Assurer la présence physique : Validation par un code secret à 4 chiffres.
-
-- Optimiser le pilotage : Offrir aux formateurs un outil d'appel "un-clic".
-
-- Analyser les flux : Générer des statistiques de présence et de durée d'entretien.
-
-## Utilisateurs et rôles
-- Candidat : Accède à son rang, suit son timer et valide sa présence sur mobile.
-
-- Formateur : Gère l'appel des candidats et met à jour les statuts de la session.
-
-- Administrateur : Configure les sessions, affecte les candidats (Drag & Drop) et analyse les données.
+Enfin, je témoigne toute ma reconnaissance à mes proches pour leur soutien moral.
 
 ---
 
-# Méthode de travail
+## Introduction
 
-# Scrum
-![Maquette application](images/scrum.png)
+La gestion des flux et de l'attente lors des sessions d'entretiens constitue une étape logistique essentielle au sein d'un établissement de formation comme **SoliCode**. 
 
-La méthodologie Scrum est une méthodologie agile qui permet de gérer un projet de manière flexible et collaborative, en favorisant la livraison progressive de fonctionnalités. Elle repose sur l’itération, la priorisation des tâches et la communication régulière entre les membres de l’équipe.
+Cependant, l’organisation de ces passages se heurte souvent à des difficultés majeures : absence de visibilité sur l’ordre de passage, stress lié à une attente imprévisible et coordination complexe pour les équipes pédagogiques.
 
-Dans le cadre de ce projet, nous avons organisé le travail selon les principes de Scrum, ce qui nous a permis de mieux planifier, suivre et livrer les différentes fonctionnalités du blog de manière efficace. 
-
-## Principes clés
-
-- **Transparence :** Toutes les tâches et objectifs sont visibles par l’équipe.  
-- **Inspection :** Chaque sprint est évalué pour détecter les améliorations possibles.  
-- **Adaptation :** L’équipe ajuste le plan de travail selon les résultats des sprints précédents.  
+Le projet **SoliQueue** vise à digitaliser et centraliser la gestion des files d’attente, transformant cette attente physique en une expérience numérique transparente et efficace.
 
 ---
 
-# Design Thinking
+## Contexte de projet
 
-![Maquette application](images/design-thinking.png) 
+Dans le cadre de ma formation en développement web, j’ai constaté que la gestion des flux de candidats après la réussite du QCM était particulièrement laborieuse (listes papier, appels oraux dispersés). 
 
-## Qu’est-ce que le Design Thinking ?
-Le **Design Thinking** est une approche de résolution de problèmes centrée sur l’humain.
-Elle vise à comprendre les besoins réels des utilisateurs pour créer des solutions innovantes.
-Très utilisée dans le design, la technologie, l’éducation, l’innovation et les services.
-## Pourquoi utiliser le Design Thinking ?
-- Encourage la créativité et l’innovation
-- Permet de développer des solutions réellement adaptées aux besoins des utilisateurs
-- Favorise la collaboration entre équipes
-- Utile pour résoudre des problèmes complexes ou mal définis
-## Les 5 étapes du Design Thinking
-1. **Empathie (Empathize)**:
-Comprendre l’utilisateur : observer, interviewer, analyser
-Objectif : découvrir ses besoins, ses motivations et ses difficultés
-2. **Définition du problème (Define)**:
-Regrouper et analyser les informations collectées
-Formuler un problème clair et centré sur l’utilisateur
-Exemple : « Comment pourrions-nous aider l’utilisateur à… ? »
-3. **Idéation (Ideate)**:
--Générer un maximum d’idées sans jugement
--Utiliser des techniques comme le brainstorming, le mind mapping, ou les questions « Comment pourrions-nous ? »
--Encourager la créativité et les points de vue variés
-4. **Prototype**:
-- Créer des versions simplifiées ou maquettes des idées sélectionnées
-- Peut être un dessin, un modèle, une interface simple, un scénario, etc.
-- Objectif : expérimenter rapidement
-5. **Test**:
-- Tester les prototypes auprès des utilisateurs
-- Recueillir leurs commentaires
-- Améliorer, ajuster ou repenser la solution
+Cela entraînait une perte de temps considérable et une incertitude constante pour les étudiants. 
 
+**SoliQueue** est né de ce constat pour moderniser ce processus.
+
+![Figure 1 : Contexte de projet](images/figure1.png)
 
 ---
 
-# Branche fonctionnelle
+## Cahier de charge
 
-## Carte d'empathie
-- **Apprenant Hammouda**
+**SoliQueue** est une solution hybride (Web/Mobile) permettant d’automatiser la file d’attente des entretiens.
 
-![Maquette application](images/carte_empathie1.png)
-- **Administrateur Salma**
+### Objectifs principaux :
+- Digitaliser le ticket de passage (ex: SOLI-88)
+- Validation de présence par code secret à 4 chiffres
+- Appel en « un-clic » pour les formateurs
+- Statistiques de présence et durée d’entretien
 
-![Maquette application](images/carte_empathie2.png) 
-
-- **Formateur Souqlabi**
-
-![Maquette application](images/carte_empathie3.png) 
----
-
-# Définition de problème
-
-Les candidats manquent de visibilité sur leur ordre de passage, ce qui génère de l'incertitude. Parallèlement, l'administration manque d'outils automatisés pour piloter les sessions, rendant le suivi des présences opaque et inefficace.
-
-**How Might We : Comment pourrions-nous digitaliser la file d'attente pour offrir une transparence totale aux candidats et un pilotage centralisé aux organisateurs ?** 
+### Utilisateurs et rôles :
+- **Candidat** : Suit son rang et timer
+- **Formateur** : Gère l’appel des candidats
+- **Administrateur** : Configure les sessions et analyse les données
 
 ---
 
-# Diagramme de cas d’utilisation générale
+## Méthode de travail
 
-Le diagramme de cas d’utilisation global de notre application de gestion des files d’attente présente les principales fonctionnalités accessibles aux différents acteurs du système : candidat, Formateur et administrateur. Il illustre les interactions entre ces acteurs et l’application, notamment la prise de ticket, la gestion des sessions, la mise à jour des statuts et la consultation des statistiques.
+### Scrum
+![Figure 2 : Méthode Scrum](images/scrum.png)
 
-- Espace Admin
-![uc admin global](images/UC_admin_global.png)
-- Espace public
-![uc public global](images/UC_public_global.png)
----
+### 2TUP
+![Figure 3 : Méthode 2TUP](images/2tup.png)
 
-# Diagramme de cas d’utilisation Sprint 1
-
-- Focus sur le cœur du système : Attribution du ticket, suivi de position et gestion de l'appel par le formateur. 
-
-![Maquette application](images/Uc_sprint1.png)
-
+### Design Thinking
+![Figure 4 : Design thinking](images/design-thinking.png)
 
 ---
 
-# Diagramme de cas d’utilisation Sprint 2
+## Branche fonctionnelle
 
-- Focus sur l'intelligence du système : Notifications prioritaires, monitoring live de toutes les sessions et statistiques avancées.
-![Maquette application](images/UC_sprint2.png)
+### Cartes d’empathie
+
+**Figure 5 :** Carte d’empathie de candidat  
+![Carte d’empathie Candidat](images/carte_candidat.png)
+
+**Figure 6 :** Carte d’empathie de formateur  
+![Carte d’empathie Formateur](images/carte_formateur.png)
+
+**Figure 7 :** Carte d’empathie d’Administrateur  
+![Carte d’empathie Admin](images/carte_admin.png)
+
+### Définition de problème & Idéation
+- Malgré l’importance des sessions d’évaluation et des entretiens, leur gestion reste difficile en raison de l’opacité des files d’attente physiques, du manque de suivi en temps réel et de l’absence d’une plateforme centralisée. Les candidats souffrent d'une attente aveugle et stressante dans les couloirs, les formateurs perdent un temps précieux à gérer manuellement les flux et l'appel des numéros, et les administrateurs manquent d’une vue globale pour superviser efficacement l'état d'avancement des sessions. 
+    ### How Might We ?
+- Comment pourrions-nous concevoir une plateforme centralisée permettant aux candidats de suivre facilement leur position, aux formateurs de gérer l'appel et les statuts de manière fluide, et aux administrateurs de superviser l’ensemble du processus de manière simple et sécurisée ? 
+
+### Diagrammes de cas d’utilisation globale : Web
+
+- ### Espace Public
+
+![Figure 8 : Diagramme de cas d’utilisation espace candidat](images/uc_general.png)  
+ 
+ - ### Espace Admin
+
+![Figure 9 : Diagramme de cas d’utilisation espace admin](images/uc_general2.png) 
+
+ - ### Espace Formateur
+
+![Figure 10 : Diagramme général](images/uc_general3.png) 
+
+### Diagrammes de cas d’utilisation globale : Application Mobile
+![Figure 11 : Diagramme général](images/uc_mobile.png) 
+
+![Figure 12-16 : Diagrammes par sprint](images/uc_sprints.png)
 
 ---
 
-# Diagramme de classe
+## Branche technique
 
-- La structure s'appuie sur un héritage fort où Administrateur et Formateur partagent la base Utilisateur, tandis que le Candidat est lié de manière dynamique à une Session via un Ticket unique. 
+### Choix technologiques
+- **Backend** : PHP 8+ / Laravel
+- **Frontend** : Tailwind CSS, Alpine.js, Blade
+- **Base de données** : MySQL
+- **Mobile** : NativePHP
+- **Autres** : Spatie Permission, Sanctum, Vite
 
-![diagramme_classe](images/diagramme_classe.png)
-
-
----
-
-# Maquettes
-
-- Maquette web
-  ![maquette web](images/maquette_web.png)
-- Maquette Mobile
-  ![maquette mobile](images/maquette_mobile.png)
-
+**Figure 18 : Architecture globale**  
+![Architecture globale](images/architecture.png)
 
 ---
 
-# Conclusion
+## Conception
 
-SoliQueue n'est pas seulement un outil de gestion, c'est un levier de confort pour l'apprenant et d'efficacité pour l'institution. En remplaçant le papier par des algorithmes de file d'attente et une validation par code secret, nous garantissons l'équité et la fluidité des entretiens de sélection à SoliCode. 
+**Figure 19 : Diagramme de classes**  
+![Diagramme de classes](images/diagramme_classes.png)
+
+**Figure 20 : Charte graphique**  
+![Charte graphique](images/charte_graphique.png)
+
+### Maquettes
+
+**Figure 21 :** Maquette Tableau de bord admin  
+**Figure 22 :** Maquette Interface candidat  
+**Figure 23 :** Maquette Interface formateur  
+**Figure 24 :** Maquettes Mobile
+
+---
+
+## Réalisation
+
+### Interfaces Web Sprint 1
+
+![Figure 24-33 : Interfaces Web Sprint 1](images/interfaces_sprint1.png)
+
+---
+
+## Conclusion
+
+Ce projet de fin d’études a permis de concevoir et développer **SoliQueue**, une application web et mobile dédiée à la digitalisation des files d’attente d’entretiens. 
+
+Cette solution facilite le suivi pour les candidats, simplifie la gestion pour les formateurs et offre des outils d’analyse à l’administrateur.
+
+---
+
+**Merci pour votre attention !**

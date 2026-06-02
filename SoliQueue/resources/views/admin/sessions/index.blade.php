@@ -22,15 +22,22 @@
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Gérez toutes les sessions
                         d'entretien</p>
                 </div>
-                <button @click="openAddSessionModal()"
-                    class="py-3 px-6 bg-[#1A73E8] text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 flex items-center gap-2">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M12 5v14" />
-                    </svg>
-                    Ajouter une session
-                </button>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('admin.sessions.export') }}"
+                        class="py-3 px-6 bg-slate-100 text-slate-700 text-xs font-black rounded-2xl uppercase hover:bg-slate-200 transition-all flex items-center gap-2">
+                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Exporter les sessions
+                    </a>
+                    <button @click="openAddSessionModal()"
+                        class="py-3 px-6 bg-[#1A73E8] text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 flex items-center gap-2">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14" />
+                            <path d="M12 5v14" />
+                        </svg>
+                        Ajouter une session
+                    </button>
+                </div>
             </div>
 
             <!-- Filters Bar -->

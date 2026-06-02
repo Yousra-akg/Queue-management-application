@@ -41,6 +41,7 @@
                 </div>
                 
                 <div class="flex flex-row items-center gap-4 mt-4 sm:justify-end sm:mt-0 sm:ps-5">
+                    <div id="navbar-notif-target" class="flex items-center"></div>
                     <div class="flex items-center gap-x-3">
                         <span class="text-sm font-semibold text-gray-500 capitalize">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</span>
                         @if(Auth::user()->photo)

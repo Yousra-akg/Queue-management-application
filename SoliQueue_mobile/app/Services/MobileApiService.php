@@ -4,6 +4,23 @@ namespace App\Services;
 
 class MobileApiService extends BaseService
 {
+    public function login(string $cin)
+    {
+        return $this->post('login', [
+            'cin' => $cin
+        ]);
+    }
+
+    public function getCandidateById(int $id)
+    {
+        return $this->get("candidates/{$id}");
+    }
+
+    public function getTicketById(int $id)
+    {
+        return $this->get("tickets/{$id}");
+    }
+
     public function getRandomStudent()
     {
         return $this->get('random-student');
@@ -32,9 +49,18 @@ class MobileApiService extends BaseService
         ]);
     }
 
-    public function getLiveQueue(int $sessionId)
+    public function getLiveQueue(int $sessionId, ?int $candidateId = null)
     {
-        return $this->get("sessions/{$sessionId}/queue");
+        $url = "sessions/{$sessionId}/queue";
+        if ($candidateId) {
+            $url .= "?candidate_id={$candidateId}";
+        }
+        return $this->get($url);
+    }
+
+    public function markNotificationRead(int $notificationId)
+    {
+        return $this->post("notifications/{$notificationId}/read", []);
     }
 
     public function getDashboardStats()
