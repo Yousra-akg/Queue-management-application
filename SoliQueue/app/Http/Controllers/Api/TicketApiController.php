@@ -95,6 +95,9 @@ class TicketApiController extends Controller
             if ($candidatId) {
                 $notificationService = app(\App\Services\NotificationService::class);
                 $notifications = $notificationService->getUnreadNotifications((int)$candidatId);
+                \Illuminate\Support\Facades\Log::info("API: Notifications count for candidat_id {$candidatId} = " . count($notifications));
+            } else {
+                \Illuminate\Support\Facades\Log::warning("API: candidat_id is missing from getQueue request!");
             }
 
             return response()->json([

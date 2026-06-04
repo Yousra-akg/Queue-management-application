@@ -151,27 +151,15 @@
                         </div>
                     </div>
 
-                    @if($session->statut !== 'terminée')
-                        <a href="{{ route('formateur.dashboard', $session->id) }}"
-                            class="w-full py-5 px-6 inline-flex justify-center items-center gap-x-3 text-sm font-black rounded-2xl border border-transparent {{ $session->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'bg-slate-900 text-white' }} hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 uppercase tracking-widest group/btn">
-                            Accéder au Dashboard
-                            <svg class="size-4 group-hover/btn:translate-x-1.5 transition-transform duration-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </a>
-                    @else
-                        <button type="button" disabled
-                            class="w-full py-5 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-2xl bg-slate-50 text-slate-300 border border-slate-100 cursor-not-allowed uppercase tracking-widest">
-                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                            </svg>
-                            Session Terminée
-                        </button>
-                    @endif
+                    <a href="{{ route('formateur.dashboard', $session->id) }}"
+                        class="w-full py-5 px-6 inline-flex justify-center items-center gap-x-3 text-sm font-black rounded-2xl border border-transparent {{ $session->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : ($session->statut === 'terminée' ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-slate-900 text-white') }} hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 uppercase tracking-widest group/btn">
+                        {{ $session->statut === 'terminée' ? 'Consulter Historique' : 'Accéder au Dashboard' }}
+                        <svg class="size-4 group-hover/btn:translate-x-1.5 transition-transform duration-300"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
                 </div>
             @endforeach
         </div>

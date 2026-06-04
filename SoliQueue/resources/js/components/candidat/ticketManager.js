@@ -259,6 +259,10 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
                 rowClass = 'bg-[#064e3b] text-white font-bold';
                 statusBadgeClass = 'bg-white/10 border border-white/30 text-white';
                 statusText = 'Terminé';
+            } else if (t.statut === 'absent') {
+                rowClass = 'bg-red-50 text-red-900 border-b border-red-100 opacity-70';
+                statusBadgeClass = 'bg-red-100 text-red-700 border border-red-200';
+                statusText = 'Absent';
             }
 
             if (isMe) {
