@@ -172,7 +172,8 @@
                             class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 transition-all duration-300"
                             :class="{ 
                                 'bg-blue-50/50 border-blue-200 border-2 shadow-md': ticket.statut === 'en cours',
-                                'bg-emerald-50/50 border-emerald-200 opacity-60': ticket.statut === 'terminée'
+                                'bg-emerald-50/50 border-emerald-200 opacity-60': ticket.statut === 'terminée',
+                                'bg-red-50/50 border-red-200 opacity-60': ticket.statut === 'absent'
                             }">
                             <div class="flex items-center gap-x-4 flex-grow">
                                 @can('manage_queue')
@@ -194,6 +195,7 @@
                                     :class="{
                                         'bg-blue-600 text-white shadow-blue-500/30': ticket.statut === 'en cours',
                                         'bg-emerald-600 text-white': ticket.statut === 'terminée',
+                                        'bg-red-600 text-white': ticket.statut === 'absent',
                                         'bg-gray-100 text-gray-600': ticket.statut === 'en attente'
                                     }" x-text="ticket.candidat.prenom[0] + ticket.candidat.nom[0]">
                                 </div>
@@ -221,6 +223,18 @@
                                                     <path d="M20 6 9 17l-5-5" />
                                                 </svg>
                                                 Terminé
+                                            </span>
+                                        </template>
+                                        <template x-if="ticket.statut === 'absent'">
+                                            <span
+                                                class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-[10px] font-black uppercase tracking-tighter bg-red-600 text-white">
+                                                <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                                Absent
                                             </span>
                                         </template>
                                         <template x-if="ticket.statut === 'en attente'">
@@ -265,6 +279,10 @@
                                                 <a @click.prevent="updateStatus(ticket, 'terminée'); openStatut = false"
                                                     class="flex items-center gap-x-3 py-2.5 px-3 rounded-xl text-sm font-bold text-gray-700 hover:bg-[#F8F9FA] cursor-pointer">
                                                     Terminée
+                                                </a>
+                                                <a @click.prevent="updateStatus(ticket, 'absent'); openStatut = false"
+                                                    class="flex items-center gap-x-3 py-2.5 px-3 rounded-xl text-sm font-bold text-red-600 hover:bg-red-50 cursor-pointer">
+                                                    Absent
                                                 </a>
                                             </div>
                                         </div>

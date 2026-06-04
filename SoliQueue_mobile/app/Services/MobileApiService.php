@@ -52,10 +52,11 @@ class MobileApiService extends BaseService
     public function getLiveQueue(int $sessionId, ?int $candidateId = null)
     {
         $url = "sessions/{$sessionId}/queue";
+        $query = [];
         if ($candidateId) {
-            $url .= "?candidate_id={$candidateId}";
+            $query['candidate_id'] = $candidateId;
         }
-        return $this->get($url);
+        return $this->get($url, $query);
     }
 
     public function markNotificationRead(int $notificationId)

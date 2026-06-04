@@ -44,14 +44,14 @@
         </a>
         <div class="flex items-center gap-x-3">
             <!-- Notification Bell -->
-            <div class="relative">
-                <button type="button" id="notif-btn" class="relative z-50 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer">
-                    <svg class="size-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            <div class="relative">                <button type="button" id="notif-btn" style="touch-action: manipulation;" class="relative z-50 p-4 -m-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer">
+                    <svg class="size-7 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                     </svg>
-                    <span id="notif-badge" class="absolute top-1 right-1 flex h-2.5 w-2.5 hidden">
+                    <!-- Notification Badge (Red Dot) -->
+                    <span id="notif-badge" class="absolute top-2 right-2 flex h-3.5 w-3.5 hidden">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-600 border-2 border-white shadow-sm"></span>
                     </span>
                 </button>
                 
@@ -365,10 +365,16 @@
             const notifList = document.getElementById('notif-list');
 
             if (notifBtn) {
-                notifBtn.onclick = (e) => {
+                notifBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     notifDropdown.classList.toggle('hidden');
-                };
+                });
+                notifBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    notifDropdown.classList.toggle('hidden');
+                }, { passive: false });
             }
 
             document.addEventListener('click', () => {
@@ -416,7 +422,7 @@
             
             async function loadLiveQueue() {
                 try {
-                    const url = "/live-queue?session_id=" + {{ $ticket['session_id'] }} + "&candidate_id=" + {{ $ticket['candidat_id'] }} + "&t=" + Date.now();
+                    const url = `/live-queue?session_id={{ $ticket['session_id'] }}&candidate_id={{ $ticket['candidat_id'] }}&t=${Date.now()}`;
                     const res = await fetch(url, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' } });
                     const data = await res.json();
                     
@@ -453,6 +459,13 @@
                                 nameTextColor = 'text-white font-bold';
                                 badgeClass = 'border-white/20 text-white bg-white/5';
                                 statusText = 'TERMINÉ';
+                            } else if (item.statut === 'absent') {
+                                bgColor = 'bg-red-50 text-red-900 border-b border-red-100 opacity-70';
+                                posColor = 'text-red-300';
+                                circleColor = 'bg-red-100 text-red-500';
+                                nameTextColor = 'text-red-700 font-bold line-through';
+                                badgeClass = 'border-red-200 text-red-600 bg-red-100';
+                                statusText = 'ABSENT';
                             } else if (isCurrent) {
                                 bgColor = 'bg-[#10b981] text-white border-b border-white/5';
                                 posColor = 'text-green-100';

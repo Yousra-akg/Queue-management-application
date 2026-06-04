@@ -13,10 +13,7 @@ class User extends Authenticatable {
 
     protected $fillable = ['nom', 'email', 'password'];
 
-    // Relation vers l'extension Formateur
-    public function formateur() {
-        return $this->hasOne(Formateur::class);
-    }
+
 
     // Un utilisateur (Admin ou Formateur via son compte User) gère des sessions
     public function sessions() {

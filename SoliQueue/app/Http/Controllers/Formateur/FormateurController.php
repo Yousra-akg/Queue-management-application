@@ -88,7 +88,7 @@ class FormateurController extends Controller
         }
 
         $request->validate([
-            'statut' => 'required|in:en attente,en cours,terminée'
+            'statut' => 'required|in:en attente,en cours,terminée,absent'
         ]);
 
         try {

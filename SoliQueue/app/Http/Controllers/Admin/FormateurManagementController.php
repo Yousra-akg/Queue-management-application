@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Formateur;
+use App\Models\User;
 use App\Services\FormateurService;
 use Illuminate\Http\Request;
 
@@ -28,13 +28,11 @@ class FormateurManagementController extends Controller
             'nom' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'codeInterne' => 'required|string|max:50|unique:formateurs,codeInterne',
-            'specialite' => 'required|string|max:255',
         ]);
 
         try {
             $this->formateurService->createFormateur($request->only([
-                'nom', 'email', 'password', 'codeInterne', 'specialite'
+                'nom', 'email', 'password'
             ]));
             return redirect()->back()->with('success', 'Formateur créé avec succès.');
         } catch (\Exception $e) {
@@ -42,18 +40,16 @@ class FormateurManagementController extends Controller
         }
     }
 
-    public function update(Request $request, Formateur $formateur)
+    public function update(Request $request, User $formateur)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $formateur->user_id,
-            'codeInterne' => 'required|string|max:50|unique:formateurs,codeInterne,' . $formateur->id,
-            'specialite' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $formateur->id,
         ]);
 
         try {
             $this->formateurService->updateFormateur($formateur->id, $request->only([
-                'nom', 'email', 'password', 'codeInterne', 'specialite'
+                'nom', 'email', 'password'
             ]));
             return redirect()->back()->with('success', 'Formateur mis à jour avec succès.');
         } catch (\Exception $e) {
@@ -61,7 +57,7 @@ class FormateurManagementController extends Controller
         }
     }
 
-    public function destroy(Formateur $formateur)
+    public function destroy(User $formateur)
     {
         try {
             $this->formateurService->deleteFormateur($formateur->id);

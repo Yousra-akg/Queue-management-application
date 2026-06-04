@@ -45,8 +45,6 @@
                 <thead class="bg-slate-50/50 border-b border-slate-100">
                     <tr>
                         <th class="ps-8 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Formateur</th>
-                        <th class="px-6 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Spécialité</th>
-                        <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Code Interne</th>
                         <th class="px-6 py-4 text-end pe-8 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
@@ -56,18 +54,12 @@
                             <td class="ps-8 py-5">
                                 <div class="flex items-center gap-4">
                                     <div class="size-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black border border-indigo-100 group-hover:scale-110 transition-transform" 
-                                         x-text="f.user.nom[0]"></div>
+                                         x-text="f.nom[0]"></div>
                                     <div>
-                                        <p class="text-sm font-black text-slate-900 uppercase tracking-tighter" x-text="f.user.nom"></p>
-                                        <p class="text-[10px] text-slate-400 font-bold" x-text="f.user.email"></p>
+                                        <p class="text-sm font-black text-slate-900 uppercase tracking-tighter" x-text="f.nom"></p>
+                                        <p class="text-[10px] text-slate-400 font-bold" x-text="f.email"></p>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="px-6 py-5">
-                                <span class="px-3 py-1 bg-slate-50 text-slate-600 rounded-lg text-[10px] font-bold border border-slate-200 uppercase tracking-widest" x-text="f.specialite"></span>
-                            </td>
-                            <td class="px-6 py-5 text-center">
-                                <span class="inline-flex items-center justify-center px-3 py-1 bg-blue-50 text-[#1A73E8] text-[10px] font-black border border-blue-100 rounded-lg" x-text="f.codeInterne"></span>
                             </td>
                             <td class="px-6 py-5 text-end pe-8">
                                 <div class="flex justify-end gap-2">
@@ -82,7 +74,7 @@
                         </tr>
                     </template>
                     <tr x-show="filteredFormateurs.length === 0">
-                        <td colspan="4" class="py-12 text-center text-slate-400">
+                        <td colspan="2" class="py-12 text-center text-slate-400">
                             <div class="flex flex-col items-center justify-center">
                                 <svg class="size-12 opacity-50 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                 <p class="text-sm font-bold uppercase tracking-widest">Aucun formateur trouvé</p>
@@ -152,18 +144,7 @@
                         </div>
                     </div>
 
-                    <div class="grid sm:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Spécialité</label>
-                            <input type="text" name="specialite" x-model="formateurForm.specialite" required placeholder="Développement Mobile"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Code Interne</label>
-                            <input type="text" name="codeInterne" x-model="formateurForm.codeInterne" required placeholder="FORM-001"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
-                        </div>
-                    </div>
+
                 </div>
 
                 <!-- Actions Footer (Fixed) -->

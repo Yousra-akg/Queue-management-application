@@ -96,7 +96,7 @@ class QueueService extends BaseService
 
     public function updateCandidatStatus(int $ticketId, string $statut)
     {
-        $validStatuses = ['en attente', 'en cours', 'terminée'];
+        $validStatuses = ['en attente', 'en cours', 'terminée', 'absent'];
         
         if (!in_array($statut, $validStatuses)) {
             throw new \InvalidArgumentException("Statut invalide.");
@@ -133,6 +133,12 @@ class QueueService extends BaseService
                     $ticket->candidat_id,
                     "Entretien Terminé",
                     "Merci pour votre passage. Votre résultat sera affiché bientôt."
+                );
+            } elseif ($statut === 'absent') {
+                $this->notificationService->createNotification(
+                    $ticket->candidat_id,
+                    "Candidat Absent",
+                    "Vous avez été marqué comme absent à l'entretien."
                 );
             }
         }
