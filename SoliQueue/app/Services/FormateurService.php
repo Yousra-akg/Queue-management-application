@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Formateur;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -10,28 +9,28 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FormateurService extends BaseService
 {
-    public function __construct(Formateur $model)
+    public function __construct(User $model)
     {
         $this->model = $model;
     }
 
     /**
-     * Get all formateurs with user info.
+     * Get all formateurs.
      * 
      * @return Collection
      */
     public function getAllWithUsers(): Collection
     {
-        return $this->model->with('user')->orderBy('id', 'desc')->get();
+        return $this->model->role('formateur')->orderBy('id', 'desc')->get();
     }
 
     /**
-     * Create user and associated formateur.
+     * Create a user with formateur role.
      * 
      * @param array $data
-     * @return Formateur
+     * @return User
      */
-    public function createFormateur(array $data): Formateur
+    public function createFormateur(array $data): User
     {
         return DB::transaction(function () use ($data) {
             $user = User::create([
@@ -43,26 +42,22 @@ class FormateurService extends BaseService
             // Assign formateur role automatically to ensure they can login
             $user->syncRoles(['formateur']);
 
-            return $this->model->create([
-                'user_id' => $user->id,
-                'codeInterne' => $data['codeInterne'],
-                'specialite' => $data['specialite'],
-            ]);
+            return $user;
         });
     }
 
     /**
-     * Update user and formateur details.
+     * Update user details.
      * 
      * @param int $id
      * @param array $data
-     * @return Formateur
+     * @return User
      */
-    public function updateFormateur(int $id, array $data): Formateur
+    public function updateFormateur(int $id, array $data): User
     {
-        $formateur = $this->findOrFail($id);
+        $user = $this->findOrFail($id);
 
-        return DB::transaction(function () use ($formateur, $data) {
+        return DB::transaction(function () use ($user, $data) {
             $userData = [
                 'nom' => $data['nom'],
                 'email' => $data['email'],
@@ -72,33 +67,24 @@ class FormateurService extends BaseService
                 $userData['password'] = Hash::make($data['password']);
             }
 
-            $formateur->user->update($userData);
+            $user->update($userData);
 
-            $formateur->update([
-                'codeInterne' => $data['codeInterne'],
-                'specialite' => $data['specialite'],
-            ]);
-
-            return $formateur;
+            return $user;
         });
     }
 
     /**
-     * Delete formateur and associated user.
+     * Delete user.
      * 
      * @param int $id
      * @return bool
      */
     public function deleteFormateur(int $id): bool
     {
-        $formateur = $this->findOrFail($id);
+        $user = $this->findOrFail($id);
 
-        return DB::transaction(function () use ($formateur) {
-            $user = $formateur->user;
-            $formateur->delete();
-            if ($user) {
-                $user->delete();
-            }
+        return DB::transaction(function () use ($user) {
+            $user->delete();
             return true;
         });
     }

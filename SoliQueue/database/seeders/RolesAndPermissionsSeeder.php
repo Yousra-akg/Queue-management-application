@@ -27,15 +27,14 @@ class RolesAndPermissionsSeeder extends Seeder
         $roleAdmin->givePermissionTo('view_sessions');
 
         // Get all user_ids that have a formateur entry
-        $formateurUserIds = Formateur::pluck('user_id')->toArray();
-
+        // Since Formateur table is deleted, we consider User ID 1 as admin, the rest as formateurs
         foreach (User::all() as $user) {
-            if (in_array($user->id, $formateurUserIds)) {
-                // This user is a formateur
-                $user->syncRoles('formateur');
-            } else {
+            if ($user->id === 1) {
                 // This user is an admin
                 $user->syncRoles('admin');
+            } else {
+                // This user is a formateur
+                $user->syncRoles('formateur');
             }
         }
     }

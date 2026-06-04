@@ -134,6 +134,9 @@ class MobileCandidateController extends Controller
             }
             $candidateId = (int) ($request->query('candidate_id') ?? session('candidate_id'));
             $response = $this->apiService->getLiveQueue($sessionId, $candidateId);
+            
+            \Illuminate\Support\Facades\Log::info("MOBILE APP: getLiveQueue returned success=" . ($response['success'] ? 'true' : 'false') . ", notifications count=" . count($response['notifications'] ?? []));
+
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

@@ -4,16 +4,14 @@ export default (initialFormateurs = []) => ({
     showAddModal: false,
     showDeleteModal: false,
     formateurToDelete: null,
-    formateurForm: { id: null, nom: '', email: '', specialite: '', codeInterne: '' },
+    formateurForm: { id: null, nom: '', email: '' },
 
     get filteredFormateurs() {
         if (this.searchQuery === '') return this.formateurs;
         const lowerCaseSearch = this.searchQuery.toLowerCase();
         return this.formateurs.filter(f => {
-            return f.user.nom.toLowerCase().includes(lowerCaseSearch) ||
-                   f.user.email.toLowerCase().includes(lowerCaseSearch) ||
-                   f.specialite.toLowerCase().includes(lowerCaseSearch) ||
-                   f.codeInterne.toLowerCase().includes(lowerCaseSearch);
+            return f.nom.toLowerCase().includes(lowerCaseSearch) ||
+                   f.email.toLowerCase().includes(lowerCaseSearch);
         });
     },
 
@@ -38,17 +36,15 @@ export default (initialFormateurs = []) => ({
     goToPage(p) { this.currentPage = p; },
 
     openAddModal() {
-        this.formateurForm = { id: null, nom: '', email: '', specialite: '', codeInterne: '' };
+        this.formateurForm = { id: null, nom: '', email: '' };
         this.showAddModal = true;
     },
 
     editFormateur(f) {
         this.formateurForm = { 
             id: f.id, 
-            nom: f.user.nom, 
-            email: f.user.email, 
-            specialite: f.specialite, 
-            codeInterne: f.codeInterne 
+            nom: f.nom, 
+            email: f.email
         };
         this.showAddModal = true;
     },
