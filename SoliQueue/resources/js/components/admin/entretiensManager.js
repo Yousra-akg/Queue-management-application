@@ -1,9 +1,9 @@
-export default (initialSessions = []) => ({
-    sessions: initialSessions,
+export default (initialEntretiens = []) => ({
+    entretiens: initialEntretiens,
     searchQuery: '',
     statusFilter: 'all',
-    showSessionModal: false,
-    sessionForm: {
+    showEntretienModal: false,
+    entretienForm: {
         id: null,
         nom: '',
         dateEntretien: '',
@@ -14,8 +14,8 @@ export default (initialSessions = []) => ({
         statut: 'planifiée'
     },
 
-    get filteredSessions() {
-        return this.sessions.filter(s => {
+    get filteredEntretiens() {
+        return this.entretiens.filter(s => {
             const matchesSearch = s.nom.toLowerCase().includes(this.searchQuery.toLowerCase());
             const matchesStatus = this.statusFilter === 'all' || s.statut === this.statusFilter;
             return matchesSearch && matchesStatus;
@@ -25,13 +25,13 @@ export default (initialSessions = []) => ({
     // Pagination
     currentPage: 1,
     itemsPerPage: 10,
-    get paginatedSessions() {
+    get paginatedEntretiens() {
         const start = (this.currentPage - 1) * this.itemsPerPage;
         const end = start + this.itemsPerPage;
-        return this.filteredSessions.slice(start, end);
+        return this.filteredEntretiens.slice(start, end);
     },
     get totalPages() {
-        return Math.ceil(this.filteredSessions.length / this.itemsPerPage) || 1;
+        return Math.ceil(this.filteredEntretiens.length / this.itemsPerPage) || 1;
     },
     get pages() {
         let pages = [];
@@ -52,15 +52,26 @@ export default (initialSessions = []) => ({
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
     },
 
-    editSession(session) {
-        this.sessionForm = { ...session };
-        this.showSessionModal = true;
+    editEntretien(entretien) {
+        this.entretienForm = { ...entretien };
+        
+        // Map existing formateurs from pivot to affectations array
+        if (entretien.formateurs && entretien.formateurs.length > 0) {
+            this.entretienForm.affectations = entretien.formateurs.map(f => ({
+                formateur_id: f.id,
+                salle_id: f.pivot.salle_id
+            }));
+        } else {
+            this.entretienForm.affectations = [{ formateur_id: '', salle_id: '' }];
+        }
+        
+        this.showEntretienModal = true;
     },
 
-    async deleteSession(id) {
+    async deleteEntretien(id) {
         if (window.Swal) {
             const result = await window.Swal.fire({
-                title: 'Supprimer la session ?',
+                title: 'Supprimer la entretien ?',
                 text: 'Cette action est irréversible.',
                 icon: 'error',
                 showCancelButton: true,
@@ -71,12 +82,12 @@ export default (initialSessions = []) => ({
             });
             if (!result.isConfirmed) return;
         } else {
-            if (!confirm('Supprimer la session ?')) return;
+            if (!confirm('Supprimer la entretien ?')) return;
         }
 
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = `/admin/sessions/${id}`;
+        form.action = `/admin/entretiens/${id}`;
         form.innerHTML = `
             <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
             <input type="hidden" name="_method" value="DELETE">
@@ -85,23 +96,23 @@ export default (initialSessions = []) => ({
         form.submit();
     },
 
-    openAddSessionModal() {
-        this.resetSessionForm();
-        this.generateSessionCode();
-        this.showSessionModal = true;
+    openAddEntretienModal() {
+        this.resetEntretienForm();
+        this.generateEntretienCode();
+        this.showEntretienModal = true;
     },
 
-    generateSessionCode() {
+    generateEntretienCode() {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let code = '';
         for (let i = 0; i < 4; i++) {
             code += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        this.sessionForm.codePresence = code;
+        this.entretienForm.codePresence = code;
     },
 
-    resetSessionForm() {
-        this.sessionForm = {
+    resetEntretienForm() {
+        this.entretienForm = {
             id: null,
             nom: '',
             dateEntretien: '',
@@ -109,7 +120,19 @@ export default (initialSessions = []) => ({
             heureDebut: '09:00',
             heureFin: '17:00',
             codePresence: '',
-            statut: 'planifiée'
+            statut: 'planifiée',
+            affectations: [{ formateur_id: '', salle_id: '' }]
         };
+    },
+
+    addAffectation() {
+        this.entretienForm.affectations.push({ formateur_id: '', salle_id: '' });
+    },
+
+    removeAffectation(index) {
+        if (this.entretienForm.affectations.length > 1) {
+            this.entretienForm.affectations.splice(index, 1);
+        }
     }
 });
+

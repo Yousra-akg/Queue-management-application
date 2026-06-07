@@ -31,7 +31,7 @@
         <nav class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
             aria-label="Global">
             <div class="flex items-center justify-between">
-                <a class="flex items-center gap-x-4" href="{{ route('formateur.sessions') }}">
+                <a class="flex items-center gap-x-4" href="{{ route('formateur.entretiens') }}">
                     <img src="{{ asset('img/logo.png') }}" alt="SoliQueue" class="h-10 w-auto">
                     <div class="h-6 w-px bg-slate-200"></div>
                 </a>
@@ -73,14 +73,14 @@
     @endcannot
 
     <!-- Main Content -->
-    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($session) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $session->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($entretien) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $session->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <!-- Dashboard Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div class="space-y-4">
                 <div
                     class="inline-flex items-center gap-x-2 py-1 px-3 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-black uppercase tracking-widest border border-blue-100">
                     <span class="size-2 rounded-full bg-blue-600 animate-pulse"></span>
-                    Session Live
+                    Entretien Live
                 </div>
                 <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase">
                     {{ $session->nom }}

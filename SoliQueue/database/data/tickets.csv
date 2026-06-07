@@ -1,4 +1,4 @@
-candidat_id,session_id,codeUnique,numeroOrdre,statut,heureArrivee
+candidat_id,entretien_id,codeUnique,numeroOrdre,statut,heureArrivee
 1,1,SOLI-01,1,terminée,2026-03-10 09:05:00
 2,1,SOLI-02,2,en cours,2026-03-10 09:15:00
 3,2,SOLI-03,1,en attente,2026-03-10 14:10:00

@@ -22,3 +22,4 @@ class CandidatSeeder extends Seeder
         fclose($file);
     }
 }
+

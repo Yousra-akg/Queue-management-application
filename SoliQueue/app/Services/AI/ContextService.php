@@ -3,7 +3,7 @@
 namespace App\Services\AI;
 
 use App\Models\Candidat;
-use App\Models\Session;
+use App\Models\Entretien;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -22,24 +22,24 @@ class ContextService
             $context['role'] = 'formateur';
             $context['formateur_nom'] = $user->nom;
             
-            // Trouver la session en cours
-            $session = Session::where('statut', 'en cours')
+            // Trouver la entretien en cours
+            $entretien = Entretien::where('statut', 'en cours')
                 ->with(['tickets' => function($q) {
                     $q->whereIn('statut', ['en attente', 'en cours'])->with('candidat');
                 }])->first();
 
-            if ($session) {
-                $prochain_ticket = $session->tickets->where('statut', 'en attente')->sortBy('numeroOrdre')->first();
+            if ($entretien) {
+                $prochain_ticket = $entretien->tickets->where('statut', 'en attente')->sortBy('numeroOrdre')->first();
                 $prochain_candidat = $prochain_ticket ? "Ticket {$prochain_ticket->codeUnique} ({$prochain_ticket->candidat->nom} {$prochain_ticket->candidat->prenom})" : "Aucun";
                 
-                $context['session_actuelle'] = [
-                    'id' => $session->id,
-                    'nombre_candidats_attente' => $session->tickets->where('statut', 'en attente')->count(),
-                    'ticket_en_cours' => $session->tickets->where('statut', 'en cours')->first()?->codeUnique,
+                $context['entretien_actuelle'] = [
+                    'id' => $entretien->id,
+                    'nombre_candidats_attente' => $entretien->tickets->where('statut', 'en attente')->count(),
+                    'ticket_en_cours' => $entretien->tickets->where('statut', 'en cours')->first()?->codeUnique,
                     'prochain_candidat' => $prochain_candidat
                 ];
             } else {
-                $context['session_actuelle'] = 'Aucune session en cours.';
+                $context['entretien_actuelle'] = 'Aucune entretien en cours.';
             }
         }
         
@@ -55,7 +55,7 @@ class ContextService
             $tauxPresence = $totalTickets > 0 ? round(($presents / $totalTickets) * 100, 1) . '%' : 'N/A';
 
             $formateursStats = \App\Models\User::role('formateur')->get()->map(function($f) {
-                $count = \App\Models\Ticket::whereHas('session', function($q) use ($f) {
+                $count = \App\Models\Ticket::whereHas('entretien', function($q) use ($f) {
                     $q->where('user_id', $f->id);
                 })->where('statut', 'terminée')->count();
                 return ['nom' => $f->nom, 'entretiens_termines' => $count];
@@ -63,9 +63,9 @@ class ContextService
 
             $stats = [
                 'total_candidats_aujourdhui' => Candidat::whereDate('created_at', Carbon::today())->count(),
-                'sessions_actives' => Session::where('statut', 'en cours')->count(),
+                'entretiens_actives' => Entretien::where('statut', 'en cours')->count(),
                 'taux_presence_aujourdhui' => $tauxPresence . " ($presents présents, $absents absents)",
-                'sessions_prevues_demain' => Session::whereDate('dateEntretien', Carbon::tomorrow())->count(),
+                'entretiens_prevues_demain' => Entretien::whereDate('dateEntretien', Carbon::tomorrow())->count(),
                 'statistiques_formateurs' => $formateursStats
             ];
             $context['statistiques_globales'] = $stats;
@@ -113,3 +113,4 @@ class ContextService
         return $context;
     }
 }
+

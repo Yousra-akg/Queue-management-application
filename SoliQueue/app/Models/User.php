@@ -15,8 +15,8 @@ class User extends Authenticatable {
 
 
 
-    // Un utilisateur (Admin ou Formateur via son compte User) gère des sessions
-    public function sessions() {
-        return $this->hasMany(Session::class);
+    // Un utilisateur (Admin ou Formateur via son compte User) gère des entretiens
+    public function entretiens() {
+        return $this->hasMany(Entretien::class);
     }
 }

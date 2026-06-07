@@ -4,73 +4,79 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Session;
+use App\Models\Entretien;
 use App\Models\Candidat;
-use App\Services\SessionService;
+use App\Services\EntretienService;
 use App\Services\CandidatService;
 use App\Services\TicketService;
 use Illuminate\Support\Facades\Auth;
 
-class SessionManagementController extends Controller
+class EntretienManagementController extends Controller
 {
-    protected $sessionService;
+    protected $entretienService;
     protected $candidatService;
     protected $ticketService;
 
     public function __construct(
-        SessionService $sessionService,
+        EntretienService $entretienService,
         CandidatService $candidatService,
         TicketService $ticketService
     ) {
-        $this->sessionService = $sessionService;
+        $this->entretienService = $entretienService;
         $this->candidatService = $candidatService;
         $this->ticketService = $ticketService;
     }
 
     public function dashboard()
     {
-        $stats = $this->sessionService->getDashboardStatsAdmin();
-        $sessions = $this->sessionService->getSessionsWithStatusUpdate()->take(4);
-        $sessions->loadCount('candidats');
-        $activites = $this->sessionService->getRecentActivitiesFeed(5);
+        $stats = $this->entretienService->getDashboardStatsAdmin();
+        $entretiens = $this->entretienService->getEntretiensWithStatusUpdate()->take(4);
+        $entretiens->loadCount('candidats');
+        $activites = $this->entretienService->getRecentActivitiesFeed(5);
 
-        return view('admin.dashboard', array_merge($stats, compact('sessions', 'activites')));
+        return view('admin.dashboard', array_merge($stats, compact('entretiens', 'activites')));
     }
 
     public function affectations()
     {
         $availableCandidates = $this->candidatService->getUnassigned();
-        $sessions = $this->sessionService->getSessionsWithStatusUpdate();
-        $sessions->load(['candidats'])->loadCount('candidats');
+        $entretiens = $this->entretienService->getEntretiensWithStatusUpdate();
+        $entretiens->load(['candidats'])->loadCount('candidats');
         
         return view('admin.affectations', [
             'availableCandidates' => $availableCandidates,
-            'sessions' => $sessions
+            'entretiens' => $entretiens
         ]);
     }
 
-    public function sessions()
+    public function entretiens()
     {
-        $sessions = $this->sessionService->getSessionsWithStatusUpdate();
-        $sessions->loadCount('candidats');
-        return view('admin.sessions.index', [
-            'sessions' => $sessions
+        $entretiens = $this->entretienService->getEntretiensWithStatusUpdate();
+        $entretiens->loadCount('candidats');
+        $entretiens->load('formateurs'); // Load formateurs with pivot salle_id
+        
+        $salles = \App\Models\Salle::all();
+        $formateurs = \App\Models\User::role('formateur')->get();
+        return view('admin.entretiens.index', [
+            'entretiens' => $entretiens,
+            'salles' => $salles,
+            'formateurs' => $formateurs
         ]);
     }
 
     public function candidats()
     {
         $candidats = $this->candidatService->all()->sortByDesc('id')->values();
-        $candidats->load('session');
+        $candidats->load('entretien');
         return view('admin.candidats.index', [
             'candidats' => $candidats
         ]);
     }
 
-    public function storeSession(Request $request)
+    public function storeEntretien(Request $request)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:sessions,nom',
+            'nom' => 'required|string|max:255|unique:entretiens,nom',
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
@@ -80,17 +86,17 @@ class SessionManagementController extends Controller
         ]);
 
         try {
-            $this->sessionService->createSession($validated, Auth::guard('web')->id());
-            return redirect()->back()->with('success', 'Session créée avec succès.');
+            $this->entretienService->createEntretien($validated, Auth::guard('web')->id());
+            return redirect()->back()->with('success', 'Entretien créée avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Erreur lors de la création : ' . $e->getMessage()]);
         }
     }
 
-    public function updateSession(Request $request, Session $session)
+    public function updateEntretien(Request $request, Entretien $entretien)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:sessions,nom,' . $session->id,
+            'nom' => 'required|string|max:255|unique:entretiens,nom,' . $entretien->id,
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
@@ -100,18 +106,18 @@ class SessionManagementController extends Controller
         ]);
 
         try {
-            $this->sessionService->updateSession($session->id, $validated);
-            return redirect()->back()->with('success', 'Session mise à jour avec succès.');
+            $this->entretienService->updateEntretien($entretien->id, $validated);
+            return redirect()->back()->with('success', 'Entretien mise à jour avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Erreur lors de la mise à jour : ' . $e->getMessage()]);
         }
     }
 
-    public function destroySession(Session $session)
+    public function destroyEntretien(Entretien $entretien)
     {
         try {
-            $this->sessionService->deleteSession($session->id);
-            return redirect()->back()->with('success', 'Session supprimée avec succès.');
+            $this->entretienService->deleteEntretien($entretien->id);
+            return redirect()->back()->with('success', 'Entretien supprimée avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
         }
@@ -163,7 +169,7 @@ class SessionManagementController extends Controller
         }
     }
 
-    public function assignCandidates(Request $request, Session $session)
+    public function assignCandidates(Request $request, Entretien $entretien)
     {
         $request->validate([
             'candidate_ids' => 'required|array',
@@ -171,8 +177,8 @@ class SessionManagementController extends Controller
         ]);
 
         try {
-            $this->candidatService->assignCandidatesToSession($session->id, $request->candidate_ids);
-            return response()->json(['message' => 'Candidats affectés avec succès.', 'session_id' => $session->id]);
+            $this->candidatService->assignCandidatesToEntretien($entretien->id, $request->candidate_ids);
+            return response()->json(['message' => 'Candidats affectés avec succès.', 'entretien_id' => $entretien->id]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -183,8 +189,8 @@ class SessionManagementController extends Controller
     public function unassignCandidate(Candidat $candidate)
     {
         try {
-            $this->candidatService->unassignCandidateFromSession($candidate->id);
-            return response()->json(['message' => 'Candidat retiré de la session.']);
+            $this->candidatService->unassignCandidateFromEntretien($candidate->id);
+            return response()->json(['message' => 'Candidat retiré de la entretien.']);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -192,3 +198,4 @@ class SessionManagementController extends Controller
         }
     }
 }
+

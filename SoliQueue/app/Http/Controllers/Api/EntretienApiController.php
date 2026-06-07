@@ -3,42 +3,42 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\SessionService;
+use App\Services\EntretienService;
 use Illuminate\Http\JsonResponse;
 
-class SessionApiController extends Controller
+class EntretienApiController extends Controller
 {
-    protected $sessionService;
+    protected $entretienService;
 
-    public function __construct(SessionService $sessionService)
+    public function __construct(EntretienService $entretienService)
     {
-        $this->sessionService = $sessionService;
+        $this->entretienService = $entretienService;
     }
 
     /**
-     * GET /api/mobile/sessions/{id}/status
-     * Retourne les détails de la session, incluant dateEntretien pour le chrono.
+     * GET /api/mobile/entretiens/{id}/status
+     * Retourne les détails de la entretien, incluant dateEntretien pour le chrono.
      */
     public function getStatus($id): JsonResponse
     {
-        $session = $this->sessionService->find($id);
+        $entretien = $this->entretienService->find($id);
 
-        if (!$session) {
+        if (!$entretien) {
             return response()->json([
                 'success' => false,
-                'message' => 'Session introuvable'
+                'message' => 'Entretien introuvable'
             ], 404);
         }
 
         return response()->json([
             'success' => true,
             'data'    => [
-                'id'            => $session->id,
-                'nom'           => $session->nom,
-                'statut'        => $session->statut,
-                'dateEntretien' => $session->dateEntretien,
-                'heureDebut'    => $session->heureDebut,
-                'capaciteMax'   => $session->capaciteMax
+                'id'            => $entretien->id,
+                'nom'           => $entretien->nom,
+                'statut'        => $entretien->statut,
+                'dateEntretien' => $entretien->dateEntretien,
+                'heureDebut'    => $entretien->heureDebut,
+                'capaciteMax'   => $entretien->capaciteMax
             ]
         ], 200);
     }
@@ -50,7 +50,7 @@ class SessionApiController extends Controller
     public function getDashboardStats(): JsonResponse
     {
         try {
-            $data = $this->sessionService->getMobileDashboardStats();
+            $data = $this->entretienService->getMobileDashboardStats();
             return response()->json([
                 'success' => true,
                 'data'    => $data
@@ -63,3 +63,4 @@ class SessionApiController extends Controller
         }
     }
 }
+

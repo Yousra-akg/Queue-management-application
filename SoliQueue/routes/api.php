@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\EtudiantApiController;
 use App\Http\Controllers\Api\TicketApiController;
-use App\Http\Controllers\Api\SessionApiController;
+use App\Http\Controllers\Api\EntretienApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,17 +29,18 @@ Route::prefix('mobile')->group(function () {
     Route::post('/tickets/generate', [TicketApiController::class, 'generate']);
     Route::get('/tickets/{id}', [TicketApiController::class, 'getTicket']);
 
-    // 3. Statut d'une session et son chrono
-    Route::get('/sessions/{id}/status', [SessionApiController::class, 'getStatus']);
-    Route::get('/sessions/{id}/queue', [TicketApiController::class, 'getQueue']);
+    // 3. Statut d'une entretien et son chrono
+    Route::get('/entretiens/{id}/status', [EntretienApiController::class, 'getStatus']);
+    Route::get('/entretiens/{id}/queue', [TicketApiController::class, 'getQueue']);
 
     // 4. Valide la présence avec un code
     Route::post('/tickets/validate-presence', [TicketApiController::class, 'validatePresence']);
 
     // 5. Dashboard Admin : Statistiques des tickets
-    Route::get('/admin/dashboard', [SessionApiController::class, 'getDashboardStats']);
+    Route::get('/admin/dashboard', [EntretienApiController::class, 'getDashboardStats']);
 
     // 6. Notifications
     Route::post('/notifications/{id}/read', [TicketApiController::class, 'markNotificationRead']);
 
 });
+

@@ -1,32 +1,32 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des Sessions - SoliQueue Admin')
-@section('breadcrumb', 'Gestion Sessions')
+@section('title', 'Gestion des Entretiens - SoliQueue Admin')
+@section('breadcrumb', 'Gestion Entretiens')
 
 @section('content')
-    <div x-data="sessionsManager({{ json_encode($sessions) }})" x-init="init()" class="space-y-8">
+    <div x-data="sessionsManager({{ json_encode($entretiens) }})" x-init="init()" class="space-y-8">
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Gestion des Sessions</h1>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Gestion des Entretiens</h1>
                 <p class="text-sm text-slate-400 font-medium">Assignation des candidats aux jours d'entretien</p>
             </div>
         </div>
 
 
 
-        <!-- Bottom: Session Management Table -->
+        <!-- Bottom: Entretien Management Table -->
         <div class="mt-12">
             <div class="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4 px-2">
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Gérez toutes les sessions
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Gérez toutes les entretiens
                         d'entretien</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('admin.sessions.export') }}"
+                    <a href="{{ route('admin.entretiens.export') }}"
                         class="py-3 px-6 bg-slate-100 text-slate-700 text-xs font-black rounded-2xl uppercase hover:bg-slate-200 transition-all flex items-center gap-2">
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Exporter les sessions
+                        Exporter les entretiens
                     </a>
                     <button @click="openAddSessionModal()"
                         class="py-3 px-6 bg-[#1A73E8] text-white text-xs font-black rounded-2xl uppercase hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 flex items-center gap-2">
@@ -35,7 +35,7 @@
                             <path d="M5 12h14" />
                             <path d="M12 5v14" />
                         </svg>
-                        Ajouter une session
+                        Ajouter une entretien
                     </button>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     </div>
                     <input type="text" x-model="searchQuery"
                         class="py-3 ps-12 pe-4 block w-full bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm"
-                        placeholder="Rechercher par titre de session...">
+                        placeholder="Rechercher par titre de entretien...">
                 </div>
 
                 <div class="relative z-10 w-48" x-data="{ openMainStatut: false }" @click.away="openMainStatut = false">
@@ -99,7 +99,7 @@
                             <tr>
                                 <th
                                     class="ps-8 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">
-                                    Nom de la Session</th>
+                                    Nom de la Entretien</th>
                                 <th
                                     class="px-6 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">
                                     Date</th>
@@ -121,7 +121,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            <template x-for="session in paginatedSessions" :key="session.id">
+                            <template x-for="entretien in paginatedSessions" :key="entretien.id">
                                 <tr class="hover:bg-slate-50/50 transition-colors group">
                                     <td class="ps-8 py-5">
                                         <div class="flex items-center gap-3">
@@ -134,50 +134,50 @@
                                                         d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                                                 </svg>
                                             </div>
-                                            <p class="text-sm font-black text-slate-900 uppercase" x-text="session.nom"></p>
+                                            <p class="text-sm font-black text-slate-900 uppercase" x-text="entretien.nom"></p>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5">
                                         <span class="text-xs font-bold text-slate-600"
-                                            x-text="formatDate(session.dateEntretien)"></span>
+                                            x-text="formatDate(entretien.dateEntretien)"></span>
                                     </td>
                                     <td class="px-6 py-5 text-center">
                                         <span
                                             class="inline-flex items-center justify-center size-9 rounded-xl bg-blue-50 text-[#1A73E8] text-xs font-black border border-blue-100"
-                                            x-text="session.capaciteMax"></span>
+                                            x-text="entretien.capaciteMax"></span>
                                     </td>
                                     <td class="px-6 py-5 text-center">
                                         <div
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg text-[10px] font-bold text-slate-600">
-                                            <span x-text="session.heureDebut.substring(0,5)"></span> - <span
-                                                x-text="session.heureFin.substring(0,5)"></span>
+                                            <span x-text="entretien.heureDebut.substring(0,5)"></span> - <span
+                                                x-text="entretien.heureFin.substring(0,5)"></span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5 text-center">
                                         <span
                                             class="px-3 py-1 bg-slate-900 text-white rounded-lg text-xs font-black tracking-widest"
-                                            x-text="session.codePresence"></span>
+                                            x-text="entretien.codePresence"></span>
                                     </td>
                                     <td class="px-6 py-5 text-center">
                                         <span :class="{
-                                            'bg-green-100 text-green-700': session.statut === 'en cours',
-                                            'bg-blue-100 text-[#1A73E8]': session.statut === 'planifiée',
-                                            'bg-slate-100 text-slate-500': session.statut === 'terminée',
-                                            'bg-red-100 text-red-600': session.statut === 'annulée'
+                                            'bg-green-100 text-green-700': entretien.statut === 'en cours',
+                                            'bg-blue-100 text-[#1A73E8]': entretien.statut === 'planifiée',
+                                            'bg-slate-100 text-slate-500': entretien.statut === 'terminée',
+                                            'bg-red-100 text-red-600': entretien.statut === 'annulée'
                                         }"
                                             class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-black uppercase">
                                             <span class="size-1.5 rounded-full" :class="{
-                                                'bg-green-500': session.statut === 'en cours',
-                                                'bg-[#1A73E8]': session.statut === 'planifiée',
-                                                'bg-slate-400': session.statut === 'terminée',
-                                                'bg-red-500': session.statut === 'annulée'
+                                                'bg-green-500': entretien.statut === 'en cours',
+                                                'bg-[#1A73E8]': entretien.statut === 'planifiée',
+                                                'bg-slate-400': entretien.statut === 'terminée',
+                                                'bg-red-500': entretien.statut === 'annulée'
                                             }"></span>
-                                            <span x-text="session.statut"></span>
+                                            <span x-text="entretien.statut"></span>
                                         </span>
                                     </td>
                                     <td class="px-6 py-5 text-end pe-8">
                                         <div class="flex justify-end gap-2">
-                                            <button @click="editSession(session)"
+                                            <button @click="editSession(entretien)"
                                                 class="size-8 rounded-lg bg-blue-50 border border-blue-100 text-[#1A73E8] hover:bg-[#1A73E8] hover:text-white transition-all flex items-center justify-center">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -186,7 +186,7 @@
                                                     <path d="m15 5 4 4" />
                                                 </svg>
                                             </button>
-                                            <button @click="deleteSession(session.id)"
+                                            <button @click="deleteSession(entretien.id)"
                                                 class="size-8 rounded-lg bg-red-50 border border-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center">
                                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -224,7 +224,7 @@
 
 
 
-        <!-- Add/Edit Session Modal -->
+        <!-- Add/Edit Entretien Modal -->
         <div x-show="showSessionModal" x-cloak
             class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm w-full h-full min-h-screen"
             @click.self="showSessionModal = false">
@@ -243,13 +243,13 @@
                     </button>
 
                     <h1 class="text-3xl font-black text-gray-900 tracking-tight"
-                        x-text="sessionForm.id ? 'Modifier Session' : 'Nouvelle Session'"></h1>
+                        x-text="sessionForm.id ? 'Modifier Entretien' : 'Nouvelle Entretien'"></h1>
                     <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mt-2">Configuration Rapide</p>
                 </div>
 
                 <!-- Form -->
                 <form
-                    :action="sessionForm.id ? '{{ url('admin/sessions') }}/' + sessionForm.id : '{{ route('admin.sessions.store') }}'"
+                    :action="sessionForm.id ? '{{ url('admin/entretiens') }}/' + sessionForm.id : '{{ route('admin.entretiens.store') }}'"
                     method="POST" class="flex flex-col flex-1 overflow-hidden">
                     @csrf
                     <template x-if="sessionForm.id">
@@ -262,9 +262,9 @@
                         <!-- Nom -->
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Titre
-                                de la session</label>
+                                de la entretien</label>
                             <input type="text" name="nom" x-model="sessionForm.nom" required
-                                placeholder="Ex: Session Printemps - J5"
+                                placeholder="Ex: Entretien Printemps - J5"
                                 class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
                         </div>
 
@@ -338,6 +338,43 @@
                             </div>
                         </div>
 
+                        <!-- Affectations Formateurs/Salles -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest">Affectation Salles & Formateurs</label>
+                                <button type="button" @click="addAffectation()" class="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1">
+                                    <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Ajouter
+                                </button>
+                            </div>
+                            <div class="space-y-3">
+                                <template x-for="(affectation, index) in sessionForm.affectations" :key="index">
+                                    <div class="flex gap-3 items-end p-3 bg-gray-50 rounded-xl border border-gray-100 relative group">
+                                        <div class="flex-1">
+                                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Formateur</label>
+                                            <select :name="`affectations[${index}][formateur_id]`" x-model="affectation.formateur_id" required class="w-full py-2 px-3 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-lg text-sm text-gray-700 shadow-sm">
+                                                <option value="">Sélectionner</option>
+                                                @foreach($formateurs as $formateur)
+                                                    <option value="{{ $formateur->id }}">{{ $formateur->nom }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Salle</label>
+                                            <select :name="`affectations[${index}][salle_id]`" x-model="affectation.salle_id" required class="w-full py-2 px-3 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-lg text-sm text-gray-700 shadow-sm">
+                                                <option value="">Sélectionner</option>
+                                                @foreach($salles as $salle)
+                                                    <option value="{{ $salle->id }}">{{ $salle->nom }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="button" @click="removeAffectation(index)" x-show="sessionForm.affectations.length > 1" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+                                            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
                         <!-- Code Generator Widget -->
                         <div>
                             <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Code de
@@ -367,7 +404,7 @@
                         </button>
                         <button type="submit"
                             class="px-8 py-3.5 text-sm font-bold text-white bg-[#1A73E8] hover:bg-blue-700 shadow-xl shadow-blue-200 rounded-2xl transition-all">
-                            <span x-text="sessionForm.id ? 'Mettre à jour' : 'Publier la session'"></span>
+                            <span x-text="sessionForm.id ? 'Mettre à jour' : 'Publier la entretien'"></span>
                         </button>
                     </div>
                 </form>

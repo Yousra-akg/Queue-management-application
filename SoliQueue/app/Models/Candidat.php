@@ -9,15 +9,15 @@ use Illuminate\Notifications\Notifiable;
 class Candidat extends Authenticatable {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['session_id', 'cin', 'nom', 'prenom', 'photo', 'scoreQCM', 'is_present'];
+    protected $fillable = ['entretien_id', 'cin', 'nom', 'prenom', 'photo', 'scoreQCM', 'is_present'];
 
     protected $casts = [
         'is_present' => 'boolean',
     ];
 
 
-    public function session() {
-        return $this->belongsTo(Session::class);
+    public function entretien() {
+        return $this->belongsTo(Entretien::class);
     }
 
     public function ticket() {

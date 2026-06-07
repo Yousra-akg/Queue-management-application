@@ -70,9 +70,9 @@ class ImportExportController extends Controller
         }
     }
 
-    public function exportSessions(): StreamedResponse
+    public function exportEntretiens(): StreamedResponse
     {
-        $spreadsheet = $this->importExportService->exportSessions();
+        $spreadsheet = $this->importExportService->exportEntretiens();
         $writer = new Xlsx($spreadsheet);
 
         $response = new StreamedResponse(function () use ($writer) {
@@ -80,8 +80,9 @@ class ImportExportController extends Controller
         });
 
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment; filename="export_sessions_' . date('Y-m-d') . '.xlsx"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export_entretiens_' . date('Y-m-d') . '.xlsx"');
 
         return $response;
     }
 }
+
