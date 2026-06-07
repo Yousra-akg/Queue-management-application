@@ -3,7 +3,7 @@
 namespace App\Services\AI;
 
 use App\Services\QueueService;
-use App\Models\Session;
+use App\Models\Entretien;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CandidatsImport; // We will create this later if Excel is fully needed, but for now we'll stub it.
@@ -27,13 +27,13 @@ class ChatbotCommandHandler
                 return ['message' => "Vous n'avez pas l'autorisation d'appeler le prochain candidat."];
             }
             
-            $session = Session::where('statut', 'en cours')->first();
-            if (!$session) {
-                return ['message' => "Vous n'avez aucune session en cours."];
+            $entretien = Entretien::where('statut', 'en cours')->first();
+            if (!$entretien) {
+                return ['message' => "Vous n'avez aucune entretien en cours."];
             }
 
             try {
-                $this->queueService->callNextCandidat($session->id);
+                $this->queueService->callNextCandidat($entretien->id, $user->id);
                 return ['message' => "C'est fait ! Le candidat suivant a été appelé.", 'action' => 'next_candidate'];
             } catch (\Exception $e) {
                 return ['message' => "Impossible de passer au candidat suivant : " . $e->getMessage()];
@@ -46,12 +46,12 @@ class ChatbotCommandHandler
                 return ['message' => "Vous n'avez pas l'autorisation de marquer un candidat absent."];
             }
             
-            $session = Session::where('statut', 'en cours')->first();
-            if (!$session) {
-                return ['message' => "Vous n'avez aucune session en cours."];
+            $entretien = Entretien::where('statut', 'en cours')->first();
+            if (!$entretien) {
+                return ['message' => "Vous n'avez aucune entretien en cours."];
             }
             
-            $ticketEnCours = $session->tickets()->where('statut', 'en cours')->first();
+            $ticketEnCours = $entretien->tickets()->where('statut', 'en cours')->first();
             if (!$ticketEnCours) {
                 return ['message' => "Aucun candidat n'est actuellement en cours d'entretien."];
             }
@@ -64,22 +64,22 @@ class ChatbotCommandHandler
             }
         }
 
-        // 3. Action: close_session (Formateur uniquement)
-        if ($action === 'close_session') {
+        // 3. Action: close_entretien (Formateur uniquement)
+        if ($action === 'close_entretien') {
             if (!$user || !$user->hasRole('formateur')) {
-                return ['message' => "Vous n'avez pas l'autorisation de terminer une session."];
+                return ['message' => "Vous n'avez pas l'autorisation de terminer une entretien."];
             }
             
-            $session = Session::where('statut', 'en cours')->first();
-            if (!$session) {
-                return ['message' => "Vous n'avez aucune session en cours."];
+            $entretien = Entretien::where('statut', 'en cours')->first();
+            if (!$entretien) {
+                return ['message' => "Vous n'avez aucune entretien en cours."];
             }
             
             try {
-                $session->update(['statut' => 'terminée']);
-                return ['message' => "La session a bien été clôturée.", 'action' => 'close_session'];
+                $entretien->update(['statut' => 'terminée']);
+                return ['message' => "La entretien a bien été clôturée.", 'action' => 'close_entretien'];
             } catch (\Exception $e) {
-                return ['message' => "Impossible de terminer la session : " . $e->getMessage()];
+                return ['message' => "Impossible de terminer la entretien : " . $e->getMessage()];
             }
         }
 
@@ -106,16 +106,16 @@ class ChatbotCommandHandler
             return ['message' => $message];
         }
 
-        // 6. Action: create_session (Admin uniquement)
-        if ($action === 'create_session') {
+        // 6. Action: create_entretien (Admin uniquement)
+        if ($action === 'create_entretien') {
             if (!$user || !$user->hasRole('admin')) {
-                return ['message' => "Seul un administrateur peut créer des sessions."];
+                return ['message' => "Seul un administrateur peut créer des entretiens."];
             }
 
             try {
                 $uniqueCode = strtoupper(\Illuminate\Support\Str::random(4));
-                $uniqueName = 'Session IA - ' . $uniqueCode;
-                Session::create([
+                $uniqueName = 'Entretien IA - ' . $uniqueCode;
+                Entretien::create([
                     'user_id' => $user->id,
                     'nom' => $uniqueName, // Required field, now unique
                     'dateEntretien' => $data['date'] ?? \Carbon\Carbon::tomorrow()->format('Y-m-d'),
@@ -125,9 +125,9 @@ class ChatbotCommandHandler
                     'codePresence' => $uniqueCode, // Required field, 4 characters
                     'statut' => 'planifiée'
                 ]);
-                return ['message' => "La session a été créée avec succès sous le nom de **$uniqueName** (Code : **$uniqueCode**) !"];
+                return ['message' => "La entretien a été créée avec succès sous le nom de **$uniqueName** (Code : **$uniqueCode**) !"];
             } catch (\Exception $e) {
-                return ['message' => "Impossible de créer la session : " . $e->getMessage()];
+                return ['message' => "Impossible de créer la entretien : " . $e->getMessage()];
             }
         }
 
@@ -140,28 +140,28 @@ class ChatbotCommandHandler
             try {
                 $date = $data['date'] ?? null;
                 
-                $query = Session::whereIn('statut', ['planifiée', 'en cours']);
+                $query = Entretien::whereIn('statut', ['planifiée', 'en cours']);
                 if ($date) {
                     $query->whereDate('dateEntretien', $date);
                 }
-                $session = $query->orderBy('dateEntretien', 'asc')->first();
+                $entretien = $query->orderBy('dateEntretien', 'asc')->first();
 
-                if (!$session) {
-                    return ['message' => "Je n'ai pas trouvé de session disponible " . ($date ? "pour le $date" : "prochainement") . ". Voulez-vous que j'en crée une ?"];
+                if (!$entretien) {
+                    return ['message' => "Je n'ai pas trouvé de entretien disponible " . ($date ? "pour le $date" : "prochainement") . ". Voulez-vous que j'en crée une ?"];
                 }
 
-                $unassigned = \App\Models\Candidat::whereNull('session_id')->get();
+                $unassigned = \App\Models\Candidat::whereNull('entretien_id')->get();
                 if ($unassigned->isEmpty()) {
-                    return ['message' => "Tous les candidats sont déjà assignés à une session."];
+                    return ['message' => "Tous les candidats sont déjà assignés à une entretien."];
                 }
 
                 $count = 0;
                 foreach ($unassigned as $c) {
-                    $c->update(['session_id' => $session->id]);
+                    $c->update(['entretien_id' => $entretien->id]);
                     $count++;
                 }
 
-                return ['message' => "C'est fait ! $count candidat(s) ont été assignés à la session **{$session->nom}** (prévue le {$session->dateEntretien})."];
+                return ['message' => "C'est fait ! $count candidat(s) ont été assignés à la entretien **{$entretien->nom}** (prévue le {$entretien->dateEntretien})."];
             } catch (\Exception $e) {
                 return ['message' => "Erreur lors de l'assignation : " . $e->getMessage()];
             }
@@ -171,3 +171,4 @@ class ChatbotCommandHandler
         return ['message' => $message];
     }
 }
+

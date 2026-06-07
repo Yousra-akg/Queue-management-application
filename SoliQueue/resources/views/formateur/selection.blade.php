@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sélection de Session - Portail Formateur SoliQueue</title>
+    <title>Sélection de Entretien - Portail Formateur SoliQueue</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -66,7 +66,7 @@
         <!-- Hero Section -->
         <div class="text-center mb-20">
             <h1 class="text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-6 uppercase">
-                Sessions d'entretiens
+                Entretiens d'entretiens
             </h1>
             <div class="flex items-center justify-center gap-4">
                 <div class="h-1 w-12 bg-blue-600 rounded-full"></div>
@@ -77,9 +77,9 @@
             </div>
         </div>
 
-        <!-- Session Grid -->
+        <!-- Entretien Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-            @foreach($sessions as $session)
+            @foreach($entretiens as $entretien)
                 <div
                     class="group relative bg-white border border-slate-100 rounded-[2.5rem] p-10 transition-all duration-500 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] hover:-translate-y-2 overflow-hidden">
                     <!-- Status Badge Overlay -->
@@ -108,7 +108,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Session</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Entretien</p>
                                 <span
                                     class="text-xs font-black text-slate-900 uppercase">#{{ str_pad($session->id, 4, '0', STR_PAD_LEFT) }}</span>
                             </div>

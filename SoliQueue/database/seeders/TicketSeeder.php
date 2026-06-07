@@ -22,3 +22,4 @@ class TicketSeeder extends Seeder
         fclose($file);
     }
 }
+

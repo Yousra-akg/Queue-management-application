@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidats', function (Blueprint $table) {
+        Schema::create('entretien_formateur_salle', function (Blueprint $table) {
             $table->id();
             $table->foreignId('entretien_id')->constrained()->onDelete('cascade');
-            $table->string('cin')->unique();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->float('scoreQCM', 10, 2);
-            $table->boolean('is_present')->default(false);
+            $table->foreignId('formateur_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('salle_id')->constrained('salles')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidats');
+        Schema::dropIfExists('entretien_formateur_salle');
     }
 };

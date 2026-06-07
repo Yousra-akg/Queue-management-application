@@ -1,7 +1,7 @@
-export default (initialTickets = [], session = {}, csrfToken = '', reorderRoute = '', canManageQueue = false) => ({
+export default (initialTickets = [], entretien = {}, csrfToken = '', reorderRoute = '', canManageQueue = false) => ({
     tickets: initialTickets,
     searchQuery: '',
-    session: session,
+    entretien: entretien,
     csrfToken: csrfToken,
     reorderRoute: reorderRoute,
     canManageQueue: canManageQueue,
@@ -49,8 +49,8 @@ export default (initialTickets = [], session = {}, csrfToken = '', reorderRoute 
                 const current = this.tickets.find(t => t.statut === 'en cours');
                 if (current) current.statut = 'absent';
                 this.tickets = [...this.tickets];
-            } else if (action === 'close_session') {
-                window.location.href = '/formateur/sessions';
+            } else if (action === 'close_entretien') {
+                window.location.href = '/formateur/entretiens';
             }
         });
     },
@@ -122,3 +122,4 @@ export default (initialTickets = [], session = {}, csrfToken = '', reorderRoute 
         }
     }
 });
+

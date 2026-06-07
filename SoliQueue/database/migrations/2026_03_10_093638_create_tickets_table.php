@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidat_id')->constrained()->onDelete('cascade');
-            $table->foreignId('session_id')->constrained()->onDelete('cascade');
+            $table->foreignId('entretien_id')->constrained()->onDelete('cascade');
             $table->string('codeUnique'); 
             $table->integer('numeroOrdre');
             $table->enum('statut', ['en attente', 'en cours', 'terminée'])->default('en attente');
-            $table->dateTime('heureArrivee');
+            $table->foreignId('formateur_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('salle_id')->nullable()->constrained('salles')->onDelete('set null');
+            $table->dateTime('heureArrivee')->nullable();
+            $table->dateTime('heureAppel')->nullable();
+            $table->dateTime('heureFin')->nullable();
             $table->timestamps();
         });
     }

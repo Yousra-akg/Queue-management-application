@@ -282,6 +282,7 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
                             <div>
                                 <p class="font-bold text-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
                                 ${isMe ? '<p class="text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
+                                ${t.salle && t.statut === 'en cours' ? `<p class="text-[9px] font-bold text-white/80 uppercase mt-0.5">📍 ${t.salle.nom}</p>` : ''}
                             </div>
                         </div>
                     </td>

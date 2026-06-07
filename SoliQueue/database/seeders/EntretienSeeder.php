@@ -4,21 +4,23 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Session;
+use App\Models\Entretien;
 
-class SessionSeeder extends Seeder
+class EntretienSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $file = fopen(database_path('data/sessions.csv'), 'r');
+        $file = fopen(database_path('data/entretiens.csv'), 'r');
         $header = fgetcsv($file);
         while (($row = fgetcsv($file)) !== FALSE) {
             $data = array_combine($header, $row);
-            Session::create($data);
+            Entretien::create($data);
         }
         fclose($file);
     }
 }
+
+

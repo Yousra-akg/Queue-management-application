@@ -76,7 +76,7 @@
                         <th class="ps-8 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Candidat</th>
                         <th class="px-6 py-4 text-start text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">CIN</th>
                         <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Score QCM</th>
-                        <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Session Affectée</th>
+                        <th class="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Entretien Affectée</th>
                         <th class="px-6 py-4 text-end pe-8 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
@@ -104,10 +104,10 @@
                                 <span class="inline-flex items-center justify-center size-9 rounded-xl bg-slate-50 text-[#1A73E8] text-xs font-black border border-slate-200" x-text="candidat.scoreQCM"></span>
                             </td>
                             <td class="px-6 py-5 text-center">
-                                <template x-if="candidat.session">
-                                    <span class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-bold border border-green-200" x-text="candidat.session.nom"></span>
+                                <template x-if="candidat.entretien">
+                                    <span class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-bold border border-green-200" x-text="candidat.entretien.nom"></span>
                                 </template>
-                                <template x-if="!candidat.session">
+                                <template x-if="!candidat.entretien">
                                     <span class="inline-flex items-center px-3 py-1 bg-slate-50 text-slate-500 rounded-lg text-[10px] font-bold border border-slate-200">Non affecté</span>
                                 </template>
                             </td>
@@ -280,3 +280,4 @@
 
 
 @endsection
+

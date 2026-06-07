@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CandidatPortalController;
-use App\Http\Controllers\Admin\SessionManagementController;
+use App\Http\Controllers\Admin\EntretienManagementController;
 use App\Http\Controllers\Admin\FormateurManagementController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\ImportExportController;
@@ -37,24 +37,24 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 
 // Admin Protected Routes
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [SessionManagementController::class, 'dashboard'])->name('dashboard');
-    Route::get('/affectations', [SessionManagementController::class, 'affectations'])->name('affectations');
+    Route::get('/dashboard', [EntretienManagementController::class, 'dashboard'])->name('dashboard');
+    Route::get('/affectations', [EntretienManagementController::class, 'affectations'])->name('affectations');
     
-    // Sessions CRUD
-    Route::get('/sessions', [SessionManagementController::class, 'sessions'])->name('sessions.index');
-    Route::post('/sessions', [SessionManagementController::class, 'storeSession'])->name('sessions.store');
-    Route::put('/sessions/{session}', [SessionManagementController::class, 'updateSession'])->name('sessions.update');
-    Route::delete('/sessions/{session}', [SessionManagementController::class, 'destroySession'])->name('sessions.destroy');
+    // Entretiens CRUD
+    Route::get('/entretiens', [EntretienManagementController::class, 'entretiens'])->name('entretiens.index');
+    Route::post('/entretiens', [EntretienManagementController::class, 'storeEntretien'])->name('entretiens.store');
+    Route::put('/entretiens/{entretien}', [EntretienManagementController::class, 'updateEntretien'])->name('entretiens.update');
+    Route::delete('/entretiens/{entretien}', [EntretienManagementController::class, 'destroyEntretien'])->name('entretiens.destroy');
     
     // Candidats CRUD
-    Route::get('/candidats', [SessionManagementController::class, 'candidats'])->name('candidats.index');
-    Route::post('/candidates', [SessionManagementController::class, 'storeCandidate'])->name('candidates.store');
-    Route::put('/candidats/{candidat}', [SessionManagementController::class, 'updateCandidate'])->name('candidats.update');
-    Route::delete('/candidats/{candidat}', [SessionManagementController::class, 'destroyCandidate'])->name('candidats.destroy');
+    Route::get('/candidats', [EntretienManagementController::class, 'candidats'])->name('candidats.index');
+    Route::post('/candidates', [EntretienManagementController::class, 'storeCandidate'])->name('candidates.store');
+    Route::put('/candidats/{candidat}', [EntretienManagementController::class, 'updateCandidate'])->name('candidats.update');
+    Route::delete('/candidats/{candidat}', [EntretienManagementController::class, 'destroyCandidate'])->name('candidats.destroy');
     
     // Actions rapides
-    Route::post('/candidates/{candidate}/unassign', [SessionManagementController::class, 'unassignCandidate'])->name('candidates.unassign');
-    Route::post('/sessions/{session}/assign', [SessionManagementController::class, 'assignCandidates'])->name('sessions.assign');
+    Route::post('/candidates/{candidate}/unassign', [EntretienManagementController::class, 'unassignCandidate'])->name('candidates.unassign');
+    Route::post('/entretiens/{entretien}/assign', [EntretienManagementController::class, 'assignCandidates'])->name('entretiens.assign');
     
     // Formateurs CRUD
     Route::get('/formateurs', [FormateurManagementController::class, 'index'])->name('formateurs.index');
@@ -62,10 +62,15 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::put('/formateurs/{formateur}', [FormateurManagementController::class, 'update'])->name('formateurs.update');
     Route::delete('/formateurs/{formateur}', [FormateurManagementController::class, 'destroy'])->name('formateurs.destroy');
 
+    // Salles CRUD
+    Route::get('/salles', [\App\Http\Controllers\Admin\SalleController::class, 'index'])->name('salles.index');
+    Route::post('/salles', [\App\Http\Controllers\Admin\SalleController::class, 'store'])->name('salles.store');
+    Route::delete('/salles/{salle}', [\App\Http\Controllers\Admin\SalleController::class, 'destroy'])->name('salles.destroy');
+
     // Import & Export
     Route::get('/candidats/export', [ImportExportController::class, 'exportCandidats'])->name('candidats.export');
     Route::post('/candidats/import', [ImportExportController::class, 'importCandidats'])->name('candidats.import');
-    Route::get('/sessions/export', [ImportExportController::class, 'exportSessions'])->name('sessions.export');
+    Route::get('/entretiens/export', [ImportExportController::class, 'exportEntretiens'])->name('entretiens.export');
 });
 
 // Portail Formateur
@@ -74,12 +79,13 @@ Route::prefix('formateur')->name('formateur.')->group(function () {
     Route::post('/login', [FormateurController::class, 'login']);
 
     Route::middleware(['auth:web'])->group(function () {
-        Route::get('/sessions', [FormateurController::class, 'selectionSession'])->name('sessions');
-        Route::get('/dashboard/{session}', [FormateurController::class, 'dashboard'])->name('dashboard');
+        Route::get('/entretiens', [FormateurController::class, 'selectionEntretien'])->name('entretiens');
+        Route::get('/dashboard/{entretien}', [FormateurController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [FormateurController::class, 'logout'])->name('logout');
         
         // Actions AJAX
         Route::post('/status/{ticket}', [FormateurController::class, 'updateTicketStatus'])->name('update-status');
-        Route::post('/reorder/{session}', [FormateurController::class, 'updateTicketOrder'])->name('reorder');
+        Route::post('/reorder/{entretien}', [FormateurController::class, 'updateTicketOrder'])->name('reorder');
     });
 });
+

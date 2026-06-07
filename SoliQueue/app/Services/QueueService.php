@@ -15,16 +15,19 @@ class QueueService extends BaseService
         $this->notificationService = $notificationService;
     }
 
-    public function callNextCandidat(int $sessionId)
+    public function callNextCandidat(int $entretienId, ?int $formateurId = null)
     {
-        return DB::transaction(function () use ($sessionId) {
+        return DB::transaction(function () use ($entretienId, $formateurId) {
             $currentActive = $this->model
-                ->where('session_id', $sessionId)
+                ->where('entretien_id', $entretienId)
                 ->where('statut', 'en cours')
                 ->first();
 
             if ($currentActive) {
-                $currentActive->update(['statut' => 'terminée']);
+                $currentActive->update([
+                    'statut' => 'terminée',
+                    'heureFin' => now()
+                ]);
                 $this->notificationService->createNotification(
                     $currentActive->candidat_id,
                     "Entretien Terminé",
@@ -33,22 +36,41 @@ class QueueService extends BaseService
             }
 
             $nextTicket = $this->model
-                ->where('session_id', $sessionId)
+                ->where('entretien_id', $entretienId)
                 ->where('statut', 'en attente')
                 ->orderBy('numeroOrdre', 'asc')
                 ->first();
 
             if ($nextTicket) {
-                $nextTicket->update(['statut' => 'en cours']);
+                $salleId = null;
+                if ($formateurId) {
+                    $affectation = DB::table('entretien_formateur_salle')
+                        ->where('entretien_id', $entretienId)
+                        ->where('formateur_id', $formateurId)
+                        ->first();
+                    if ($affectation) {
+                        $salleId = $affectation->salle_id;
+                    }
+                }
+
+                $nextTicket->update([
+                    'statut' => 'en cours',
+                    'heureAppel' => now(),
+                    'formateur_id' => $formateurId,
+                    'salle_id' => $salleId
+                ]);
+
+                $salleNom = $salleId ? \App\Models\Salle::find($salleId)->nom : 'la salle d\'entretien';
+
                 $this->notificationService->createNotification(
                     $nextTicket->candidat_id,
                     "C'est votre tour !",
-                    "Veuillez vous présenter à la salle d'entretien immédiatement."
+                    "Veuillez vous présenter à " . $salleNom . " immédiatement."
                 );
 
                 // Notifier le candidat suivant immédiat (le premier en attente désormais)
                 $upcomingTicket = $this->model
-                    ->where('session_id', $sessionId)
+                    ->where('entretien_id', $entretienId)
                     ->where('statut', 'en attente')
                     ->orderBy('numeroOrdre', 'asc')
                     ->first();
@@ -66,11 +88,11 @@ class QueueService extends BaseService
         });
     }
 
-    public function reorderQueue(int $sessionId, array $orderedTicketIds)
+    public function reorderQueue(int $entretienId, array $orderedTicketIds)
     {
-        return DB::transaction(function () use ($sessionId, $orderedTicketIds) {
+        return DB::transaction(function () use ($entretienId, $orderedTicketIds) {
             $oldTickets = $this->model
-                ->where('session_id', $sessionId)
+                ->where('entretien_id', $entretienId)
                 ->pluck('numeroOrdre', 'id')
                 ->toArray();
 
@@ -94,7 +116,7 @@ class QueueService extends BaseService
         });
     }
 
-    public function updateCandidatStatus(int $ticketId, string $statut)
+    public function updateCandidatStatus(int $ticketId, string $statut, ?int $formateurId = null)
     {
         $validStatuses = ['en attente', 'en cours', 'terminée', 'absent'];
         
@@ -104,19 +126,38 @@ class QueueService extends BaseService
 
         $ticket = $this->findOrFail($ticketId);
         $oldStatut = $ticket->statut;
-        $ticket->update(['statut' => $statut]);
+        
+        $updateData = ['statut' => $statut];
+        if ($statut === 'en cours') {
+            $updateData['heureAppel'] = now();
+            if ($formateurId) {
+                $updateData['formateur_id'] = $formateurId;
+                $affectation = DB::table('entretien_formateur_salle')
+                    ->where('entretien_id', $ticket->entretien_id)
+                    ->where('formateur_id', $formateurId)
+                    ->first();
+                if ($affectation) {
+                    $updateData['salle_id'] = $affectation->salle_id;
+                }
+            }
+        } elseif ($statut === 'terminée' || $statut === 'absent') {
+            $updateData['heureFin'] = now();
+        }
+
+        $ticket->update($updateData);
 
         if ($oldStatut !== $statut) {
             if ($statut === 'en cours') {
+                $salleNom = isset($updateData['salle_id']) ? \App\Models\Salle::find($updateData['salle_id'])->nom : 'la salle d\'entretien';
                 $this->notificationService->createNotification(
                     $ticket->candidat_id,
                     "C'est votre tour !",
-                    "Veuillez vous présenter à la salle d'entretien immédiatement."
+                    "Veuillez vous présenter à " . $salleNom . " immédiatement."
                 );
 
                 // Notifier le candidat suivant immédiat
                 $upcomingTicket = $this->model
-                    ->where('session_id', $ticket->session_id)
+                    ->where('entretien_id', $ticket->entretien_id)
                     ->where('statut', 'en attente')
                     ->orderBy('numeroOrdre', 'asc')
                     ->first();
@@ -146,4 +187,5 @@ class QueueService extends BaseService
         return $ticket;
     }
 }
+
 

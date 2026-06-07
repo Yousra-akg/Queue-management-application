@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Candidat;
-use App\Models\Session;
+use App\Models\Entretien;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -24,20 +24,20 @@ class ImportExportService
         $sheet->setCellValue('B1', 'Nom');
         $sheet->setCellValue('C1', 'Prenom');
         $sheet->setCellValue('D1', 'Score QCM');
-        $sheet->setCellValue('E1', 'Session');
+        $sheet->setCellValue('E1', 'Entretien');
         $sheet->setCellValue('F1', 'Est Present');
         $sheet->setCellValue('G1', 'Photo');
 
         $sheet->getStyle('A1:G1')->getFont()->setBold(true);
 
         $rowNumber = 2;
-        $candidats = Candidat::with('session')->get();
+        $candidats = Candidat::with('entretien')->get();
         foreach ($candidats as $candidat) {
             $sheet->setCellValue('A' . $rowNumber, $candidat->cin);
             $sheet->setCellValue('B' . $rowNumber, $candidat->nom);
             $sheet->setCellValue('C' . $rowNumber, $candidat->prenom);
             $sheet->setCellValue('D' . $rowNumber, $candidat->scoreQCM);
-            $sheet->setCellValue('E' . $rowNumber, $candidat->session ? $candidat->session->nom : 'Non affecté');
+            $sheet->setCellValue('E' . $rowNumber, $candidat->entretien ? $candidat->entretien->nom : 'Non affecté');
             $sheet->setCellValue('F' . $rowNumber, $candidat->is_present ? 'Oui' : 'Non');
             
             if ($candidat->photo) {
@@ -345,13 +345,13 @@ class ImportExportService
         }
     }
 
-    public function exportSessions(): Spreadsheet
+    public function exportEntretiens(): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Sessions');
+        $sheet->setTitle('Entretiens');
 
-        $sheet->setCellValue('A1', 'Nom de la session');
+        $sheet->setCellValue('A1', 'Nom de la entretien');
         $sheet->setCellValue('B1', 'Date Entretien');
         $sheet->setCellValue('C1', 'Heure Debut');
         $sheet->setCellValue('D1', 'Heure Fin');
@@ -363,16 +363,16 @@ class ImportExportService
         $sheet->getStyle('A1:H1')->getFont()->setBold(true);
 
         $rowNumber = 2;
-        $sessions = Session::withCount('candidats')->get();
-        foreach ($sessions as $session) {
-            $sheet->setCellValue('A' . $rowNumber, $session->nom);
-            $sheet->setCellValue('B' . $rowNumber, $session->dateEntretien);
-            $sheet->setCellValue('C' . $rowNumber, $session->heureDebut);
-            $sheet->setCellValue('D' . $rowNumber, $session->heureFin);
-            $sheet->setCellValue('E' . $rowNumber, $session->capaciteMax);
-            $sheet->setCellValue('F' . $rowNumber, $session->codePresence);
-            $sheet->setCellValue('G' . $rowNumber, $session->statut);
-            $sheet->setCellValue('H' . $rowNumber, $session->candidats_count);
+        $entretiens = Entretien::withCount('candidats')->get();
+        foreach ($entretiens as $entretien) {
+            $sheet->setCellValue('A' . $rowNumber, $entretien->nom);
+            $sheet->setCellValue('B' . $rowNumber, $entretien->dateEntretien);
+            $sheet->setCellValue('C' . $rowNumber, $entretien->heureDebut);
+            $sheet->setCellValue('D' . $rowNumber, $entretien->heureFin);
+            $sheet->setCellValue('E' . $rowNumber, $entretien->capaciteMax);
+            $sheet->setCellValue('F' . $rowNumber, $entretien->codePresence);
+            $sheet->setCellValue('G' . $rowNumber, $entretien->statut);
+            $sheet->setCellValue('H' . $rowNumber, $entretien->candidats_count);
             $rowNumber++;
         }
 
@@ -383,3 +383,4 @@ class ImportExportService
         return $spreadsheet;
     }
 }
+

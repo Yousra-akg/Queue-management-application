@@ -48,8 +48,8 @@ class CandidatPortalController extends Controller
             return redirect()->route('login');
         }
 
-        if (!$candidat->session_id) {
-            return redirect()->route('candidat.bienvenue')->with('error', 'Vous n\'êtes affecté à aucune session pour le moment.');
+        if (!$candidat->entretien_id) {
+            return redirect()->route('candidat.bienvenue')->with('error', 'Vous n\'êtes affecté à aucune entretien pour le moment.');
         }
 
         // Si le ticket n'existe pas encore, on le génère
@@ -58,15 +58,15 @@ class CandidatPortalController extends Controller
             $candidat->refresh(); // Recharger avec le ticket
         }
 
-        $session = $candidat->session;
+        $entretien = $candidat->entretien;
         $ticket = $candidat->ticket;
 
         $queue = [];
         if ($candidat->is_present) {
-            $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+            $queue = $this->ticketService->getLiveQueue($candidat->entretien_id);
         }
 
-        return view('candidat.ticket-details', compact('candidat', 'session', 'ticket', 'queue'));
+        return view('candidat.ticket-details', compact('candidat', 'entretien', 'ticket', 'queue'));
     }
 
     /**
@@ -86,7 +86,7 @@ class CandidatPortalController extends Controller
 
         try {
             $candidat = $this->candidatService->validateAndConfirmPresence($candidat->id, $request->code);
-            $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+            $queue = $this->ticketService->getLiveQueue($candidat->entretien_id);
 
             return response()->json([
                 'success' => true,
@@ -111,7 +111,7 @@ class CandidatPortalController extends Controller
             return response()->json(['success' => false], 401);
         }
 
-        $queue = $this->ticketService->getLiveQueue($candidat->session_id);
+        $queue = $this->ticketService->getLiveQueue($candidat->entretien_id);
         $notifications = $this->notificationService->getUnreadNotifications($candidat->id);
         
         return response()->json([
@@ -136,4 +136,5 @@ class CandidatPortalController extends Controller
         }
     }
 }
+
 

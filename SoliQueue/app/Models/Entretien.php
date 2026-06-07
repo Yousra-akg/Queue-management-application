@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Session extends Model {
+class Entretien extends Model {
     protected $fillable = ['user_id', 'nom', 'dateEntretien', 'heureDebut', 'heureFin', 'capaciteMax', 'codePresence', 'statut'];
 
     public function user() { 
@@ -17,6 +17,12 @@ class Session extends Model {
 
     public function tickets() {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function formateurs() {
+        return $this->belongsToMany(User::class, 'entretien_formateur_salle', 'entretien_id', 'formateur_id')
+                    ->withPivot('salle_id')
+                    ->withTimestamps();
     }
 
     public function updateStatusBasedOnTime() {

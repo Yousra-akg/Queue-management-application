@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Ticket;
 use App\Models\Candidat;
-use App\Models\Session;
+use App\Models\Entretien;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +22,10 @@ class TicketService extends BaseService
         return DB::transaction(function () use ($candidatId) {
             $candidat = Candidat::findOrFail($candidatId);
 
-            // Vérifier si le candidat a déjà un ticket pour cette session
+            // Vérifier si le candidat a déjà un ticket pour cette entretien
             $existingTicket = $this->model
                 ->where('candidat_id', $candidatId)
-                ->where('session_id', $candidat->session_id)
+                ->where('entretien_id', $candidat->entretien_id)
                 ->first();
 
             if ($existingTicket) {
@@ -33,7 +33,7 @@ class TicketService extends BaseService
             }
 
             $maxOrder = $this->model
-                ->where('session_id', $candidat->session_id)
+                ->where('entretien_id', $candidat->entretien_id)
                 ->max('numeroOrdre') ?? 0;
 
             $lastTicketCount = $this->model->count();
@@ -41,7 +41,7 @@ class TicketService extends BaseService
 
             return $this->model->create([
                 'candidat_id' => $candidatId,
-                'session_id'  => $candidat->session_id,
+                'entretien_id'  => $candidat->entretien_id,
                 'codeUnique'  => $codeUnique,
                 'numeroOrdre' => $maxOrder + 1,
                 'statut'      => 'en attente',
@@ -54,10 +54,10 @@ class TicketService extends BaseService
     public function validatePresence(int $ticketId, string $codePresence)
     {
         $ticket = $this->findOrFail($ticketId);
-        $session = $ticket->session;
+        $entretien = $ticket->entretien;
 
         $codePresence = str_replace(' ', '', $codePresence);
-        if ($session->codePresence !== $codePresence) {
+        if ($entretien->codePresence !== $codePresence) {
             return false;
         }
 
@@ -65,12 +65,13 @@ class TicketService extends BaseService
     }
 
     
-    public function getLiveQueue(int $sessionId)
+    public function getLiveQueue(int $entretienId)
     {
         return $this->model
-            ->with('candidat')
-            ->where('session_id', $sessionId)
+            ->with(['candidat', 'salle'])
+            ->where('entretien_id', $entretienId)
             ->orderBy('numeroOrdre', 'asc')
             ->get();
     }
 }
+

@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\Candidat;
-use App\Models\Session;
+use App\Models\Entretien;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session as LaravelSession;
+use Illuminate\Support\Facades\Entretien as LaravelEntretien;
 use Illuminate\Support\Facades\Storage;
 
 class CandidatService extends BaseService
@@ -47,7 +47,7 @@ class CandidatService extends BaseService
             return null;
         }
 
-        return $this->model->with(['session', 'ticket'])->find($candidatId);
+        return $this->model->with(['entretien', 'ticket.salle'])->find($candidatId);
     }
 
     /**
@@ -63,20 +63,20 @@ class CandidatService extends BaseService
     }
 
     /**
-     * Assigne un candidat à une session.
+     * Assigne un candidat à une entretien.
      */
-    public function assignToSession(int $candidatId, int $sessionId)
+    public function assignToEntretien(int $candidatId, int $entretienId)
     {
-        return DB::transaction(function () use ($candidatId, $sessionId) {
+        return DB::transaction(function () use ($candidatId, $entretienId) {
             $candidat = $this->findOrFail($candidatId);
-            $session = Session::findOrFail($sessionId);
+            $entretien = Entretien::findOrFail($entretienId);
 
-            $currentCount = $session->candidats()->count();
-            if ($currentCount >= $session->capaciteMax) {
-                throw new \Exception("La session a atteint sa capacité maximale.");
+            $currentCount = $entretien->candidats()->count();
+            if ($currentCount >= $entretien->capaciteMax) {
+                throw new \Exception("La entretien a atteint sa capacité maximale.");
             }
 
-            return $candidat->update(['session_id' => $sessionId]);
+            return $candidat->update(['entretien_id' => $entretienId]);
         });
     }
 
@@ -86,7 +86,7 @@ class CandidatService extends BaseService
     public function getUnassigned()
     {
         return $this->model
-             ->whereNull('session_id')
+             ->whereNull('entretien_id')
              ->orderBy('created_at', 'desc')
              ->get();
     }
@@ -96,7 +96,7 @@ class CandidatService extends BaseService
      */
     public function getRecentActivity(int $limit = 10)
     {
-        return Ticket::with(['candidat', 'session'])
+        return Ticket::with(['candidat', 'entretien'])
             ->orderBy('updated_at', 'desc')
             ->limit($limit)
             ->get();
@@ -146,23 +146,23 @@ class CandidatService extends BaseService
     }
 
     /**
-     * Assigne plusieurs candidats à une session et génère leurs tickets.
+     * Assigne plusieurs candidats à une entretien et génère leurs tickets.
      */
-    public function assignCandidatesToSession(int $sessionId, array $candidateIds): bool
+    public function assignCandidatesToEntretien(int $entretienId, array $candidateIds): bool
     {
-        return DB::transaction(function () use ($sessionId, $candidateIds) {
-            $session = Session::findOrFail($sessionId);
-            $currentCount = $session->candidats()->count();
+        return DB::transaction(function () use ($entretienId, $candidateIds) {
+            $entretien = Entretien::findOrFail($entretienId);
+            $currentCount = $entretien->candidats()->count();
             $newCount = count($candidateIds);
 
-            if ($currentCount + $newCount > $session->capaciteMax) {
-                throw new \Exception('La session a atteint sa capacité maximale (' . $session->capaciteMax . ' places).');
+            if ($currentCount + $newCount > $entretien->capaciteMax) {
+                throw new \Exception('La entretien a atteint sa capacité maximale (' . $entretien->capaciteMax . ' places).');
             }
 
             $ticketService = app(TicketService::class);
             foreach ($candidateIds as $candidateId) {
                 $candidat = $this->findOrFail($candidateId);
-                $candidat->update(['session_id' => $sessionId]);
+                $candidat->update(['entretien_id' => $entretienId]);
                 $ticketService->generateTicket($candidat->id);
             }
 
@@ -171,19 +171,19 @@ class CandidatService extends BaseService
     }
 
     /**
-     * Désassigne un candidat d'une session et supprime son ticket.
+     * Désassigne un candidat d'une entretien et supprime son ticket.
      */
-    public function unassignCandidateFromSession(int $candidatId): bool
+    public function unassignCandidateFromEntretien(int $candidatId): bool
     {
         return DB::transaction(function () use ($candidatId) {
             $candidat = $this->findOrFail($candidatId);
 
-            // Bloquer le retrait si la session est terminée et que le candidat était présent
-            if ($candidat->session && $candidat->session->statut === 'terminée' && $candidat->is_present) {
-                throw new \Exception("Impossible de retirer un candidat présent d'une session terminée.");
+            // Bloquer le retrait si la entretien est terminée et que le candidat était présent
+            if ($candidat->entretien && $candidat->entretien->statut === 'terminée' && $candidat->is_present) {
+                throw new \Exception("Impossible de retirer un candidat présent d'une entretien terminée.");
             }
 
-            $candidat->update(['session_id' => null]);
+            $candidat->update(['entretien_id' => null]);
             $candidat->ticket()->delete();
 
             return true;
@@ -204,14 +204,14 @@ class CandidatService extends BaseService
     public function validateAndConfirmPresence(int $candidatId, string $code): Candidat
     {
         return DB::transaction(function () use ($candidatId, $code) {
-            $candidat = $this->model->with(['session', 'ticket'])->findOrFail($candidatId);
+            $candidat = $this->model->with(['entretien', 'ticket'])->findOrFail($candidatId);
 
-            if (!$candidat->session) {
-                throw new \Exception("Vous n'êtes affecté à aucune session pour le moment.");
+            if (!$candidat->entretien) {
+                throw new \Exception("Vous n'êtes affecté à aucune entretien pour le moment.");
             }
 
             $inputCode = str_replace(' ', '', $code);
-            if ($candidat->session->codePresence !== $inputCode) {
+            if ($candidat->entretien->codePresence !== $inputCode) {
                 throw new \Exception("Code de présence invalide.");
             }
 
@@ -227,3 +227,4 @@ class CandidatService extends BaseService
         });
     }
 }
+
