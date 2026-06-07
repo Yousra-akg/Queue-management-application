@@ -191,5 +191,7 @@
             @endif
         });
     </script>
+    <!-- Chat Widget IA -->
+    <x-chat-widget />
 </body>
 </html>

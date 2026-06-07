@@ -36,6 +36,23 @@ export default (initialTickets = [], session = {}, csrfToken = '', reorderRoute 
                 });
             }
         }
+
+        window.addEventListener('ai-action', (e) => {
+            const action = e.detail.action;
+            if (action === 'next_candidate') {
+                const current = this.tickets.find(t => t.statut === 'en cours');
+                if (current) current.statut = 'terminée';
+                const next = this.tickets.find(t => t.statut === 'en attente');
+                if (next) next.statut = 'en cours';
+                this.tickets = [...this.tickets];
+            } else if (action === 'mark_absent') {
+                const current = this.tickets.find(t => t.statut === 'en cours');
+                if (current) current.statut = 'absent';
+                this.tickets = [...this.tickets];
+            } else if (action === 'close_session') {
+                window.location.href = '/formateur/sessions';
+            }
+        });
     },
 
     async updateStatus(ticket, newStatus) {

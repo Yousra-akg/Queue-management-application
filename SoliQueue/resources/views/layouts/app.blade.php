@@ -77,6 +77,8 @@
     </div>
     @stack('modals')
     @yield('scripts')
+    <!-- Chat Widget IA -->
+    <x-chat-widget />
 </body>
 </html>
 

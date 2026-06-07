@@ -92,7 +92,12 @@ export default (initialSessions = []) => ({
     },
 
     generateSessionCode() {
-        this.sessionForm.codePresence = Math.floor(1000 + Math.random() * 9000).toString();
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 4; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        this.sessionForm.codePresence = code;
     },
 
     resetSessionForm() {
