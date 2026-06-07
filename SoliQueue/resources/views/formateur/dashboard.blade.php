@@ -300,7 +300,7 @@
         </div>
     </main>
 
-
+    <x-chat-widget />
 </body>
 
 </html>

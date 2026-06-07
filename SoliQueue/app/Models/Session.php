@@ -15,6 +15,10 @@ class Session extends Model {
         return $this->hasMany(Candidat::class);
     }
 
+    public function tickets() {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function updateStatusBasedOnTime() {
         $now = now();
         $dateEntretien = \Carbon\Carbon::parse($this->dateEntretien);
