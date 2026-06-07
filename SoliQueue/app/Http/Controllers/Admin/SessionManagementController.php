@@ -70,12 +70,12 @@ class SessionManagementController extends Controller
     public function storeSession(Request $request)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255|unique:sessions,nom',
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
             'capaciteMax' => 'required|integer|min:1',
-            'codePresence' => 'required|string|max:10',
+            'codePresence' => 'required|string|size:4',
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
         ]);
 
@@ -90,12 +90,12 @@ class SessionManagementController extends Controller
     public function updateSession(Request $request, Session $session)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255|unique:sessions,nom,' . $session->id,
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
             'capaciteMax' => 'required|integer|min:1',
-            'codePresence' => 'required|string|max:10',
+            'codePresence' => 'required|string|size:4',
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
         ]);
 

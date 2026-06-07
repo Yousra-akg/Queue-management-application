@@ -61,7 +61,7 @@ class TicketService extends BaseService
             return false;
         }
 
-        return $ticket->update(['statut' => 'en cours']);
+        return $ticket->update(['statut' => 'en attente', 'heureArrivee' => Carbon::now()]);
     }
 
     

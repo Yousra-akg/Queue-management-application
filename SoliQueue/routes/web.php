@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\ImportExportController;
 use App\Http\Controllers\Formateur\FormateurController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
 // Authentification Laravel UI : Page de connexion à la racine
@@ -25,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/queue-status', [CandidatPortalController::class, 'getQueueStatus'])->name('candidat.queue-status');
     Route::post('/notifications/{notification}/read', [CandidatPortalController::class, 'markNotificationRead'])->name('candidat.notification.read');
 });
+
+// Chatbot Route (accessible pour tous les utilisateurs web - admin, formateur, candidat)
+Route::post('/chat', [ChatbotController::class, 'sendMessage'])->name('chat.send');
 
 // Admin Auth Routes
 Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

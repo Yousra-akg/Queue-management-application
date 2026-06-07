@@ -171,6 +171,7 @@
             <div class="h-px w-24 bg-slate-200 mx-auto"></div>
         </div>
     </main>
+    <x-chat-widget />
 </body>
 
 </html>
