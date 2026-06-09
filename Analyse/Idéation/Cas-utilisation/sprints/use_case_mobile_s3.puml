@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle hollow
+
+actor Candidat as "Candidat (Web)"
+actor Formateur as "Formateur (Web)"
+actor Admin as "Administrateur (Web)"
+actor IA as "Assistant IA"
+
+rectangle "Système SoliQueue - Assistant IA" {
+    
+    usecase "Poser des questions sur l'entretien" as UC_Cand_1
+    usecase "S'informer sur Solicode" as UC_Cand_2
+    usecase "Demander les étapes post-entretien" as UC_Cand_3
+    usecase "Consulter le statut actuel de la file" as UC_Cand_4
+    
+    usecase "Demander l'état de la file d'attente" as UC_Form_1
+    usecase "Passer au candidat suivant via chat" as UC_Form_2
+    usecase "Marquer un candidat absent via chat" as UC_Form_3
+    
+    usecase "Consulter les statistiques du jour" as UC_Adm_1
+    usecase "Créer une nouvelle session via chat" as UC_Adm_2
+    usecase "Assigner des candidats via chat" as UC_Adm_3
+    usecase "Importer et assigner des candidats via fichier Excel" as UC_Adm_4
+}
+
+Candidat --> UC_Cand_1
+Candidat --> UC_Cand_2
+Candidat --> UC_Cand_3
+Candidat --> UC_Cand_4
+
+Formateur --> UC_Form_1
+Formateur --> UC_Form_2
+Formateur --> UC_Form_3
+
+Admin --> UC_Adm_1
+Admin --> UC_Adm_2
+Admin --> UC_Adm_3
+Admin --> UC_Adm_4
+
+UC_Cand_1 <-- IA
+UC_Cand_2 <-- IA
+UC_Cand_3 <-- IA
+UC_Cand_4 <-- IA
+
+UC_Form_1 <-- IA
+UC_Form_2 <-- IA
+UC_Form_3 <-- IA
+
+UC_Adm_1 <-- IA
+UC_Adm_2 <-- IA
+UC_Adm_3 <-- IA
+UC_Adm_4 <-- IA
+
+@enduml

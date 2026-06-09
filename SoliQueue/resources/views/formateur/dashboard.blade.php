@@ -73,7 +73,7 @@
     @endcannot
 
     <!-- Main Content -->
-    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($entretien) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $session->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($entretien) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $entretien->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <!-- Dashboard Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div class="space-y-4">
@@ -83,7 +83,7 @@
                     Entretien Live
                 </div>
                 <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase">
-                    {{ $session->nom }}
+                    {{ $entretien->nom }}
                 </h1>
                 <div class="flex items-center gap-x-6">
                     <div class="flex items-center gap-x-2 text-slate-500">
@@ -93,15 +93,15 @@
                                 d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                         <span class="text-sm font-bold uppercase tracking-tight">
-                            {{ \Carbon\Carbon::parse($session->heureDebut)->format('H:i') }} —
-                            {{ \Carbon\Carbon::parse($session->heureFin)->format('H:i') }}
+                            {{ \Carbon\Carbon::parse($entretien->heureDebut)->format('H:i') }} —
+                            {{ \Carbon\Carbon::parse($entretien->heureFin)->format('H:i') }}
                         </span>
                     </div>
                     <div
                         class="flex items-center gap-x-2 text-slate-900 bg-white border border-slate-200 py-1.5 px-4 rounded-xl shadow-sm">
                         <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Code:</span>
                         <span
-                            class="text-sm font-black tracking-widest text-blue-600">{{ $session->codePresence }}</span>
+                            class="text-sm font-black tracking-widest text-blue-600">{{ $entretien->codePresence }}</span>
                     </div>
                 </div>
             </div>

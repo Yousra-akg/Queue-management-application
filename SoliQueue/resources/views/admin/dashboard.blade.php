@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(document.getElementById('absenteismeChart'), {
         type: 'bar',
         data: {
-            labels: absenteismeData.map(d => d.nom),
+            labels: absenteismeData.map(d => d.dateEntretien),
             datasets: [{
                 label: "Taux d'absentéisme (%)",
                 data: absenteismeData.map(d => d.taux_absenteisme),

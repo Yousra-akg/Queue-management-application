@@ -21,7 +21,7 @@ class AdminLoginController extends Controller
         ]);
 
         if (Auth::guard('web')->attempt($credentials, $request->filled('remember'))) {
-            $request->entretien()->regenerate();
+            $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
 
@@ -33,8 +33,8 @@ class AdminLoginController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
-        $request->entretien()->invalidate();
-        $request->entretien()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('admin.login');
     }
 }

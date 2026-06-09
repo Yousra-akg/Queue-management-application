@@ -22,7 +22,7 @@ class EntretienService extends BaseService
     {
         return $this->model
             ->when($search, function ($query, $search) {
-                return $query->where('nom', 'like', "%{$search}%");
+                return $query->whereDate('dateEntretien', $search);
             })
             ->when($statut !== 'all' && $statut !== '', function ($query) use ($statut) {
                 return $query->where('statut', $statut);
@@ -62,17 +62,21 @@ class EntretienService extends BaseService
     {
         $data['user_id'] = $userId;
         
-        if (stripos($data['nom'], 'entretien ') !== 0) {
-            $data['nom'] = 'Entretien ' . ucfirst($data['nom']);
-        }
-
         $affectations = $data['affectations'] ?? [];
         unset($data['affectations']);
 
         $entretien = $this->create($data);
         
         if (!empty($affectations)) {
-            $entretien->formateurs()->attach($affectations);
+            $formattedAffectations = [];
+            foreach ($affectations as $aff) {
+                if (!empty($aff['formateur_id']) && is_array($aff['formateur_id'])) {
+                    foreach ($aff['formateur_id'] as $fId) {
+                        $formattedAffectations[$fId] = ['salle_id' => $aff['salle_id'] ?? null];
+                    }
+                }
+            }
+            $entretien->formateurs()->attach($formattedAffectations);
         }
 
         return $entretien;
@@ -83,10 +87,6 @@ class EntretienService extends BaseService
      */
     public function updateEntretien(int $id, array $data): Entretien
     {
-        if (stripos($data['nom'], 'entretien ') !== 0) {
-            $data['nom'] = 'Entretien ' . ucfirst($data['nom']);
-        }
-
         $affectations = $data['affectations'] ?? [];
         unset($data['affectations']);
 
@@ -96,7 +96,15 @@ class EntretienService extends BaseService
         if (isset($data['affectations']) || !empty($affectations)) {
             $entretien->formateurs()->detach();
             if (!empty($affectations)) {
-                $entretien->formateurs()->attach($affectations);
+                $formattedAffectations = [];
+                foreach ($affectations as $aff) {
+                    if (!empty($aff['formateur_id']) && is_array($aff['formateur_id'])) {
+                        foreach ($aff['formateur_id'] as $fId) {
+                            $formattedAffectations[$fId] = ['salle_id' => $aff['salle_id'] ?? null];
+                        }
+                    }
+                }
+                $entretien->formateurs()->attach($formattedAffectations);
             }
         }
 
@@ -130,7 +138,7 @@ class EntretienService extends BaseService
             $absents = $e->tickets->where('statut', 'absent')->count();
             $taux = $total > 0 ? round(($absents / $total) * 100, 1) : 0;
             return [
-                'nom' => $e->nom,
+                'dateEntretien' => $e->dateEntretien,
                 'taux_absenteisme' => $taux
             ];
         });
@@ -170,7 +178,7 @@ class EntretienService extends BaseService
         $latestEntretiens = Entretien::orderBy('created_at', 'desc')->take(2)->get()->map(function($s) {
             return [
                 'type' => 'entretien',
-                'titre' => 'Nouvelle Entretien : ' . $s->nom,
+                'titre' => 'Nouvelle Entretien : ' . $s->dateEntretien,
                 'temps' => $s->created_at->diffForHumans(),
                 'couleur' => 'blue-600',
                 'date' => $s->created_at
@@ -185,7 +193,7 @@ class EntretienService extends BaseService
             ->map(function($c) {
                 return [
                     'type' => 'candidat',
-                    'titre' => $c->prenom . ' ' . $c->nom . ' assigné à ' . ($c->entretien->nom ?? 'Entretien'),
+                    'titre' => $c->prenom . ' ' . $c->nom . ' assigné à ' . ($c->entretien->dateEntretien ?? 'Entretien'),
                     'temps' => $c->updated_at->diffForHumans(),
                     'couleur' => 'emerald-500',
                     'date' => $c->updated_at
@@ -238,7 +246,7 @@ class EntretienService extends BaseService
                 
                 return [
                     'id'               => $entretien->id,
-                    'nom'              => $entretien->nom,
+                    'dateEntretien'    => $entretien->dateEntretien,
                     'statut'           => $entretien->statut,
                     'candidat_actuel'  => $current ? '#' . str_pad($current->numeroOrdre, 2, '0', STR_PAD_LEFT) : 'Aucun',
                     'prochain_candidat' => $next ? '#' . str_pad($next->numeroOrdre, 2, '0', STR_PAD_LEFT) : 'Aucun',

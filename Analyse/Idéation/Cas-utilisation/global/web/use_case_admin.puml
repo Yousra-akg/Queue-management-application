@@ -22,7 +22,7 @@ actor "Mobile" as Mob
 ' Admin Use Cases (Web)
 '=====================
 usecase "Tableau de bord global" as UC1
-usecase "Gérer les sessions" as UC2
+usecase "Gérer les entretiens" as UC2
 usecase "Affecter les candidats (Drag & Drop)" as UC3
 usecase "Gérer les candidats" as UC4
 usecase "Gérer les formateurs" as UC5
@@ -35,7 +35,7 @@ usecase "Exporter les sessions" as UC8
 '=====================
 ' Formateur Use Cases (Web)
 '=====================
-usecase "Rejoindre une session d'entretien" as UC9
+usecase "Rejoindre un entretien" as UC9
 usecase "Appeler le candidat suivant" as UC10
 usecase "Mettre à jour statut (Présent/Absent/Terminé)" as UC11
 usecase "Consulter la file d'attente active" as UC12

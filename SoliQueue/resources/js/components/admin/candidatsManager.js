@@ -4,6 +4,8 @@ export default (initialCandidats = []) => ({
     showAddCandidateModal: false,
     showImportModal: false,
     showDeleteModal: false,
+    showDetailsModal: false,
+    detailsData: null,
     candidatToDelete: null,
     candidatForm: { id: null, prenom: '', nom: '', cin: '', scoreQCM: '' },
 
@@ -65,7 +67,32 @@ export default (initialCandidats = []) => ({
         form.submit();
     },
 
+    async showDetails(id) {
+        this.detailsData = null;
+        this.showDetailsModal = true;
+        try {
+            const response = await fetch(`/admin/candidats/${id}/details`);
+            const data = await response.json();
+            if (data.success) {
+                this.detailsData = data;
+            } else {
+                alert(data.message || 'Erreur lors de la récupération des détails.');
+                this.showDetailsModal = false;
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Erreur serveur. Veuillez réessayer.');
+            this.showDetailsModal = false;
+        }
+    },
+
     init() {
         this.$watch('searchQuery', () => this.currentPage = 1);
+    },
+
+    formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 });

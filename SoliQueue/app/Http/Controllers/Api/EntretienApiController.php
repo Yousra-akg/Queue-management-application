@@ -34,7 +34,6 @@ class EntretienApiController extends Controller
             'success' => true,
             'data'    => [
                 'id'            => $entretien->id,
-                'nom'           => $entretien->nom,
                 'statut'        => $entretien->statut,
                 'dateEntretien' => $entretien->dateEntretien,
                 'heureDebut'    => $entretien->heureDebut,

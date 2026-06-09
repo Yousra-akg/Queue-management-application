@@ -55,16 +55,53 @@
     @endif
 
     <!-- Filters Bar -->
-    <div class="mb-6 relative max-w-full">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-            <svg class="size-4.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3" />
-            </svg>
+    <div class="mb-6 flex flex-wrap gap-4 items-center">
+        <div class="relative flex-grow min-w-[300px]">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+                <svg class="size-4.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3" />
+                </svg>
+            </div>
+            <input type="text" x-model="searchQuery"
+                class="py-3 ps-12 pe-4 block w-full bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm"
+                placeholder="Rechercher par nom, prénom ou CIN...">
         </div>
-        <input type="text" x-model="searchQuery"
-            class="py-3 ps-12 pe-4 block w-full bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm"
-            placeholder="Rechercher par nom, prénom ou CIN...">
+        
+        <!-- Date Filter Form -->
+        <div class="relative z-10 w-48" x-data="{ openDateFilter: false }" @click.away="openDateFilter = false">
+            <button type="button" @click="openDateFilter = !openDateFilter"
+                class="w-full py-3 px-4 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-sm font-medium text-gray-700 transition-colors flex justify-between items-center focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] shadow-sm">
+                <span class="capitalize">
+                    {{ $dateFilter ? \Carbon\Carbon::parse($dateFilter)->format('d M Y') : 'Toutes les dates' }}
+                </span>
+                <svg :class="{ 'rotate-180': openDateFilter }"
+                    class="size-4 text-gray-500 transition-transform duration-200"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6"></path>
+                </svg>
+            </button>
+
+            <div x-show="openDateFilter" style="display: none;"
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="opacity-0 transform scale-95"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                class="origin-top-right absolute right-0 top-full mt-2 min-w-48 w-full z-[101] bg-white shadow-xl rounded-xl p-2 border border-gray-100 max-h-60 overflow-y-auto">
+                
+                <a href="{{ route('admin.candidats.index') }}"
+                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">
+                    Toutes les dates
+                </a>
+
+                @foreach($availableDates as $date)
+                    <a href="{{ route('admin.candidats.index', ['date_entretien' => $date]) }}"
+                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">
+                        {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
     </div>
 
     <!-- Table Container -->
@@ -105,7 +142,7 @@
                             </td>
                             <td class="px-6 py-5 text-center">
                                 <template x-if="candidat.entretien">
-                                    <span class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-bold border border-green-200" x-text="candidat.entretien.nom"></span>
+                                    <span class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-bold border border-green-200" x-text="formatDate(candidat.entretien.dateEntretien)"></span>
                                 </template>
                                 <template x-if="!candidat.entretien">
                                     <span class="inline-flex items-center px-3 py-1 bg-slate-50 text-slate-500 rounded-lg text-[10px] font-bold border border-slate-200">Non affecté</span>
@@ -113,6 +150,9 @@
                             </td>
                             <td class="px-6 py-5 text-end pe-8">
                                 <div class="flex justify-end gap-2">
+                                    <button @click="showDetails(candidat.id)" class="size-8 rounded-lg bg-green-50 border border-green-100 text-green-600 hover:bg-green-600 hover:text-white transition-all flex items-center justify-center" title="Détails de passage">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </button>
                                     <button @click="editCandidat(candidat)" class="size-8 rounded-lg bg-blue-50 border border-blue-100 text-[#1A73E8] hover:bg-[#1A73E8] hover:text-white transition-all flex items-center justify-center">
                                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></svg>
                                     </button>
@@ -275,9 +315,77 @@
             </form>
         </div>
     </div>
+
+    <!-- Candidate Details Modal -->
+    <div x-show="showDetailsModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm" @click.self="showDetailsModal = false">
+        <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-sm flex flex-col animate-in fade-in zoom-in duration-200">
+            <div class="px-6 pt-6 pb-4 relative shrink-0 border-b border-slate-100">
+                <button @click="showDetailsModal = false" class="absolute top-4 right-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-colors">
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+                <div class="flex items-center gap-3 mb-1">
+                    <div class="size-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                        <svg class="size-5 text-green-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black text-slate-800 tracking-tight leading-tight">Détails de passage</h2>
+                        <p class="text-xs font-medium text-slate-400" x-text="detailsData ? detailsData.candidat.nom + ' ' + detailsData.candidat.prenom : 'Chargement...'"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div x-show="!detailsData" class="py-10 text-center">
+                    <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading"></div>
+                </div>
+                
+                <div x-show="detailsData" class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Date</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.candidat?.entretien?.dateEntretien || 'N/A'"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Formateur</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.ticket?.formateur?.nom || 'Non assigné'"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Salle</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.ticket?.salle?.nom || 'Non assignée'"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-500">Statut</span>
+                            <span class="px-2 py-1 bg-slate-200 text-slate-800 text-[9px] font-black uppercase tracking-widest rounded-md" x-text="detailsData?.ticket?.statut || 'N/A'"></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Arrivée</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.ticket?.heureArrivee ? detailsData.ticket.heureArrivee.substring(11, 16) : '--:--'"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Appel</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.ticket?.heureAppel ? detailsData.ticket.heureAppel.substring(11, 16) : '--:--'"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-slate-500">Fin</span>
+                            <span class="text-xs font-bold text-slate-800" x-text="detailsData?.ticket?.heureFin ? detailsData.ticket.heureFin.substring(11, 16) : '--:--'"></span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+                            <span class="text-xs font-black uppercase tracking-widest text-slate-400">Durée</span>
+                            <span class="text-sm font-black text-blue-600" x-text="detailsData?.duree || '--'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button @click="showDetailsModal = false" type="button" class="w-full py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
 @endsection
-

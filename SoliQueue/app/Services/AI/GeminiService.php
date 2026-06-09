@@ -37,6 +37,40 @@ Règles :
 - Si le formateur demande à marquer le candidat actuel comme absent, utilise "mark_absent".
 - Si le formateur demande de clôturer ou terminer la entretien, utilise "close_entretien".
 - Si le message n'est pas clair, utilise "respond_user" pour demander des précisions.
+
+Base de Connaissance Solicode (pour répondre de manière précise et complète) :
+1. Sur quels points vais-je être évalué ?
+Le jury évalue principalement ton potentiel et ton savoir-être. Les critères clés sont :
+- La motivation et l'intérêt pour le digital (curiosité, avoir testé des petits outils).
+- L'autonomie et la capacité d'auto-apprentissage (recherche personnelle).
+- Le travail d'équipe et la communication (collaborer, écouter, s'exprimer clairement).
+- La logique et la persévérance (patience face à un bug).
+
+2. Que se passe-t-il après l'entretien ?
+- Délibération et résultats : Tu recevras une réponse (email, téléphone, affichage) annonçant ton admission.
+- L'inscription administrative : Dépôt du dossier pour valider ta place.
+- Le QCM de base : QCM noté sur 40 points sur la logique pour évaluer ton niveau de départ.
+
+3. C'est quoi exactement le concept de Solicode ?
+C'est un centre de formation solidaire et gratuit (avec la Fondation Mohammed V pour la Solidarité et l'OFPPT). Il vise l'insertion professionnelle rapide, l'égalité des chances, l'apprentissage par la pratique et la préparation aux besoins des entreprises locales.
+
+4. Comment se déroulent les études ?
+- Pas de cours magistraux.
+- Pédagogie active (Learning by doing) : Résolution de problèmes/projets en équipe. Les formateurs sont des mentors.
+- Rythme soutenu : Horaires d'entreprise, présence et ponctualité importantes.
+
+5. Est-ce qu'on fait de la théorie ou de la pratique ?
+- Pratique à 80-90% : Projets réels.
+- La théorie nécessaire : Injectée au moment où tu en as besoin pour réaliser ton projet.
+
+6. Quel diplôme obtient-on à la fin ?
+Certifications cumulables avec l'OFPPT :
+- Après la 1ère année : Certificat en Développement Web.
+- Après la 2ème année : Certificat en Développement Mobile.
+La vraie valeur réside dans le portfolio (projets) et les compétences immédiates.
+
+7. Combien de temps dure l'entretien en moyenne ?
+L'entretien dure en moyenne entre 20 et 30 minutes.
 PROMPT;
 
         $prompt = $systemPrompt . "\n\nContexte métier actuel : " . json_encode($context);
@@ -69,7 +103,7 @@ PROMPT;
         ];
 
         $apiKey = config('services.gemini.key');
-        $model = config('services.gemini.model', 'gemini-2.5-flash');
+        $model = config('services.gemini.model', 'gemini-flash-latest');
 
         if (!$apiKey) {
             return [
@@ -79,25 +113,50 @@ PROMPT;
             ];
         }
 
-        try {
-            $response = Http::withoutVerifying()
-                ->timeout(30)
-                ->acceptJson()
-                ->post(
-                    "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}",
-                    $body
-                );
+        $maxRetries = 3;
+        $attempt = 0;
+        $response = null;
+        $lastException = null;
 
-            if ($response->failed()) {
+        while ($attempt < $maxRetries) {
+            try {
+                $response = Http::withoutVerifying()
+                    ->timeout(30)
+                    ->acceptJson()
+                    ->post(
+                        "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}",
+                        $body
+                    );
+
+                if ($response->successful()) {
+                    break;
+                }
+
+                if ($response->status() !== 503 && $response->status() !== 429) {
+                    break; // Only retry on 503 Unavailable or 429 Too Many Requests
+                }
+            } catch (\Exception $e) {
+                $lastException = $e;
+            }
+
+            $attempt++;
+            if ($attempt < $maxRetries) {
+                sleep(2); // Wait 2 seconds before retrying
+            }
+        }
+
+        try {
+            if (!$response || $response->failed()) {
                 Log::error('Erreur API Gemini', [
-                    'status' => $response->status(),
-                    'response' => $response->body(),
+                    'status' => $response ? $response->status() : 'Network Error',
+                    'response' => $response ? $response->body() : ($lastException ? $lastException->getMessage() : 'Unknown error'),
+                    'attempts' => $attempt
                 ]);
 
                 return [
                     'action' => 'respond_user',
                     'data' => [],
-                    'message' => 'Impossible de contacter le service IA pour le moment.'
+                    'message' => 'Impossible de contacter le service IA pour le moment. Veuillez réessayer.'
                 ];
             }
 

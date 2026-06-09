@@ -60,37 +60,15 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
         this.confirmedBadge = document.getElementById('presence-confirmed-badge');
         this.confirmTimeEl = document.getElementById('confirm-time');
 
-        // --- GESTION DU COMPTE A REBOURS ET POLLEUR ---
+        // --- INITIALISATION IMMÉDIATE ---
         if (!this.isAlreadyPresent) {
-            const updateTimer = () => {
-                const diff = this.targetTimestamp - Date.now();
-
-                if (diff <= 0) {
-                    if (this.timerInterval) clearInterval(this.timerInterval);
-                    this.switchToLiveState();
-                    return;
-                }
-
-                if (this.timerEls.days) {
-                    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-                    this.timerEls.days.textContent = String(d).padStart(2, '0');
-                    this.timerEls.hours.textContent = String(h).padStart(2, '0');
-                    this.timerEls.minutes.textContent = String(m).padStart(2, '0');
-                    this.timerEls.seconds.textContent = String(s).padStart(2, '0');
-                }
-            };
-            
-            updateTimer();
-            if (this.targetTimestamp - Date.now() > 0) {
-                this.timerInterval = setInterval(updateTimer, 1000);
-            }
+            this.switchToLiveState();
         } else {
-            this.startPolling();
+            if (this.notifBanner) {
+                this.notifBanner.classList.remove('hidden');
+            }
         }
+        this.startPolling();
 
         // --- GESTION OTP / ACTIONS ---
         this.setupOtpListeners();
@@ -161,8 +139,7 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
             this.presenceBtn.classList.add('bg-[#1A73E8]', 'text-white', 'hover:bg-blue-700', 'shadow-blue-600/30', 'animate-pulse');
         }
         if (this.presenceHint) {
-            this.presenceHint.textContent = "C'est le moment ! Validez votre présence maintenant.";
-            this.presenceHint.classList.replace('text-slate-400', 'text-[#1A73E8]');
+            this.presenceHint.classList.add('hidden');
         }
 
         if (this.infoFooter) {
@@ -187,7 +164,7 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
                 
                 newNotifs.forEach(notif => {
                     const exists = this.notifications.some(n => n.id === notif.id);
-                    if (!exists && (notif.titre.includes("tour") || notif.titre.includes("Terminé"))) {
+                    if (!exists && (notif.titre.includes("C'est votre tour !") || notif.titre.includes("Terminé"))) {
                         this.priorityAlert = notif;
                     }
                 });

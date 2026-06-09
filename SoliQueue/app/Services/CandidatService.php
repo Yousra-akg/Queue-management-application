@@ -218,10 +218,7 @@ class CandidatService extends BaseService
             // Marquer la présence
             $candidat->update(['is_present' => true]);
 
-            // Mettre à jour le statut du ticket à "en cours" si en attente
-            if ($candidat->ticket && $candidat->ticket->statut === 'en attente') {
-                $candidat->ticket->update(['statut' => 'en cours']);
-            }
+
 
             return $candidat;
         });

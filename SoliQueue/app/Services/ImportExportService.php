@@ -37,7 +37,7 @@ class ImportExportService
             $sheet->setCellValue('B' . $rowNumber, $candidat->nom);
             $sheet->setCellValue('C' . $rowNumber, $candidat->prenom);
             $sheet->setCellValue('D' . $rowNumber, $candidat->scoreQCM);
-            $sheet->setCellValue('E' . $rowNumber, $candidat->entretien ? $candidat->entretien->nom : 'Non affecté');
+            $sheet->setCellValue('E' . $rowNumber, $candidat->entretien ? $candidat->entretien->dateEntretien : 'Non affecté');
             $sheet->setCellValue('F' . $rowNumber, $candidat->is_present ? 'Oui' : 'Non');
             
             if ($candidat->photo) {
@@ -351,32 +351,30 @@ class ImportExportService
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Entretiens');
 
-        $sheet->setCellValue('A1', 'Nom de la entretien');
-        $sheet->setCellValue('B1', 'Date Entretien');
-        $sheet->setCellValue('C1', 'Heure Debut');
-        $sheet->setCellValue('D1', 'Heure Fin');
-        $sheet->setCellValue('E1', 'Capacite Max');
-        $sheet->setCellValue('F1', 'Code Presence');
-        $sheet->setCellValue('G1', 'Statut');
-        $sheet->setCellValue('H1', 'Nombre Candidats');
+        $sheet->setCellValue('A1', 'Date Entretien');
+        $sheet->setCellValue('B1', 'Heure Debut');
+        $sheet->setCellValue('C1', 'Heure Fin');
+        $sheet->setCellValue('D1', 'Capacite Max');
+        $sheet->setCellValue('E1', 'Code Presence');
+        $sheet->setCellValue('F1', 'Statut');
+        $sheet->setCellValue('G1', 'Nombre Candidats');
 
-        $sheet->getStyle('A1:H1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:G1')->getFont()->setBold(true);
 
         $rowNumber = 2;
         $entretiens = Entretien::withCount('candidats')->get();
         foreach ($entretiens as $entretien) {
-            $sheet->setCellValue('A' . $rowNumber, $entretien->nom);
-            $sheet->setCellValue('B' . $rowNumber, $entretien->dateEntretien);
-            $sheet->setCellValue('C' . $rowNumber, $entretien->heureDebut);
-            $sheet->setCellValue('D' . $rowNumber, $entretien->heureFin);
-            $sheet->setCellValue('E' . $rowNumber, $entretien->capaciteMax);
-            $sheet->setCellValue('F' . $rowNumber, $entretien->codePresence);
-            $sheet->setCellValue('G' . $rowNumber, $entretien->statut);
-            $sheet->setCellValue('H' . $rowNumber, $entretien->candidats_count);
+            $sheet->setCellValue('A' . $rowNumber, $entretien->dateEntretien);
+            $sheet->setCellValue('B' . $rowNumber, $entretien->heureDebut);
+            $sheet->setCellValue('C' . $rowNumber, $entretien->heureFin);
+            $sheet->setCellValue('D' . $rowNumber, $entretien->capaciteMax);
+            $sheet->setCellValue('E' . $rowNumber, $entretien->codePresence);
+            $sheet->setCellValue('F' . $rowNumber, $entretien->statut);
+            $sheet->setCellValue('G' . $rowNumber, $entretien->candidats_count);
             $rowNumber++;
         }
 
-        foreach (range('A', 'H') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 

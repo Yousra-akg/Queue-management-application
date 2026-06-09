@@ -198,7 +198,10 @@
                         body: formData
                     });
 
-                    if (!response.ok) throw new Error('Network response was not ok');
+                    if (!response.ok) {
+                        if (response.status === 419) throw new Error('CSRF_EXPIRED');
+                        throw new Error('Network response was not ok');
+                    }
                     
                     const data = await response.json();
                     
@@ -212,7 +215,11 @@
 
                 } catch (error) {
                     console.error('Erreur:', error);
-                    this.messages.push({ role: 'assistant', content: 'Désolé, une erreur de connexion est survenue.' });
+                    let errorMessage = 'Désolé, une erreur de connexion est survenue.';
+                    if (error.message === 'CSRF_EXPIRED') {
+                        errorMessage = 'Votre session a expiré. Veuillez rafraîchir la page pour continuer.';
+                    }
+                    this.messages.push({ role: 'assistant', content: errorMessage });
                 } finally {
                     this.loading = false;
                     this.scrollToBottom();
