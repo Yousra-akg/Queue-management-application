@@ -19,29 +19,18 @@ skinparam usecase {
 skinparam nodesep 25
 skinparam ranksep 25
 
-' Acteurs
-actor "Candidat (Mode MVP)" as C
-actor "Web" as W
+actor "Candidat" as C
 
-package "Application Mobile (Sprint 1)" {
-
-    ' Actions indispensables du MVP
-    usecase "Obtenir ticket (SOLI-XX)" as UC1
-    usecase "Consulter le timer de jour d'entretien" as UC2
-    usecase "Valider présence (Code Secret)" as UC3
-    usecase "Suivre position en temps réel" as UC4
-    
-    ' API
-    usecase "Fournir l'API mobile" as UC5
+package "Application Mobile - Sprint 1" {
+    usecase "S'authentifier via CIN" as UC1
+    usecase "Obtenir ticket (SOLI-XX)" as UC2
+    usecase "Suivre position en temps réel" as UC3
 }
 
-' Relations directes pour le Sprint 1 (Sans authentification)
-C -- UC1
 C -- UC2
 C -- UC3
-C -- UC4
 
-' Relation Web
-W -- UC5
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC1 : <<include>>
 
 @enduml
