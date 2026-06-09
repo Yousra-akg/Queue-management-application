@@ -20,7 +20,7 @@ actor "Mobile" as Mob
 ' =========================
 
 usecase "Obtenir un ticket (SOLI-XX)" as UC1
-usecase "Consulter position et timer" as UC2
+usecase "Consulter position" as UC2
 usecase "Valider présence (Code Secret)" as UC3
 usecase "Suivre l'état de la file globale" as UC4
 
@@ -34,7 +34,7 @@ C -- UC4
 ' Formateur
 ' =========================
 
-usecase "Rejoindre une session d'entretien" as UC7
+usecase "Rejoindre une entretien" as UC7
 usecase "Appeler le candidat suivant" as UC8
 usecase "Mettre à jour statut (Terminé/Absent)" as UC9
 usecase "Prioriser/Déplacer un candidat" as UC10
@@ -50,8 +50,8 @@ F -- UC10
 ' Administrateur
 ' =========================
 
-usecase "Gérer les sessions (CRUD)" as UC11
-usecase "Affecter les candidats aux sessions" as UC12
+usecase "Gérer les entretiens (CRUD)" as UC11
+usecase "Affecter les candidats aux entretiens" as UC12
 usecase "Consulter dashboard de statistiques" as UC13
 
 Admin -- UC11
