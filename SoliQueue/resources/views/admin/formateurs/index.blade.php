@@ -125,19 +125,28 @@
                     <div>
                         <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Nom Complet</label>
                         <input type="text" name="nom" x-model="formateurForm.nom" required placeholder="Ahmed Amrani"
-                            class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                            class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('nom') border-red-500 @enderror">
+                        @error('nom')
+                            <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <div class="grid sm:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Email</label>
                             <input type="email" name="email" x-model="formateurForm.email" required placeholder="ahmed@solicode.co"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('email') border-red-500 @enderror">
+                            @error('email')
+                                <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Mot de passe</label>
                             <input type="password" name="password" :required="!formateurForm.id" placeholder="••••••••"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('password') border-red-500 @enderror">
+                            @error('password')
+                                <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                            @enderror
                             <template x-if="formateurForm.id">
                                 <p class="text-[9px] text-slate-400 mt-1 uppercase font-bold italic">Laissez vide pour conserver l'actuel</p>
                             </template>

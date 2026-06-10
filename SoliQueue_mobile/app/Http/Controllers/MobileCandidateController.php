@@ -98,7 +98,7 @@ class MobileCandidateController extends Controller
                 'candidate_id' => (int)($ticket['candidat_id'] ?? 0)
             ]);
 
-            $sessionStatus = $this->apiService->getSessionStatus($ticket['session_id']);
+            $sessionStatus = $this->apiService->getSessionStatus($ticket['entretien_id']);
             $sessionInfo = $sessionStatus['data'];
             
             return view('mobile.portail-interactif', compact('ticket', 'sessionInfo', 'studentName'));

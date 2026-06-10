@@ -272,14 +272,20 @@
                                 <label
                                     class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Date</label>
                                 <input type="date" name="dateEntretien" x-model="entretienForm.dateEntretien" required
-                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm">
+                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm @error('dateEntretien') border-red-500 @enderror">
+                                @error('dateEntretien')
+                                    <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label
                                     class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Capacité</label>
                                 <input type="number" name="capaciteMax" x-model="entretienForm.capaciteMax" required
                                     placeholder="60"
-                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('capaciteMax') border-red-500 @enderror">
+                                @error('capaciteMax')
+                                    <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
@@ -289,13 +295,19 @@
                                 <label
                                     class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Début</label>
                                 <input type="time" name="heureDebut" x-model="entretienForm.heureDebut" required
-                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm">
+                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm @error('heureDebut') border-red-500 @enderror">
+                                @error('heureDebut')
+                                    <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label
                                     class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Fin</label>
                                 <input type="time" name="heureFin" x-model="entretienForm.heureFin" required
-                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm">
+                                    class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors shadow-sm @error('heureFin') border-red-500 @enderror">
+                                @error('heureFin')
+                                    <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label

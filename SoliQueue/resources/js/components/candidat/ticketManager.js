@@ -250,21 +250,21 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
 
             const row = `
                 <tr class="${rowClass} transition-all duration-300">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-black w-24 text-[11px]">Pos ${index + 1}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-x-4">
-                            <div class="size-9 rounded-full ${isMe ? 'bg-blue-100 text-[#1A73E8]' : 'bg-white/20'} flex items-center justify-center font-bold text-xs shadow-inner">
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-black text-[11px] w-auto">Pos ${index + 1}</td>
+                    <td class="px-2 sm:px-6 py-4">
+                        <div class="flex items-center gap-x-2 sm:gap-x-4">
+                            <div class="size-8 sm:size-9 rounded-full ${isMe ? 'bg-blue-100 text-[#1A73E8]' : 'bg-white/20'} flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-inner shrink-0">
                                 ${initials}
                             </div>
-                            <div>
-                                <p class="font-bold text-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
-                                ${isMe ? '<p class="text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
-                                ${t.salle && t.statut === 'en cours' ? `<p class="text-[9px] font-bold text-white/80 uppercase mt-0.5">📍 ${t.salle.nom}</p>` : ''}
+                            <div class="min-w-0">
+                                <p class="font-bold text-[10px] sm:text-xs truncate max-w-[80px] sm:max-w-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
+                                ${isMe ? '<p class="text-[8px] sm:text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
+                                ${t.salle && t.statut === 'en cours' ? `<p class="text-[8px] sm:text-[9px] font-bold text-white/80 uppercase mt-0.5 truncate">📍 ${t.salle.nom}</p>` : ''}
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-end">
-                        ${statusText ? `<span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${statusBadgeClass}">${statusText}</span>` : ''}
+                    <td class="px-3 sm:px-6 py-4 text-end">
+                        ${statusText ? `<span class="px-2 sm:px-3 py-1 rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-widest ${statusBadgeClass} whitespace-nowrap">${statusText}</span>` : ''}
                     </td>
                 </tr>
             `;

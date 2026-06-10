@@ -216,26 +216,38 @@
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Prénom</label>
                             <input type="text" name="prenom" x-model="candidatForm.prenom" required placeholder="Lila"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('prenom') border-red-500 @enderror">
+                            @error('prenom')
+                                <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Nom</label>
                             <input type="text" name="nom" x-model="candidatForm.nom" required placeholder="Mansouri"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('nom') border-red-500 @enderror">
+                            @error('nom')
+                                <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">CIN</label>
                         <input type="text" name="cin" x-model="candidatForm.cin" required placeholder="AB123456"
-                            class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 uppercase transition-colors placeholder:text-gray-400 shadow-sm">
+                            class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 uppercase transition-colors placeholder:text-gray-400 shadow-sm @error('cin') border-red-500 @enderror">
+                        @error('cin')
+                            <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <div class="grid sm:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Score QCM (/100)</label>
                             <input type="number" name="scoreQCM" x-model="candidatForm.scoreQCM" min="0" max="100" step="0.1" required placeholder="85"
-                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                                class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('scoreQCM') border-red-500 @enderror">
+                            @error('scoreQCM')
+                                <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Photo (Optionnel)</label>

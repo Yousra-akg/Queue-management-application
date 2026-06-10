@@ -24,10 +24,25 @@
         }
     </style>
 </head>
-<body class="bg-bgSurface min-h-screen font-sans antialiased text-gray-800">
-    <!-- Navigation Sidebar (Desktop) -->
+<body class="bg-bgSurface min-h-screen font-sans antialiased text-gray-800" x-data="{ sidebarOpen: false }">
+    <!-- Mobile Header -->
+    <div class="lg:hidden flex items-center justify-between bg-[#0B1120] text-white px-4 py-3 border-b border-slate-800 fixed top-0 w-full z-[70] shadow-md">
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('img/logo.png') }}" alt="SoliQueue Logo" class="h-8 object-contain">
+        </div>
+        <button @click="sidebarOpen = !sidebarOpen" class="p-2 text-slate-400 hover:text-white rounded-lg focus:bg-slate-800 transition-colors">
+            <svg x-show="!sidebarOpen" class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <svg x-cloak x-show="sidebarOpen" class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+
+    <!-- Backdrop -->
+    <div x-cloak x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 z-[75] bg-slate-900/60 backdrop-blur-sm lg:hidden transition-opacity duration-300"></div>
+
+    <!-- Navigation Sidebar -->
     <div id="application-sidebar"
-        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[60] w-64 bg-[#0B1120] border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0">
+        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+        class="transition-all duration-300 transform fixed top-0 start-0 bottom-0 z-[80] w-64 bg-[#0B1120] border-e border-slate-800 pt-7 pb-10 overflow-y-auto lg:block lg:end-auto lg:bottom-0">
         <div class="px-8 mt-4 mb-10">
             <div class="flex flex-col items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="SoliQueue Logo" class="h-24 mb-6 object-contain scale-125">
@@ -131,12 +146,12 @@
     </div>
 
     <!-- Main Content -->
-    <div class="w-full lg:ps-64 animate-fade-in">
+    <div class="w-full lg:ps-64 animate-fade-in pt-16 lg:pt-0">
         <div class="p-4 sm:p-6 lg:p-10">
             <!-- Top Header -->
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <!-- Breadcrumbs -->
-                <ol class="flex items-center whitespace-nowrap min-w-0" aria-label="Breadcrumb">
+                <ol class="flex items-center flex-wrap gap-y-2 whitespace-nowrap min-w-0" aria-label="Breadcrumb">
                     <li class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
                         SoliQueue
                         <svg class="flex-shrink-0 mx-3 overflow-visible size-2 text-slate-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
@@ -162,7 +177,9 @@
                 </div>
             </div>
 
-            @yield('content')
+            <div id="dynamic-view">
+                @yield('content')
+            </div>
         </div>
     </div>
 

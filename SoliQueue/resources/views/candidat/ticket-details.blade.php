@@ -26,7 +26,7 @@
 
 @endphp
 
-<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
+<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 pt-6 pb-24 sm:py-10 space-y-6 w-full" id="main-container">
 
     <!-- Teleported Notification Bell to Navbar -->
     <template x-teleport="#navbar-notif-target">
@@ -120,7 +120,7 @@
                 <span class="relative inline-flex size-1.5 rounded-full bg-[#34A853]"></span>
             </span>
         </div>
-        <div class="overflow-hidden">
+        <div class="overflow-x-hidden">
             <table class="w-full divide-y divide-slate-100">
                 <tbody id="queue-body" class="divide-y divide-slate-100 font-bold">
                     <!-- Les lignes seront injectées par JS -->

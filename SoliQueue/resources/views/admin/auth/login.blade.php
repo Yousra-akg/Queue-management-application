@@ -80,6 +80,9 @@
                             </svg>
                         </div>
                     </div>
+                    @error('password')
+                        <p class="text-xs text-red-600 mt-2 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="flex items-center">

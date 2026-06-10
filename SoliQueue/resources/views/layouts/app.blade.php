@@ -33,17 +33,17 @@
         </div>
 
         <header class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 border-b border-gray-200 shadow-sm relative z-50">
-            <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between" aria-label="Global">
-                <div class="flex items-center justify-between">
+            <nav class="max-w-[85rem] w-full mx-auto px-4 flex items-center justify-between" aria-label="Global">
+                <div class="flex items-center">
                     <a class="flex-none" href="{{ route('candidat.bienvenue') }}">
                         <img src="{{ asset('img/logo.png') }}" alt="SoliCode" class="h-10 w-auto">
                     </a>
                 </div>
                 
-                <div class="flex flex-row items-center gap-4 mt-4 sm:justify-end sm:mt-0 sm:ps-5">
+                <div class="flex flex-row items-center gap-2 sm:gap-4">
                     <div id="navbar-notif-target" class="flex items-center"></div>
                     <div class="flex items-center gap-x-3">
-                        <span class="text-sm font-semibold text-gray-500 capitalize">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</span>
+                        <span class="hidden sm:inline text-sm font-semibold text-gray-500 capitalize">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</span>
                         @if(Auth::user()->photo)
                             <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Avatar" class="size-[38px] rounded-full object-cover ring-2 ring-white shadow-sm">
                         @else

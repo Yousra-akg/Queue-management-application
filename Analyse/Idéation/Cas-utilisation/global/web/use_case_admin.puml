@@ -50,6 +50,7 @@ usecase "Consommer API (Synchronisation File)" as API
 ' Authentification
 '=====================
 usecase "S'authentifier" as Auth
+usecase "S'authentifier" as Auth2
 
 '=====================
 ' Relations Admin
@@ -91,10 +92,10 @@ UC6 ..> Auth : <<include>>
 
 UC7 ..> Auth : <<include>>
 UC8 ..> Auth : <<include>>
-UC9 ..> Auth : <<include>>
-UC10 ..> Auth : <<include>>
-UC11 ..> Auth : <<include>>
-UC12 ..> Auth : <<include>>
-UC13 ..> Auth : <<include>>
+UC9 ..> Auth2 : <<include>>
+UC10 ..> Auth2 : <<include>>
+UC11 ..> Auth2 : <<include>>
+UC12 ..> Auth2 : <<include>>
+UC13 ..> Auth2 : <<include>>
 
 @enduml

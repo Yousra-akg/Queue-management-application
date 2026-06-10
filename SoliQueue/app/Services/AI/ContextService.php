@@ -55,8 +55,8 @@ class ContextService
             $tauxPresence = $totalTickets > 0 ? round(($presents / $totalTickets) * 100, 1) . '%' : 'N/A';
 
             $formateursStats = \App\Models\User::role('formateur')->get()->map(function($f) {
-                $count = \App\Models\Ticket::whereHas('entretien', function($q) use ($f) {
-                    $q->where('user_id', $f->id);
+                $count = \App\Models\Ticket::whereHas('entretien.formateurs', function($q) use ($f) {
+                    $q->where('users.id', $f->id);
                 })->where('statut', 'terminée')->count();
                 return ['nom' => $f->nom, 'entretiens_termines' => $count];
             })->toArray();

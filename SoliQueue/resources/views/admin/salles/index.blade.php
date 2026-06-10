@@ -135,7 +135,10 @@
                 <div class="px-8 sm:px-10 pb-4 overflow-y-auto space-y-6">
                     <div>
                         <label class="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">Nom de la salle</label>
-                        <input type="text" name="nom" x-model="salleForm.nom" required placeholder="Ex: Salle de Réunion A" class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm">
+                        <input type="text" name="nom" x-model="salleForm.nom" required placeholder="Ex: Salle de Réunion A" class="w-full py-3 px-4 bg-white border border-gray-200 focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] rounded-xl text-sm font-medium text-gray-700 transition-colors placeholder:text-gray-400 shadow-sm @error('nom') border-red-500 @enderror">
+                        @error('nom')
+                            <p class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 

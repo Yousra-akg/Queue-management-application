@@ -51,12 +51,18 @@ F -- UC10
 ' =========================
 
 usecase "Gérer les entretiens (CRUD)" as UC11
+usecase "Gérer les formateurs (CRUD)" as UC14
+usecase "Gérer les salles (CRUD)" as UC15
+usecase "Gérer les candidats (CRUD)" as UC16
 usecase "Affecter les candidats aux entretiens" as UC12
 usecase "Consulter dashboard de statistiques" as UC13
 
 Admin -- UC11
 Admin -- UC12
 Admin -- UC13
+Admin -- UC14
+Admin -- UC15
+Admin -- UC16
 
 
 ' =========================
@@ -87,5 +93,8 @@ UC10 ..> Auth : <<include>>
 UC11 ..> Auth : <<include>>
 UC12 ..> Auth : <<include>>
 UC13 ..> Auth : <<include>>
+UC14 ..> Auth : <<include>>
+UC15 ..> Auth : <<include>>
+UC16 ..> Auth : <<include>>
 
 @enduml

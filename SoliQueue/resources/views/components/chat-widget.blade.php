@@ -1,11 +1,24 @@
+@props(['entretienId' => null])
 @php
-    $guardName = 'guest';
-    if(Auth::guard('web')->check()) {
-        $guardName = 'admin_' . Auth::guard('web')->id();
-    } elseif(Auth::guard('candidat')->check()) {
-        $guardName = 'candidat_' . Auth::guard('candidat')->id();
+    $prefix = 'guest';
+    if (request()->is('admin*') || request()->is('formateur*')) {
+        $prefix = 'staff_';
+        if (Auth::guard('web')->check()) {
+            $prefix .= Auth::guard('web')->id();
+        } else {
+            $prefix .= 'guest';
+        }
+    } else {
+        $prefix = 'candidat_';
+        if (Auth::guard('candidat')->check()) {
+            $prefix .= Auth::guard('candidat')->id();
+        } elseif (Auth::guard('web')->check()) {
+            $prefix .= 'test_' . Auth::guard('web')->id();
+        } else {
+            $prefix .= 'guest';
+        }
     }
-    $storageKey = 'soliqueue_chat_history_' . $guardName;
+    $storageKey = 'soliqueue_chat_history_' . $prefix;
 @endphp
 <div x-data="chatbot('{{ $storageKey }}')" class="fixed bottom-6 right-6 z-50">
     <!-- Chat Button -->
@@ -26,8 +39,8 @@
          x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-4"
-         class="absolute bottom-16 right-0 w-80 bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200"
-         style="display: none; height: 450px;">
+         class="fixed inset-0 z-[100] sm:absolute sm:inset-auto sm:bottom-16 sm:right-0 sm:w-80 sm:h-[450px] bg-white sm:rounded-lg sm:shadow-2xl flex flex-col overflow-hidden sm:border sm:border-gray-200"
+         style="display: none;">
         
         <!-- Header -->
         <div class="bg-blue-600 text-white p-4 font-bold flex justify-between items-center">
@@ -101,6 +114,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('chatbot', (storageKey) => ({
             storageKey: storageKey,
+            entretienId: '{{ $entretienId }}',
             open: false,
             loading: false,
             newMessage: '',
@@ -185,6 +199,9 @@
                     if (file) {
                         formData.append('file', file);
                     }
+                    if (this.entretienId) {
+                        formData.append('entretien_id', this.entretienId);
+                    }
                     
                     // Add CSRF token
                     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -209,8 +226,27 @@
                     this.saveHistory();
                     
                     // Si l'action modifie l'état, on met à jour l'interface dynamiquement
-                    if (data.action === 'next_candidate' || data.action === 'mark_absent' || data.action === 'close_session') {
+                    if (data.action && data.action !== 'respond_user' && data.action !== 'get_stats') {
+                        // 1. Déclenche l'événement local (ex: animation dashboard formateur)
                         window.dispatchEvent(new CustomEvent('ai-action', { detail: { action: data.action } }));
+                        
+                        // 2. Recharge discrètement la vue principale (soft-reload SPA)
+                        setTimeout(async () => {
+                            try {
+                                const res = await fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                                const html = await res.text();
+                                const doc = new DOMParser().parseFromString(html, 'text/html');
+                                
+                                const currentContent = document.querySelector('#dynamic-view') || document.querySelector('main');
+                                const newContent = doc.querySelector('#dynamic-view') || doc.querySelector('main');
+                                
+                                if (currentContent && newContent) {
+                                    currentContent.innerHTML = newContent.innerHTML;
+                                }
+                            } catch (e) {
+                                console.error('Erreur lors du rafraîchissement dynamique:', e);
+                            }
+                        }, 1500); // Court délai pour lire la réponse du bot
                     }
 
                 } catch (error) {
