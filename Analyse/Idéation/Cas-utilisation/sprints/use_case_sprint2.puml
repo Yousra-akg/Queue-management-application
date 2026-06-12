@@ -32,15 +32,17 @@ package "Sprint 2 – Fonctionnalités Avancées (SoliQueue)" {
     ' Améliorations Administrateur
     ' ========================
     usecase "Importer/ Exporter les candidats" as UC5
-    usecase "Exporter les sessions" as UC6
+    usecase "Exporter les entretiens" as UC6
 
     Admin -- UC5
     Admin -- UC6
 
     usecase "S'authentifier" as Auth
+    usecase "S'authentifier via CIN" as Auth2
 
     UC5 ..> Auth : <<include>>
     UC6 ..> Auth : <<include>>
+    UC1 ..> Auth2 : <<include>>
 }
 
 @enduml

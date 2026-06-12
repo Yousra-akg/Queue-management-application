@@ -36,11 +36,14 @@ class ChatbotController extends Controller
         // Récupérer le contexte métier (état DB, rôle)
         $context = $this->context->getContext($ticketNumber);
 
+        // Extract entretien_id from request or context if possible
+        $entretienId = $request->input('entretien_id');
+
         // Envoyer à Gemini (Function Calling)
         $aiResponse = $this->gemini->generate($context, $message, $history);
 
         // Traiter l'action retournée par Gemini (avec le fichier optionnel)
-        $result = $this->handler->handle($aiResponse, $file);
+        $result = $this->handler->handle($aiResponse, $file, $entretienId);
 
         return response()->json($result);
     }

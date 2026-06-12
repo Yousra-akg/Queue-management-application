@@ -1,11 +1,11 @@
-export default (initialEntretiens = []) => ({
+export default (initialEntretiens = [], initialSalles = []) => ({
     entretiens: initialEntretiens,
+    salles: initialSalles,
     searchQuery: '',
     statusFilter: 'all',
     showEntretienModal: false,
     entretienForm: {
         id: null,
-        nom: '',
         dateEntretien: '',
         capaciteMax: '',
         heureDebut: '',
@@ -16,7 +16,7 @@ export default (initialEntretiens = []) => ({
 
     get filteredEntretiens() {
         return this.entretiens.filter(s => {
-            const matchesSearch = s.nom.toLowerCase().includes(this.searchQuery.toLowerCase());
+            const matchesSearch = s.dateEntretien.toLowerCase().includes(this.searchQuery.toLowerCase());
             const matchesStatus = this.statusFilter === 'all' || s.statut === this.statusFilter;
             return matchesSearch && matchesStatus;
         });
@@ -52,20 +52,47 @@ export default (initialEntretiens = []) => ({
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
     },
 
+    getAffectationsFormat(entretien) {
+        if (!entretien.formateurs || entretien.formateurs.length === 0) return [];
+        const groups = {};
+        entretien.formateurs.forEach(f => {
+            const sId = f.pivot.salle_id;
+            if (!groups[sId]) groups[sId] = [];
+            groups[sId].push(f.nom);
+        });
+        return Object.keys(groups).map(sId => {
+            const salle = this.salles.find(s => s.id == sId);
+            return {
+                salleNom: salle ? salle.nom : 'Salle',
+                formateurs: groups[sId].join(', ')
+            };
+        });
+    },
+
     editEntretien(entretien) {
         this.entretienForm = { ...entretien };
         
-        // Map existing formateurs from pivot to affectations array
         if (entretien.formateurs && entretien.formateurs.length > 0) {
-            this.entretienForm.affectations = entretien.formateurs.map(f => ({
-                formateur_id: f.id,
-                salle_id: f.pivot.salle_id
+            const groups = {};
+            entretien.formateurs.forEach(f => {
+                const sId = f.pivot.salle_id;
+                if (!groups[sId]) groups[sId] = [];
+                groups[sId].push(f.id);
+            });
+            this.entretienForm.affectations = Object.keys(groups).map(sId => ({
+                salle_id: sId,
+                formateur_id: groups[sId]
             }));
         } else {
-            this.entretienForm.affectations = [{ formateur_id: '', salle_id: '' }];
+            this.entretienForm.affectations = [{ formateur_id: [], salle_id: '' }];
         }
         
         this.showEntretienModal = true;
+        setTimeout(() => {
+            if (window.HSStaticMethods) {
+                window.HSStaticMethods.autoInit();
+            }
+        }, 100);
     },
 
     async deleteEntretien(id) {
@@ -100,6 +127,11 @@ export default (initialEntretiens = []) => ({
         this.resetEntretienForm();
         this.generateEntretienCode();
         this.showEntretienModal = true;
+        setTimeout(() => {
+            if (window.HSStaticMethods) {
+                window.HSStaticMethods.autoInit();
+            }
+        }, 100);
     },
 
     generateEntretienCode() {
@@ -114,19 +146,23 @@ export default (initialEntretiens = []) => ({
     resetEntretienForm() {
         this.entretienForm = {
             id: null,
-            nom: '',
             dateEntretien: '',
             capaciteMax: '60',
             heureDebut: '09:00',
             heureFin: '17:00',
             codePresence: '',
             statut: 'planifiée',
-            affectations: [{ formateur_id: '', salle_id: '' }]
+            affectations: [{ formateur_id: [], salle_id: '' }]
         };
     },
 
     addAffectation() {
-        this.entretienForm.affectations.push({ formateur_id: '', salle_id: '' });
+        this.entretienForm.affectations.push({ formateur_id: [], salle_id: '' });
+        setTimeout(() => {
+            if (window.HSStaticMethods) {
+                window.HSStaticMethods.autoInit();
+            }
+        }, 50);
     },
 
     removeAffectation(index) {

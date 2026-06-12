@@ -61,6 +61,9 @@
                             </svg>
                         </div>
                     </div>
+                    @error('email')
+                        <p class="text-xs text-red-600 mt-2 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -75,6 +78,9 @@
                             </svg>
                         </div>
                     </div>
+                    @error('password')
+                        <p class="text-xs text-red-600 mt-2 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="pt-4">

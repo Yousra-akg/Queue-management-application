@@ -422,7 +422,7 @@
             
             async function loadLiveQueue() {
                 try {
-                    const url = `/live-queue?session_id={{ $ticket['session_id'] }}&candidate_id={{ $ticket['candidat_id'] }}&t=${Date.now()}`;
+                    const url = `/live-queue?session_id={{ $ticket['entretien_id'] }}&candidate_id={{ $ticket['candidat_id'] }}&t=${Date.now()}`;
                     const res = await fetch(url, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' } });
                     const data = await res.json();
                     

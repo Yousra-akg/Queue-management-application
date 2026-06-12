@@ -1,13 +1,13 @@
-export default (initialAvailableCandidates = [], initialSessions = []) => ({
+export default (initialAvailableCandidates = [], initialentretiens = []) => ({
     availableCandidates: initialAvailableCandidates.map(c => ({ ...c, selected: false })),
-    sessions: initialSessions,
-    selectedSessionId: '',
+    entretiens: initialentretiens,
+    selectedEntretienId: '',
     searchQuery: '',
     statusFilter: 'all',
     showAddCandidateModal: false,
-    showSessionModal: false,
+    showEntretienModal: false,
     isDragging: false,
-    sessionForm: {
+    entretienForm: {
         id: null,
         nom: '',
         dateEntretien: '',
@@ -18,16 +18,16 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
         statut: 'planifiée'
     },
 
-    get selectedSession() {
-        return this.sessions.find(s => s.id == this.selectedSessionId);
+    get selectedEntretien() {
+        return this.entretiens.find(s => s.id == this.selectedEntretienId);
     },
 
     get allSelected() {
         return this.availableCandidates.length > 0 && this.availableCandidates.every(c => c.selected);
     },
 
-    get filteredSessions() {
-        return this.sessions.filter(s => {
+    get filteredentretiens() {
+        return this.entretiens.filter(s => {
             const matchesSearch = s.nom.toLowerCase().includes(this.searchQuery.toLowerCase());
             const matchesStatus = this.statusFilter === 'all' || s.statut === this.statusFilter;
             return matchesSearch && matchesStatus;
@@ -35,9 +35,9 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
     },
 
     init() {
-        // Select first session by default
-        if (this.sessions.length > 0) {
-            this.selectedSessionId = this.sessions[0].id;
+        // Select first entretien by default
+        if (this.entretiens.length > 0) {
+            this.selectedEntretienId = this.entretiens[0].id;
         }
 
         // Initialize Sortable on candidates pool
@@ -75,13 +75,13 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
     },
 
     async assignCandidate(id) {
-        if (!this.selectedSessionId) {
-            alert('Veuillez sélectionner une session.');
+        if (!this.selectedEntretienId) {
+            alert('Veuillez sélectionner une entretien.');
             return;
         }
 
-        const sessionIndex = this.sessions.findIndex(s => s.id == this.selectedSessionId);
-        const session = this.sessions[sessionIndex];
+        const entretienIndex = this.entretiens.findIndex(s => s.id == this.selectedEntretienId);
+        const entretien = this.entretiens[entretienIndex];
 
         // If multiple are selected, assign all selected ones
         let selectedItems = this.availableCandidates.filter(c => c.selected);
@@ -95,16 +95,16 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
             }
         }
 
-        if (session.candidats_count + selectedIds.length > session.capaciteMax) {
+        if (entretien.candidats_count + selectedIds.length > entretien.capaciteMax) {
             if (window.Swal) {
                 window.Swal.fire({
                     icon: 'error',
                     title: 'Capacité atteinte',
-                    text: `Impossible d'ajouter ces candidats. La session est pleine (${session.capaciteMax} max).`,
+                    text: `Impossible d'ajouter ces candidats. La entretien est pleine (${entretien.capaciteMax} max).`,
                     confirmButtonColor: '#1A73E8'
                 });
             } else {
-                alert(`Impossible d'ajouter ces candidats. La session est pleine (${session.capaciteMax} max).`);
+                alert(`Impossible d'ajouter ces candidats. La entretien est pleine (${entretien.capaciteMax} max).`);
             }
             // Trigger Alpine re-render to revert Sortable's DOM manipulation
             this.availableCandidates = [...this.availableCandidates];
@@ -112,7 +112,7 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
         }
 
         try {
-            const response = await fetch(`/admin/sessions/${this.selectedSessionId}/assign`, {
+            const response = await fetch(`/admin/entretiens/${this.selectedEntretienId}/assign`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,15 +122,15 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
             });
 
             if (response.ok) {
-                // Update local state: move from available to session
-                const sessionIndex = this.sessions.findIndex(s => s.id == this.selectedSessionId);
+                // Update local state: move from available to entretien
+                const entretienIndex = this.entretiens.findIndex(s => s.id == this.selectedEntretienId);
 
                 selectedItems.forEach(cand => {
-                    this.sessions[sessionIndex].candidats.push({ ...cand, selected: false });
+                    this.entretiens[entretienIndex].candidats.push({ ...cand, selected: false });
                 });
 
                 this.availableCandidates = this.availableCandidates.filter(c => !selectedIds.includes(c.id));
-                this.sessions[sessionIndex].candidats_count = this.sessions[sessionIndex].candidats.length;
+                this.entretiens[entretienIndex].candidats_count = this.entretiens[entretienIndex].candidats.length;
 
                 // Show bottom alert
                 if (window.Swal) {
@@ -159,7 +159,7 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
         if (window.Swal) {
             const result = await window.Swal.fire({
                 title: 'Retrait du candidat',
-                text: 'Voulez-vous vraiment retirer ce candidat de la session ?',
+                text: 'Voulez-vous vraiment retirer ce candidat de la entretien ?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#1A73E8',
@@ -169,7 +169,7 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
             });
             if (!result.isConfirmed) return;
         } else {
-            if (!confirm('Voulez-vous vraiment retirer ce candidat de la session ?')) return;
+            if (!confirm('Voulez-vous vraiment retirer ce candidat de la entretien ?')) return;
         }
 
         try {
@@ -182,19 +182,19 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
             });
 
             if (response.ok) {
-                const sessionIndex = this.sessions.findIndex(s => s.id == this.selectedSessionId);
-                const candIndex = this.sessions[sessionIndex].candidats.findIndex(c => c.id == id);
-                const cand = this.sessions[sessionIndex].candidats[candIndex];
+                const entretienIndex = this.entretiens.findIndex(s => s.id == this.selectedEntretienId);
+                const candIndex = this.entretiens[entretienIndex].candidats.findIndex(c => c.id == id);
+                const cand = this.entretiens[entretienIndex].candidats[candIndex];
 
                 this.availableCandidates.push({ ...cand, selected: false });
-                this.sessions[sessionIndex].candidats.splice(candIndex, 1);
-                this.sessions[sessionIndex].candidats_count = this.sessions[sessionIndex].candidats.length;
+                this.entretiens[entretienIndex].candidats.splice(candIndex, 1);
+                this.entretiens[entretienIndex].candidats_count = this.entretiens[entretienIndex].candidats.length;
 
                 // Show bottom alert
                 if (window.Swal) {
                     window.Swal.fire({
                         icon: 'success',
-                        text: 'Candidat retiré de la session.',
+                        text: 'Candidat retiré de la entretien.',
                         position: 'bottom',
                         toast: true,
                         showConfirmButton: false,
@@ -218,15 +218,15 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
     },
 
-    editSession(session) {
-        this.sessionForm = { ...session };
-        this.showSessionModal = true;
+    editentretien(entretien) {
+        this.entretienForm = { ...entretien };
+        this.showEntretienModal = true;
     },
 
-    async deleteSession(id) {
+    async deleteentretien(id) {
         if (window.Swal) {
             const result = await window.Swal.fire({
-                title: 'Supprimer la session ?',
+                title: 'Supprimer la entretien ?',
                 text: 'Cette action est irréversible.',
                 icon: 'error',
                 showCancelButton: true,
@@ -237,12 +237,12 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
             });
             if (!result.isConfirmed) return;
         } else {
-            if (!confirm('Supprimer la session ?')) return;
+            if (!confirm('Supprimer la entretien ?')) return;
         }
 
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = `/admin/sessions/${id}`;
+        form.action = `/admin/entretiens/${id}`;
         form.innerHTML = `
             <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
             <input type="hidden" name="_method" value="DELETE">
@@ -251,18 +251,18 @@ export default (initialAvailableCandidates = [], initialSessions = []) => ({
         form.submit();
     },
 
-    openAddSessionModal() {
-        this.resetSessionForm();
-        this.generateSessionCode();
-        this.showSessionModal = true;
+    openAddentretienModal() {
+        this.resetentretienForm();
+        this.generateentretienCode();
+        this.showEntretienModal = true;
     },
 
-    generateSessionCode() {
-        this.sessionForm.codePresence = Math.floor(1000 + Math.random() * 9000).toString();
+    generateentretienCode() {
+        this.entretienForm.codePresence = Math.floor(1000 + Math.random() * 9000).toString();
     },
 
-    resetSessionForm() {
-        this.sessionForm = {
+    resetentretienForm() {
+        this.entretienForm = {
             id: null,
             nom: '',
             dateEntretien: '',

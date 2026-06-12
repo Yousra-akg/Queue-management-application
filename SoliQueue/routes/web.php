@@ -55,6 +55,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Actions rapides
     Route::post('/candidates/{candidate}/unassign', [EntretienManagementController::class, 'unassignCandidate'])->name('candidates.unassign');
     Route::post('/entretiens/{entretien}/assign', [EntretienManagementController::class, 'assignCandidates'])->name('entretiens.assign');
+    Route::get('/candidats/{candidat}/details', [EntretienManagementController::class, 'getCandidatDetails'])->name('candidats.details');
     
     // Formateurs CRUD
     Route::get('/formateurs', [FormateurManagementController::class, 'index'])->name('formateurs.index');

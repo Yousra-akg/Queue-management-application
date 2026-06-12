@@ -86,12 +86,12 @@
                     <div class="absolute top-6 right-6">
                         <span
                             class="inline-flex items-center gap-x-2 py-2 px-4 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm
-                            {{ $session->statut === 'en cours' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-slate-50 text-slate-400 border border-slate-100' }}">
-                            @if($session->statut === 'en cours')
+                            {{ $entretien->statut === 'en cours' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-slate-50 text-slate-400 border border-slate-100' }}">
+                            @if($entretien->statut === 'en cours')
                                 <span class="size-2 rounded-full bg-green-500 animate-pulse"></span>
                                 Direct
                             @else
-                                {{ $session->statut }}
+                                {{ $entretien->statut }}
                             @endif
                         </span>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="mb-10">
                         <div class="flex items-center gap-4 mb-8">
                             <div
-                                class="size-14 rounded-2xl {{ $session->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'bg-slate-50 text-slate-400' }} flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                class="size-14 rounded-2xl {{ $entretien->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'bg-slate-50 text-slate-400' }} flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                                 <svg class="size-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="2.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -110,13 +110,13 @@
                             <div>
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Entretien</p>
                                 <span
-                                    class="text-xs font-black text-slate-900 uppercase">#{{ str_pad($session->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                    class="text-xs font-black text-slate-900 uppercase">#{{ str_pad($entretien->id, 4, '0', STR_PAD_LEFT) }}</span>
                             </div>
                         </div>
 
                         <h3
                             class="text-4xl font-black text-slate-900 leading-tight mb-4 tracking-tighter uppercase group-hover:text-blue-600 transition-colors">
-                            {{ $session->nom }}
+                            {{ $entretien->nom }}
                         </h3>
 
                         <div class="flex flex-wrap gap-3 mt-6">
@@ -128,8 +128,8 @@
                                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                                 <span class="text-[10px] font-black text-slate-600 uppercase tracking-tight">
-                                    {{ \Carbon\Carbon::parse($session->heureDebut)->format('H:i') }} —
-                                    {{ \Carbon\Carbon::parse($session->heureFin)->format('H:i') }}
+                                    {{ \Carbon\Carbon::parse($entretien->heureDebut)->format('H:i') }} —
+                                    {{ \Carbon\Carbon::parse($entretien->heureFin)->format('H:i') }}
                                 </span>
                             </div>
                             <div class="flex items-center gap-x-2 py-1.5 px-3 bg-blue-50 border border-blue-100 rounded-xl">
@@ -139,21 +139,21 @@
                                         d="M7.864 4.243A7.5 7.5 0 0 1 15.75 6.75V15a3 3 0 1 1-6 0V6.75a7.5 7.5 0 0 1 .114-1.282Zm0 0 .114-1.282A7.5 7.5 0 0 1 15.75 6.75V15a3 3 0 1 1-6 0V6.75a7.5 7.5 0 0 1 .114-1.282ZM9 9h.008v.008H9V9Zm0 3h.008v.008H9V12Zm0 3h.008v.008H9V15Zm3-6h.008v.008H12V9Zm0 3h.008v.008H12V12Zm0 3h.008v.008H12V15Zm3-6h.008v.008H15V9Zm0 3h.008v.008H15V12Zm0 3h.008v.008H15V15Z" />
                                 </svg>
                                 <span class="text-[10px] font-black text-blue-700 uppercase tracking-widest">
-                                    CODE: {{ $session->codePresence }}
+                                    CODE: {{ $entretien->codePresence }}
                                 </span>
                             </div>
                         </div>
 
                         <div class="mt-4 flex items-center gap-2">
                             <span class="text-xs font-bold text-slate-400 italic">
-                                {{ \Carbon\Carbon::parse($session->dateEntretien)->translatedFormat('l d F Y') }}
+                                {{ \Carbon\Carbon::parse($entretien->dateEntretien)->translatedFormat('l d F Y') }}
                             </span>
                         </div>
                     </div>
 
-                    <a href="{{ route('formateur.dashboard', $session->id) }}"
-                        class="w-full py-5 px-6 inline-flex justify-center items-center gap-x-3 text-sm font-black rounded-2xl border border-transparent {{ $session->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : ($session->statut === 'terminée' ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-slate-900 text-white') }} hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 uppercase tracking-widest group/btn">
-                        {{ $session->statut === 'terminée' ? 'Consulter Historique' : 'Accéder au Dashboard' }}
+                    <a href="{{ route('formateur.dashboard', $entretien->id) }}"
+                        class="w-full py-5 px-6 inline-flex justify-center items-center gap-x-3 text-sm font-black rounded-2xl border border-transparent {{ $entretien->statut === 'en cours' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : ($entretien->statut === 'terminée' ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-slate-900 text-white') }} hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 uppercase tracking-widest group/btn">
+                        {{ $entretien->statut === 'terminée' ? 'Consulter Historique' : 'Accéder au Dashboard' }}
                         <svg class="size-4 group-hover/btn:translate-x-1.5 transition-transform duration-300"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
                             stroke="currentColor">

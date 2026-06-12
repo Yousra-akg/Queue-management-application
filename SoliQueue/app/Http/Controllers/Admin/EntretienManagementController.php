@@ -64,25 +64,40 @@ class EntretienManagementController extends Controller
         ]);
     }
 
-    public function candidats()
+    public function candidats(Request $request)
     {
-        $candidats = $this->candidatService->all()->sortByDesc('id')->values();
-        $candidats->load('entretien');
+        $dateFilter = $request->input('date_entretien');
+        $query = \App\Models\Candidat::with('entretien');
+
+        if ($dateFilter) {
+            $query->whereHas('entretien', function ($q) use ($dateFilter) {
+                $q->whereDate('dateEntretien', $dateFilter);
+            });
+        }
+
+        $candidats = $query->orderByDesc('id')->get();
+        $availableDates = \App\Models\Entretien::select('dateEntretien')->distinct()->orderBy('dateEntretien', 'desc')->pluck('dateEntretien');
+
         return view('admin.candidats.index', [
-            'candidats' => $candidats
+            'candidats' => $candidats,
+            'dateFilter' => $dateFilter,
+            'availableDates' => $availableDates
         ]);
     }
 
     public function storeEntretien(Request $request)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:entretiens,nom',
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
             'capaciteMax' => 'required|integer|min:1',
             'codePresence' => 'required|string|size:4',
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
+            'affectations' => 'nullable|array',
+            'affectations.*.formateur_id' => 'required|array',
+            'affectations.*.formateur_id.*' => 'exists:users,id',
+            'affectations.*.salle_id' => 'required|exists:salles,id',
         ]);
 
         try {
@@ -96,13 +111,16 @@ class EntretienManagementController extends Controller
     public function updateEntretien(Request $request, Entretien $entretien)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:entretiens,nom,' . $entretien->id,
             'dateEntretien' => 'required|date',
             'heureDebut' => 'required',
             'heureFin' => 'required',
             'capaciteMax' => 'required|integer|min:1',
             'codePresence' => 'required|string|size:4',
             'statut' => 'required|in:planifiée,en cours,terminée,annulée',
+            'affectations' => 'nullable|array',
+            'affectations.*.formateur_id' => 'required|array',
+            'affectations.*.formateur_id.*' => 'exists:users,id',
+            'affectations.*.salle_id' => 'required|exists:salles,id',
         ]);
 
         try {
@@ -197,5 +215,35 @@ class EntretienManagementController extends Controller
             ], 422);
         }
     }
-}
 
+    public function getCandidatDetails($id)
+    {
+        try {
+            $candidat = \App\Models\Candidat::with('entretien')->findOrFail($id);
+            
+            // Fetch ticket associated with this candidate
+            $ticket = \App\Models\Ticket::with(['formateur', 'salle'])
+                ->where('candidat_id', $id)
+                ->first();
+
+            $duree = null;
+            if ($ticket && $ticket->heureAppel && $ticket->heureFin) {
+                $debut = \Carbon\Carbon::parse($ticket->heureAppel);
+                $fin = \Carbon\Carbon::parse($ticket->heureFin);
+                $duree = intval($debut->diffInMinutes($fin)) . ' min';
+            }
+
+            return response()->json([
+                'success' => true,
+                'candidat' => $candidat,
+                'ticket' => $ticket,
+                'duree' => $duree,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Candidat introuvable ou erreur serveur.'
+            ], 404);
+        }
+    }
+}

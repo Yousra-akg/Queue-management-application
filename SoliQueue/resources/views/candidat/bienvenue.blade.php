@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        @if($candidat->session_id)
+        @if($candidat->entretien_id)
             <!-- Success Header -->
             <div class="text-center mb-6">
                 <div class="inline-flex justify-center items-center size-[72px] rounded-full border-4 border-green-50 bg-green-100 mb-6 group transition-all duration-300 hover:scale-110">

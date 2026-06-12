@@ -60,37 +60,15 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
         this.confirmedBadge = document.getElementById('presence-confirmed-badge');
         this.confirmTimeEl = document.getElementById('confirm-time');
 
-        // --- GESTION DU COMPTE A REBOURS ET POLLEUR ---
+        // --- INITIALISATION IMMÉDIATE ---
         if (!this.isAlreadyPresent) {
-            const updateTimer = () => {
-                const diff = this.targetTimestamp - Date.now();
-
-                if (diff <= 0) {
-                    if (this.timerInterval) clearInterval(this.timerInterval);
-                    this.switchToLiveState();
-                    return;
-                }
-
-                if (this.timerEls.days) {
-                    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-                    this.timerEls.days.textContent = String(d).padStart(2, '0');
-                    this.timerEls.hours.textContent = String(h).padStart(2, '0');
-                    this.timerEls.minutes.textContent = String(m).padStart(2, '0');
-                    this.timerEls.seconds.textContent = String(s).padStart(2, '0');
-                }
-            };
-            
-            updateTimer();
-            if (this.targetTimestamp - Date.now() > 0) {
-                this.timerInterval = setInterval(updateTimer, 1000);
-            }
+            this.switchToLiveState();
         } else {
-            this.startPolling();
+            if (this.notifBanner) {
+                this.notifBanner.classList.remove('hidden');
+            }
         }
+        this.startPolling();
 
         // --- GESTION OTP / ACTIONS ---
         this.setupOtpListeners();
@@ -161,8 +139,7 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
             this.presenceBtn.classList.add('bg-[#1A73E8]', 'text-white', 'hover:bg-blue-700', 'shadow-blue-600/30', 'animate-pulse');
         }
         if (this.presenceHint) {
-            this.presenceHint.textContent = "C'est le moment ! Validez votre présence maintenant.";
-            this.presenceHint.classList.replace('text-slate-400', 'text-[#1A73E8]');
+            this.presenceHint.classList.add('hidden');
         }
 
         if (this.infoFooter) {
@@ -187,7 +164,7 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
                 
                 newNotifs.forEach(notif => {
                     const exists = this.notifications.some(n => n.id === notif.id);
-                    if (!exists && (notif.titre.includes("tour") || notif.titre.includes("Terminé"))) {
+                    if (!exists && (notif.titre.includes("C'est votre tour !") || notif.titre.includes("Terminé"))) {
                         this.priorityAlert = notif;
                     }
                 });
@@ -273,21 +250,21 @@ export default (targetTimestamp = 0, isAlreadyPresent = false, candidatId = 0, i
 
             const row = `
                 <tr class="${rowClass} transition-all duration-300">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-black w-24 text-[11px]">Pos ${index + 1}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-x-4">
-                            <div class="size-9 rounded-full ${isMe ? 'bg-blue-100 text-[#1A73E8]' : 'bg-white/20'} flex items-center justify-center font-bold text-xs shadow-inner">
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-black text-[11px] w-auto">Pos ${index + 1}</td>
+                    <td class="px-2 sm:px-6 py-4">
+                        <div class="flex items-center gap-x-2 sm:gap-x-4">
+                            <div class="size-8 sm:size-9 rounded-full ${isMe ? 'bg-blue-100 text-[#1A73E8]' : 'bg-white/20'} flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-inner shrink-0">
                                 ${initials}
                             </div>
-                            <div>
-                                <p class="font-bold text-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
-                                ${isMe ? '<p class="text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
-                                ${t.salle && t.statut === 'en cours' ? `<p class="text-[9px] font-bold text-white/80 uppercase mt-0.5">📍 ${t.salle.nom}</p>` : ''}
+                            <div class="min-w-0">
+                                <p class="font-bold text-[10px] sm:text-xs truncate max-w-[80px] sm:max-w-xs">${t.candidat.prenom} ${t.candidat.nom}</p>
+                                ${isMe ? '<p class="text-[8px] sm:text-[9px] text-[#1A73E8] font-black uppercase">C\'est vous</p>' : ''}
+                                ${t.salle && t.statut === 'en cours' ? `<p class="text-[8px] sm:text-[9px] font-bold text-white/80 uppercase mt-0.5 truncate">📍 ${t.salle.nom}</p>` : ''}
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-end">
-                        ${statusText ? `<span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${statusBadgeClass}">${statusText}</span>` : ''}
+                    <td class="px-3 sm:px-6 py-4 text-end">
+                        ${statusText ? `<span class="px-2 sm:px-3 py-1 rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-widest ${statusBadgeClass} whitespace-nowrap">${statusText}</span>` : ''}
                     </td>
                 </tr>
             `;

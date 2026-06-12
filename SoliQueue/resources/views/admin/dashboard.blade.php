@@ -26,7 +26,7 @@
     <!-- Stats Grid -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Candidats -->
-        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-6 transition-all hover:shadow-md">
+        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-4 sm:p-6 transition-all hover:shadow-md">
             <div class="flex items-center gap-x-4">
                 <div class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Entretiens -->
-        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-6 transition-all hover:shadow-md">
+        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-4 sm:p-6 transition-all hover:shadow-md">
             <div class="flex items-center gap-x-4">
                 <div class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Terminés -->
-        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-6 transition-all hover:shadow-md">
+        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-4 sm:p-6 transition-all hover:shadow-md">
             <div class="flex items-center gap-x-4">
                 <div class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-green-50 text-green-600">
                     <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Taux Présence -->
-        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-6 transition-all hover:shadow-md">
+        <div class="group flex flex-col bg-white border border-gray-100 shadow-sm rounded-[2rem] p-4 sm:p-6 transition-all hover:shadow-md">
             <div class="flex items-center gap-x-4">
                 <div class="size-12 flex-shrink-0 inline-flex items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
                     <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -97,7 +97,7 @@
     <!-- Monitoring Grid -->
     <div class="grid lg:grid-cols-2 gap-6">
         <!-- Entretien Fill Rate -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-4 sm:p-8">
             <div class="flex justify-between items-center mb-8">
                 <h4 class="text-lg font-black text-gray-900 uppercase tracking-tight italic">Remplissage des Entretiens</h4>
                 <a href="{{ route('admin.affectations') }}" class="text-[10px] font-black text-[#1A73E8] uppercase hover:underline tracking-widest">Voir tout</a>
@@ -124,7 +124,7 @@
         </div>
 
         <!-- Recent Activity -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-4 sm:p-8">
             <h4 class="text-lg font-black text-gray-900 uppercase tracking-tight italic mb-8">Activité Recente</h4>
             <div class="relative">
                 <div class="absolute top-0 bottom-0 left-[19px] w-px bg-gray-100"></div>
@@ -154,20 +154,20 @@
     <!-- Advanced Analytics Charts -->
     <div class="grid lg:grid-cols-2 gap-6 mt-8">
         <!-- Taux d'absentéisme par session -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-4 sm:p-8 w-full overflow-hidden">
             <h4 class="text-lg font-black text-gray-900 uppercase tracking-tight italic mb-8">Taux d'absentéisme</h4>
             <canvas id="absenteismeChart"></canvas>
         </div>
 
         <!-- Heures de pointe d'arrivée -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-4 sm:p-8 w-full overflow-hidden">
             <h4 class="text-lg font-black text-gray-900 uppercase tracking-tight italic mb-8">Heures de pointe d'arrivée</h4>
             <canvas id="heuresArriveeChart"></canvas>
         </div>
     </div>
 
     <!-- Temps Moyen d'entretien -->
-    <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-8 mt-6">
+    <div class="bg-white border border-gray-100 shadow-sm rounded-3xl p-4 sm:p-8 mt-6">
         <div class="flex items-center justify-between">
             <h4 class="text-lg font-black text-gray-900 uppercase tracking-tight italic">Temps moyen d'un entretien</h4>
             <div class="text-4xl font-black text-[#1A73E8] tracking-tighter">{{ $tempsMoyen }} <span class="text-lg text-slate-400">min</span></div>
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(document.getElementById('absenteismeChart'), {
         type: 'bar',
         data: {
-            labels: absenteismeData.map(d => d.nom),
+            labels: absenteismeData.map(d => d.dateEntretien),
             datasets: [{
                 label: "Taux d'absentéisme (%)",
                 data: absenteismeData.map(d => d.taux_absenteisme),

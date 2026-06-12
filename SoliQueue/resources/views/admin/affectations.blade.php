@@ -81,40 +81,40 @@
                 <nav class="flex space-x-2 bg-slate-50 p-1.5 rounded-2xl overflow-x-auto" aria-label="Tabs">
                     <template x-for="s in entretiens" :key="s.id">
                         <button type="button" 
-                            @click="selectedSessionId = s.id"
+                            @click="selectedEntretienId = s.id"
                             class="py-2 px-4 inline-flex items-center gap-x-2 text-xs font-black uppercase rounded-xl transition-all whitespace-nowrap"
-                            :class="selectedSessionId == s.id ? 'bg-white text-[#1A73E8] shadow-sm' : 'bg-transparent text-slate-400 hover:text-slate-600'"
-                            x-text="s.nom.includes('Entretien') ? s.nom.replace('Entretien ', '') : s.nom"></button>
+                            :class="selectedEntretienId == s.id ? 'bg-white text-[#1A73E8] shadow-sm' : 'bg-transparent text-slate-400 hover:text-slate-600'"
+                            x-text="s.dateEntretien"></button>
                     </template>
                 </nav>
             </div>
 
-            <div class="p-6 overflow-y-auto flex-grow flex flex-col" x-show="selectedSession">
+            <div class="p-6 overflow-y-auto flex-grow flex flex-col" x-show="selectedEntretien">
                 <div class="capacity-container flex justify-between items-center mb-6 p-4 bg-[#F8F9FA] border border-slate-100 rounded-2xl">
                     <div class="flex-grow mr-4">
-                        <p class="text-xs font-black text-slate-900 tracking-tight uppercase" x-text="'Capacité ' + (selectedSession.nom.includes('Entretien') ? selectedSession.nom.replace('Entretien ', '') : selectedSession.nom)"></p>
+                        <p class="text-xs font-black text-slate-900 tracking-tight uppercase" x-text="'Capacité ' + selectedEntretien.dateEntretien"></p>
                         <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
                             <div class="bg-[#1A73E8] h-full rounded-full transition-all duration-500" 
-                                 :style="'width: ' + (selectedSession.candidats_count / selectedSession.capaciteMax * 100) + '%'">
+                                 :style="'width: ' + (selectedEntretien.candidats_count / selectedEntretien.capaciteMax * 100) + '%'">
                             </div>
                         </div>
                     </div>
-                    <span class="text-sm font-black text-slate-900" x-text="selectedSession.candidats_count + '/' + selectedSession.capaciteMax"></span>
+                    <span class="text-sm font-black text-slate-900" x-text="selectedEntretien.candidats_count + '/' + selectedEntretien.capaciteMax"></span>
                 </div>
 
                 <div class="flex-grow flex flex-col min-h-0">
                     <div id="drop-zone" class="drop-zone flex-grow overflow-y-auto border-2 border-dashed border-slate-200 rounded-[2.5rem] p-6 flex flex-col gap-3 transition-all [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200"
                         :class="isDragging ? 'border-[#1A73E8] bg-blue-50/50' : ''">
                         
-                        <div x-show="selectedSession && selectedSession.candidats.length === 0" class="flex flex-col items-center justify-center h-full text-center py-10 opacity-40">
+                        <div x-show="selectedEntretien && selectedEntretien.candidats.length === 0" class="flex flex-col items-center justify-center h-full text-center py-10 opacity-40">
                             <div class="size-20 bg-white border border-slate-100 rounded-3xl shadow-sm flex items-center justify-center text-slate-300 mb-6">
                                 <svg class="size-10" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m5 10 7 7 7-7"/><path d="M20 21H4"/></svg>
                             </div>
                             <p class="text-xs text-slate-500 font-black uppercase tracking-widest italic">Déposez ici les candidats</p>
                         </div>
 
-                        <template x-if="selectedSession">
-                            <template x-for="c in selectedSession.candidats" :key="c.id">
+                        <template x-if="selectedEntretien">
+                            <template x-for="c in selectedEntretien.candidats" :key="c.id">
                                 <div class="flex items-center justify-between p-5 bg-white border border-slate-100 rounded-2xl shadow-sm animate-in fade-in zoom-in duration-300 hover:border-[#1A73E8] transition-colors group">
                                     <div class="flex items-center gap-4">
                                         <div class="size-10 rounded-xl bg-slate-50 text-xs font-black flex items-center justify-center text-slate-500 italic shadow-inner" x-text="c.prenom[0] + c.nom[0]"></div>
@@ -127,7 +127,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button x-show="selectedSession.statut !== 'terminée' || !c.is_present" @click="unassignCandidate(c.id)" class="size-8 flex items-center justify-center rounded-lg text-slate-200 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100" title="Retirer de la entretien">
+                                    <button x-show="selectedEntretien.statut !== 'terminée' || !c.is_present" @click="unassignCandidate(c.id)" class="size-8 flex items-center justify-center rounded-lg text-slate-200 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100" title="Retirer de la entretien">
                                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                                     </button>
                                 </div>
@@ -137,7 +137,7 @@
                 </div>
             </div>
 
-            <div x-show="!selectedSessionId" class="flex-grow flex items-center justify-center p-12 text-center text-slate-400 opacity-60">
+            <div x-show="!selectedEntretienId" class="flex-grow flex items-center justify-center p-12 text-center text-slate-400 opacity-60">
                 <div class="space-y-4">
                     <svg class="size-16 mx-auto text-slate-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     <p class="text-sm font-bold uppercase tracking-widest text-slate-300">Sélectionnez une entretien pour commencer l'affectation</p>

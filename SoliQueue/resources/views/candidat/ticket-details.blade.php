@@ -21,12 +21,12 @@
 
 @section('content')
 @php
-    $startTime = \Carbon\Carbon::parse($session->dateEntretien . ' ' . $session->heureDebut);
+    $startTime = \Carbon\Carbon::parse($entretien->dateEntretien . ' ' . $entretien->heureDebut);
     $confirmed = (bool) $candidat->is_present;
 
 @endphp
 
-<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 py-6 sm:py-10 space-y-6 w-full" id="main-container">
+<div x-data="ticketManager({{ $startTime->timestamp }} * 1000, {{ $confirmed ? 'true' : 'false' }}, {{ $candidat->id }}, {{ json_encode($queue) }}, '{{ route('candidat.mark-presence') }}', '{{ route('candidat.queue-status') }}', '{{ csrf_token() }}')" class="max-w-[38rem] mx-auto px-4 pt-6 pb-24 sm:py-10 space-y-6 w-full" id="main-container">
 
     <!-- Teleported Notification Bell to Navbar -->
     <template x-teleport="#navbar-notif-target">
@@ -81,46 +81,16 @@
                 SOLI-<span class="text-[#1A73E8]">{{ $ticket->numeroOrdre }}</span>
             </h2>
 
-            <!-- [STATE: WAITING] Timer Section -->
-            @if(!$confirmed)
-            <div id="timer-section"
-                class="bg-slate-50 rounded-2xl p-5 sm:p-6 border border-slate-100 mb-6 transition-all duration-500">
-                <p class="text-slate-400 font-black text-[9px] uppercase tracking-[0.2em] mb-4">L'entretien commence dans :</p>
-                <div class="flex justify-center items-center gap-4 sm:gap-8">
-                    <div class="flex flex-col items-center">
-                        <span id="days" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
-                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Jours</span>
-                    </div>
-                    <div class="text-xl font-black text-slate-200 mb-4">:</div>
-                    <div class="flex flex-col items-center">
-                        <span id="hours" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
-                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Heures</span>
-                    </div>
-                    <div class="text-xl font-black text-slate-200 mb-4">:</div>
-                    <div class="flex flex-col items-center">
-                        <span id="minutes" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
-                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Min</span>
-                    </div>
-                    <div class="text-xl font-black text-slate-200 mb-4 hidden sm:block">:</div>
-                    <div class="hidden sm:flex flex-col items-center">
-                        <span id="seconds" class="text-3xl sm:text-4xl font-black text-[#1A73E8] tracking-tighter">00</span>
-                        <span class="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-1">Sec</span>
-                    </div>
-                </div>
-            </div>
-            @endif
+            <!-- Timer removed -->
 
             <!-- Presence Button / Badge Area -->
             <div id="presence-action-area" class="max-w-xs mx-auto space-y-3 transition-all duration-500">
                 @if(!$confirmed)
-                <button type="button" id="presence-btn" disabled
-                    class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-2 text-base font-black rounded-xl border border-transparent bg-slate-100 text-slate-400 cursor-not-allowed transition-all duration-500 shadow-lg shadow-slate-200/50">
+                <button type="button" id="presence-btn"
+                    class="w-full py-4 px-6 inline-flex justify-center items-center gap-x-2 text-base font-black rounded-xl border border-transparent bg-[#1A73E8] text-white hover:bg-blue-700 shadow-blue-600/30 animate-pulse transition-all duration-500 shadow-lg">
                     <svg class="flex-shrink-0 size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     Je suis présent(e)
                 </button>
-                <p id="presence-hint" class="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                    Activé automatiquement après le timer
-                </p>
                 @endif
 
                 <!-- Confirmation Badge -->
@@ -150,7 +120,7 @@
                 <span class="relative inline-flex size-1.5 rounded-full bg-[#34A853]"></span>
             </span>
         </div>
-        <div class="overflow-hidden">
+        <div class="overflow-x-hidden">
             <table class="w-full divide-y divide-slate-100">
                 <tbody id="queue-body" class="divide-y divide-slate-100 font-bold">
                     <!-- Les lignes seront injectées par JS -->
@@ -158,6 +128,31 @@
             </table>
         </div>
     </div>
+
+    <!-- Priority Alert Modal -->
+    <template x-teleport="body">
+        <template x-if="priorityAlert">
+            <div class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
+                <div class="bg-white border-2 border-red-500 rounded-[2.5rem] shadow-2xl max-w-md w-full overflow-hidden transform transition-all duration-300">
+                    <div class="h-3 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 animate-pulse"></div>
+                    <div class="p-8 sm:p-10 text-center">
+                        <div class="mb-6 flex justify-center">
+                            <span class="inline-flex justify-center items-center size-16 rounded-full bg-red-50 text-red-600 animate-bounce">
+                                <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                            </span>
+                        </div>
+                        <h3 class="mb-2 text-2xl font-black text-red-600 tracking-tight" x-text="priorityAlert.titre"></h3>
+                        <p class="text-slate-600 font-bold mb-8 leading-relaxed text-sm" x-text="priorityAlert.message"></p>
+                        
+                        <button type="button" @click="dismissPriorityAlert(priorityAlert.id)"
+                            class="w-full py-4 px-6 text-base font-black rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-xl shadow-red-600/20 transform hover:-translate-y-0.5 transition-all">
+                            J'ai compris !
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
 
 </div>
 
@@ -203,28 +198,6 @@
     </div>
 </div>
 
-<!-- Priority Alert Modal -->
-<template x-if="priorityAlert">
-    <div class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
-        <div class="bg-white border-2 border-red-500 rounded-[2.5rem] shadow-2xl max-w-md w-full overflow-hidden transform transition-all duration-300">
-            <div class="h-3 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 animate-pulse"></div>
-            <div class="p-8 sm:p-10 text-center">
-                <div class="mb-6 flex justify-center">
-                    <span class="inline-flex justify-center items-center size-16 rounded-full bg-red-50 text-red-600 animate-bounce">
-                        <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    </span>
-                </div>
-                <h3 class="mb-2 text-2xl font-black text-red-600 tracking-tight" x-text="priorityAlert.titre"></h3>
-                <p class="text-slate-600 font-bold mb-8 leading-relaxed text-sm" x-text="priorityAlert.message"></p>
-                
-                <button type="button" @click="dismissPriorityAlert(priorityAlert.id)"
-                    class="w-full py-4 px-6 text-base font-black rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-xl shadow-red-600/20 transform hover:-translate-y-0.5 transition-all">
-                    J'ai compris !
-                </button>
-            </div>
-        </div>
-    </div>
-</template>
 @endpush
 
 @section('scripts')

@@ -28,7 +28,7 @@
     <!-- Navigation -->
     <header
         class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0">
-        <nav class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+        <nav class="relative max-w-[85rem] w-full mx-auto px-4 flex items-center justify-between sm:px-6 lg:px-8"
             aria-label="Global">
             <div class="flex items-center justify-between">
                 <a class="flex items-center gap-x-4" href="{{ route('formateur.entretiens') }}">
@@ -36,14 +36,14 @@
                     <div class="h-6 w-px bg-slate-200"></div>
                 </a>
             </div>
-            <div class="hidden sm:block sm:order-3 sm:py-4">
-                <div class="flex items-center gap-x-6">
-                    <div class="flex items-center gap-x-3 bg-gray-50 p-1 rounded-full border border-gray-100">
+            <div class="flex items-center gap-4 sm:order-3 sm:py-4">
+                <div class="flex items-center gap-x-2 sm:gap-x-6">
+                    <div class="flex items-center gap-x-3 sm:bg-gray-50 sm:p-1 rounded-full sm:border border-gray-100">
                         <div
                             class="size-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
                             {{ substr(Auth::user()->nom, 0, 1) }}
                         </div>
-                        <div class="text-left pr-3">
+                        <div class="text-left pr-3 hidden sm:block">
                             <p class="text-[10px] font-black text-gray-800 uppercase tracking-tighter leading-none">
                                 {{ Auth::user()->nom }}
                             </p>
@@ -54,7 +54,7 @@
                         @csrf
                         <button type="submit"
                             class="text-[10px] font-black text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-2 group">
-                            <span>Quitter</span>
+                            <span class="hidden sm:inline">Quitter</span>
                             <svg class="size-4 group-hover:translate-x-1 transition-transform"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
                                 stroke="currentColor">
@@ -73,7 +73,7 @@
     @endcannot
 
     <!-- Main Content -->
-    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($entretien) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $session->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <main x-data="dashboardManager({{ json_encode($tickets) }}, {{ json_encode($entretien) }}, '{{ csrf_token() }}', '{{ route('formateur.reorder', $entretien->id) }}', {{ auth()->user()->can('manage_queue') ? 'true' : 'false' }})" class="max-w-[85rem] mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <!-- Dashboard Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div class="space-y-4">
@@ -83,7 +83,7 @@
                     Entretien Live
                 </div>
                 <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase">
-                    {{ $session->nom }}
+                    {{ $entretien->nom }}
                 </h1>
                 <div class="flex items-center gap-x-6">
                     <div class="flex items-center gap-x-2 text-slate-500">
@@ -93,15 +93,15 @@
                                 d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                         <span class="text-sm font-bold uppercase tracking-tight">
-                            {{ \Carbon\Carbon::parse($session->heureDebut)->format('H:i') }} —
-                            {{ \Carbon\Carbon::parse($session->heureFin)->format('H:i') }}
+                            {{ \Carbon\Carbon::parse($entretien->heureDebut)->format('H:i') }} —
+                            {{ \Carbon\Carbon::parse($entretien->heureFin)->format('H:i') }}
                         </span>
                     </div>
                     <div
                         class="flex items-center gap-x-2 text-slate-900 bg-white border border-slate-200 py-1.5 px-4 rounded-xl shadow-sm">
                         <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Code:</span>
                         <span
-                            class="text-sm font-black tracking-widest text-blue-600">{{ $session->codePresence }}</span>
+                            class="text-sm font-black tracking-widest text-blue-600">{{ $entretien->codePresence }}</span>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
         </div>
 
         <!-- Actions & Toolbar -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between mb-6 gap-4">
             <div class="flex items-center gap-x-3">
                 @can('manage_queue')
                     <button type="button" @click="callNext()"
@@ -154,8 +154,10 @@
         </div>
 
         <!-- Candidate List Section -->
-        <div class="bg-white border border-gray-100 rounded-[2.5rem] p-6 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 size-64 bg-blue-50 rounded-full blur-3xl opacity-20 -mr-32 -mt-32"></div>
+        <div class="bg-white border border-gray-100 rounded-[2.5rem] p-6 shadow-2xl relative">
+            <div class="absolute inset-0 rounded-[2.5rem] overflow-hidden pointer-events-none">
+                <div class="absolute top-0 right-0 size-64 bg-blue-50 rounded-full blur-3xl opacity-20 -mr-32 -mt-32"></div>
+            </div>
 
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-6 px-4">
@@ -169,42 +171,48 @@
                 <div id="candidate-list" class="space-y-3 min-h-[100px]">
                     <template x-for="ticket in filteredTickets" :key="ticket.id">
                         <div :data-id="ticket.id"
-                            class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 transition-all duration-300"
+                            x-data="{ openStatut: false }"
+                            class="candidate-card bg-white border border-gray-100 rounded-2xl p-4 transition-all duration-300 relative"
                             :class="{ 
                                 'bg-blue-50/50 border-blue-200 border-2 shadow-md': ticket.statut === 'en cours',
-                                'bg-emerald-50/50 border-emerald-200 opacity-60': ticket.statut === 'terminée',
-                                'bg-red-50/50 border-red-200 opacity-60': ticket.statut === 'absent'
+                                'bg-emerald-50/50 border-emerald-200 opacity-60 hover:opacity-100': ticket.statut === 'terminée',
+                                'bg-red-50/50 border-red-200 opacity-60 hover:opacity-100': ticket.statut === 'absent',
+                                'z-50': openStatut
                             }">
-                            <div class="flex items-center gap-x-4 flex-grow">
-                                @can('manage_queue')
-                                    <div
-                                        class="drag-handle text-gray-300 hover:text-gray-400 cursor-grab active:cursor-grabbing">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <circle cx="9" cy="5" r="1" />
-                                            <circle cx="9" cy="12" r="1" />
-                                            <circle cx="9" cy="19" r="1" />
-                                            <circle cx="15" cy="5" r="1" />
-                                            <circle cx="15" cy="12" r="1" />
-                                            <circle cx="15" cy="19" r="1" />
-                                        </svg>
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
+                                <div class="flex items-center gap-x-4 flex-grow min-w-0">
+                                    @can('manage_queue')
+                                        <div
+                                            class="drag-handle text-gray-300 hover:text-gray-400 cursor-grab active:cursor-grabbing shrink-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <circle cx="9" cy="5" r="1" />
+                                                <circle cx="9" cy="12" r="1" />
+                                                <circle cx="9" cy="19" r="1" />
+                                                <circle cx="15" cy="5" r="1" />
+                                                <circle cx="15" cy="12" r="1" />
+                                                <circle cx="15" cy="19" r="1" />
+                                            </svg>
+                                        </div>
+                                    @endcan
+                                    <div class="size-10 sm:size-12 shrink-0 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all duration-500 shadow-sm"
+                                        :class="{
+                                            'bg-blue-600 text-white shadow-blue-500/30': ticket.statut === 'en cours',
+                                            'bg-emerald-600 text-white': ticket.statut === 'terminée',
+                                            'bg-red-600 text-white': ticket.statut === 'absent',
+                                            'bg-gray-100 text-gray-600': ticket.statut === 'en attente'
+                                        }" x-text="ticket.candidat.prenom[0] + ticket.candidat.nom[0]">
                                     </div>
-                                @endcan
-                                <div class="size-12 rounded-full flex items-center justify-center font-bold text-base transition-all duration-500 shadow-sm"
-                                    :class="{
-                                        'bg-blue-600 text-white shadow-blue-500/30': ticket.statut === 'en cours',
-                                        'bg-emerald-600 text-white': ticket.statut === 'terminée',
-                                        'bg-red-600 text-white': ticket.statut === 'absent',
-                                        'bg-gray-100 text-gray-600': ticket.statut === 'en attente'
-                                    }" x-text="ticket.candidat.prenom[0] + ticket.candidat.nom[0]">
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="font-bold text-lg transition-colors"
-                                        :class="ticket.statut === 'terminée' ? 'text-gray-400 line-through' : 'text-gray-900'">
-                                        <span x-text="ticket.candidat.prenom"></span> <span
-                                            x-text="ticket.candidat.nom"></span>
-                                    </h4>
+                                    <div class="flex-grow min-w-0">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest shrink-0"
+                                                x-text="'N°' + ticket.numeroOrdre"></span>
+                                            <h4 class="font-bold text-sm sm:text-lg transition-colors truncate"
+                                                :class="ticket.statut === 'terminée' ? 'text-gray-400 line-through' : 'text-gray-900'">
+                                                <span x-text="ticket.candidat.prenom"></span> <span x-text="ticket.candidat.nom"></span>
+                                            </h4>
+                                        </div>
                                     <div class="flex items-center gap-2 mt-1">
                                         <template x-if="ticket.statut === 'en cours'">
                                             <span
@@ -243,17 +251,15 @@
                                                 En attente
                                             </span>
                                         </template>
-                                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2"
-                                            x-text="'N° ' + ticket.numeroOrdre"></span>
+                                    </div>
                                     </div>
                                 </div>
                                 @can('manage_queue')
-                                    <div class="flex items-center">
-                                        <div class="relative inline-flex w-full min-w-[150px]"
-                                            x-data="{ openStatut: false }"
+                                    <div class="flex items-center shrink-0">
+                                        <div class="relative inline-flex w-24 sm:w-32"
                                             @click.away="openStatut = false">
                                             <button type="button" @click="openStatut = !openStatut"
-                                                class="w-full py-2 px-4 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors flex justify-between items-center gap-x-3 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] shadow-sm">
+                                                class="w-full py-1.5 sm:py-2 px-2 sm:px-4 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-[10px] sm:text-sm font-bold text-gray-700 transition-colors flex justify-between items-center gap-x-1 sm:gap-x-3 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] shadow-sm">
                                                 <span x-text="ticket.statut.charAt(0).toUpperCase() + ticket.statut.slice(1)"></span>
                                                 <svg :class="{ 'rotate-180': openStatut }"
                                                     class="size-4 text-gray-400 transition-transform duration-200"
@@ -289,6 +295,7 @@
                                     </div>
                                 @endcan
                             </div>
+                            </div>
                         </div>
                     </template>
                     <div x-show="filteredTickets.length === 0" class="py-20 text-center">
@@ -300,7 +307,7 @@
         </div>
     </main>
 
-    <x-chat-widget />
+    <x-chat-widget :entretienId="$entretien->id ?? null" />
 </body>
 
 </html>

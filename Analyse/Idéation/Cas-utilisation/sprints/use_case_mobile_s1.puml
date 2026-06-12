@@ -1,0 +1,40 @@
+@startuml SoliQueue_Mobile_Sprint1
+left to right direction
+skinparam actorStyle awesome
+
+skinparam backgroundColor white
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam package {
+    BackgroundColor White
+    BorderColor #2C3E50
+}
+
+skinparam usecase {
+    BackgroundColor #E8F6F3
+    BorderColor #117864
+}
+
+skinparam nodesep 25
+skinparam ranksep 25
+
+actor "Candidat (Mode MVP)" as C
+actor "Web" as W
+
+package "Application Mobile (Sprint 1)" {
+    usecase "Obtenir ticket (SOLI-XX)" as UC1
+    usecase "Consulter le timer de jour d'entretien" as UC2
+    usecase "Valider présence (Code Secret)" as UC3
+    usecase "Suivre position en temps réel" as UC4
+    usecase "Fournir l'API mobile" as UC5
+}
+
+C -- UC1
+C -- UC2
+C -- UC3
+C -- UC4
+
+W -- UC5
+
+@enduml

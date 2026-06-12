@@ -14,12 +14,23 @@ class ChatbotCommandHandler
         private QueueService $queueService
     ) {}
 
-    public function handle(array $aiResponse, $uploadedFile = null): array
+    public function handle(array $aiResponse, $uploadedFile = null, $entretienId = null): array
     {
         $action = $aiResponse['action'] ?? 'respond_user';
         $data = $aiResponse['data'] ?? [];
         $message = $aiResponse['message'] ?? 'Je ne suis pas sûr de comprendre.';
         $user = Auth::guard('web')->user() ?? Auth::guard('candidat')->user();
+
+        // Helper function to get the current Entretien
+        $getCurrentEntretien = function() use ($entretienId, $user) {
+            if ($entretienId) {
+                return Entretien::find($entretienId);
+            }
+            if ($user && $user->hasRole('formateur')) {
+                return Entretien::where('statut', 'en cours')->where('user_id', $user->id)->first();
+            }
+            return Entretien::where('statut', 'en cours')->first();
+        };
 
         // 1. Action: next_candidate (Formateur uniquement)
         if ($action === 'next_candidate') {
@@ -27,9 +38,9 @@ class ChatbotCommandHandler
                 return ['message' => "Vous n'avez pas l'autorisation d'appeler le prochain candidat."];
             }
             
-            $entretien = Entretien::where('statut', 'en cours')->first();
+            $entretien = $getCurrentEntretien();
             if (!$entretien) {
-                return ['message' => "Vous n'avez aucune entretien en cours."];
+                return ['message' => "Vous n'avez aucune entretien en cours ou spécifiée."];
             }
 
             try {
@@ -46,9 +57,9 @@ class ChatbotCommandHandler
                 return ['message' => "Vous n'avez pas l'autorisation de marquer un candidat absent."];
             }
             
-            $entretien = Entretien::where('statut', 'en cours')->first();
+            $entretien = $getCurrentEntretien();
             if (!$entretien) {
-                return ['message' => "Vous n'avez aucune entretien en cours."];
+                return ['message' => "Vous n'avez aucune entretien en cours ou spécifiée."];
             }
             
             $ticketEnCours = $entretien->tickets()->where('statut', 'en cours')->first();
@@ -70,9 +81,9 @@ class ChatbotCommandHandler
                 return ['message' => "Vous n'avez pas l'autorisation de terminer une entretien."];
             }
             
-            $entretien = Entretien::where('statut', 'en cours')->first();
+            $entretien = $getCurrentEntretien();
             if (!$entretien) {
-                return ['message' => "Vous n'avez aucune entretien en cours."];
+                return ['message' => "Vous n'avez aucune entretien en cours ou spécifiée."];
             }
             
             try {
@@ -114,18 +125,17 @@ class ChatbotCommandHandler
 
             try {
                 $uniqueCode = strtoupper(\Illuminate\Support\Str::random(4));
-                $uniqueName = 'Entretien IA - ' . $uniqueCode;
+                $date = $data['date'] ?? \Carbon\Carbon::tomorrow()->format('Y-m-d');
                 Entretien::create([
                     'user_id' => $user->id,
-                    'nom' => $uniqueName, // Required field, now unique
-                    'dateEntretien' => $data['date'] ?? \Carbon\Carbon::tomorrow()->format('Y-m-d'),
+                    'dateEntretien' => $date,
                     'heureDebut' => $data['heure_debut'] ?? '09:00',
                     'heureFin' => $data['heure_fin'] ?? '17:00',
                     'capaciteMax' => $data['capacite'] ?? 20,
                     'codePresence' => $uniqueCode, // Required field, 4 characters
                     'statut' => 'planifiée'
                 ]);
-                return ['message' => "La entretien a été créée avec succès sous le nom de **$uniqueName** (Code : **$uniqueCode**) !"];
+                return ['message' => "La entretien a été créée avec succès pour la date du **{$date}** (Code : **$uniqueCode**) !"];
             } catch (\Exception $e) {
                 return ['message' => "Impossible de créer la entretien : " . $e->getMessage()];
             }
@@ -161,7 +171,7 @@ class ChatbotCommandHandler
                     $count++;
                 }
 
-                return ['message' => "C'est fait ! $count candidat(s) ont été assignés à la entretien **{$entretien->nom}** (prévue le {$entretien->dateEntretien})."];
+                return ['message' => "C'est fait ! $count candidat(s) ont été assignés à la entretien prévue le **{$entretien->dateEntretien}**."];
             } catch (\Exception $e) {
                 return ['message' => "Erreur lors de l'assignation : " . $e->getMessage()];
             }

@@ -22,7 +22,7 @@ actor "Mobile" as Mob
 ' Admin Use Cases (Web)
 '=====================
 usecase "Tableau de bord global" as UC1
-usecase "Gérer les sessions" as UC2
+usecase "Gérer les entretiens" as UC2
 usecase "Affecter les candidats (Drag & Drop)" as UC3
 usecase "Gérer les candidats" as UC4
 usecase "Gérer les formateurs" as UC5
@@ -35,7 +35,7 @@ usecase "Exporter les sessions" as UC8
 '=====================
 ' Formateur Use Cases (Web)
 '=====================
-usecase "Rejoindre une session d'entretien" as UC9
+usecase "Rejoindre un entretien" as UC9
 usecase "Appeler le candidat suivant" as UC10
 usecase "Mettre à jour statut (Présent/Absent/Terminé)" as UC11
 usecase "Consulter la file d'attente active" as UC12
@@ -50,6 +50,7 @@ usecase "Consommer API (Synchronisation File)" as API
 ' Authentification
 '=====================
 usecase "S'authentifier" as Auth
+usecase "S'authentifier" as Auth2
 
 '=====================
 ' Relations Admin
@@ -91,10 +92,19 @@ UC6 ..> Auth : <<include>>
 
 UC7 ..> Auth : <<include>>
 UC8 ..> Auth : <<include>>
-UC9 ..> Auth : <<include>>
-UC10 ..> Auth : <<include>>
-UC11 ..> Auth : <<include>>
-UC12 ..> Auth : <<include>>
-UC13 ..> Auth : <<include>>
+UC9 ..> Auth2 : <<include>>
+UC10 ..> Auth2 : <<include>>
+UC11 ..> Auth2 : <<include>>
+UC12 ..> Auth2 : <<include>>
+UC13 ..> Auth2 : <<include>>
+
+usecase "Interagir avec l'assistant IA " as UC14
+Admin -- UC14
+UC14 ..> Auth : <<include>>
+
+usecase "Interagir avec l'assistant IA (Actions)" as UC15
+Formateur -- UC15
+UC15 ..> Auth2 : <<include>>
+
 
 @enduml

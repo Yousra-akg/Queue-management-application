@@ -21,41 +21,39 @@ skinparam ranksep 25
 
 ' Acteurs
 actor "Candidat" as C
-actor "Administrateur" as A
 actor "Web" as W
 
 package "Application Mobile" {
 
     ' Actions communes / Public
-    usecase "S'authentifier" as UC6
+    usecase "S'authentifier via CIN" as UC6
 
     ' Actions Candidat
     usecase "Obtenir ticket (SOLI-XX)" as UC2
     usecase "Suivre position en temps réel" as UC3
     usecase "Valider présence (Code Secret)" as UC4
+    usecase "Recevoir notification lors de l'appel de son numéro" as UC5
     
-    ' Actions Admin (Affichage uniquement)
-    usecase "Consulter statistiques globales" as UC7
-    usecase "Visualiser l'état des sessions" as UC8
-    
+
     ' API
-    usecase "Fournir l'API mobile" as UC5
+    usecase "Fournir l'API mobile" as UC7
 }
 
 ' Relations Candidat
 C -- UC2
 C -- UC3
 C -- UC4
+C -- UC5
 
-' Relations Admin (Lecture seule)
-A -- UC7
-A -- UC8
+
+UC2 ..> UC6 : <<include>>
+UC3 ..> UC6 : <<include>>
+UC4 ..> UC6 : <<include>>
+UC5 ..> UC6 : <<include>>
 
 ' Relation Web
-W -- UC5
+W -- UC7
 
-' Authentification Includes
-UC7 ..> UC6 : <<include>>
-UC8 ..> UC6 : <<include>>
+
 
 @enduml

@@ -20,7 +20,7 @@ actor "Mobile" as Mob
 ' =========================
 
 usecase "Obtenir un ticket (SOLI-XX)" as UC1
-usecase "Consulter position et timer" as UC2
+usecase "Consulter position" as UC2
 usecase "Valider présence (Code Secret)" as UC3
 usecase "Suivre l'état de la file globale" as UC4
 
@@ -34,7 +34,7 @@ C -- UC4
 ' Formateur
 ' =========================
 
-usecase "Rejoindre une session d'entretien" as UC7
+usecase "Rejoindre une entretien" as UC7
 usecase "Appeler le candidat suivant" as UC8
 usecase "Mettre à jour statut (Terminé/Absent)" as UC9
 usecase "Prioriser/Déplacer un candidat" as UC10
@@ -50,13 +50,19 @@ F -- UC10
 ' Administrateur
 ' =========================
 
-usecase "Gérer les sessions (CRUD)" as UC11
-usecase "Affecter les candidats aux sessions" as UC12
+usecase "Gérer les entretiens (CRUD)" as UC11
+usecase "Gérer les formateurs (CRUD)" as UC14
+usecase "Gérer les salles (CRUD)" as UC15
+usecase "Gérer les candidats (CRUD)" as UC16
+usecase "Affecter les candidats aux entretiens" as UC12
 usecase "Consulter dashboard de statistiques" as UC13
 
 Admin -- UC11
 Admin -- UC12
 Admin -- UC13
+Admin -- UC14
+Admin -- UC15
+Admin -- UC16
 
 
 ' =========================
@@ -87,5 +93,8 @@ UC10 ..> Auth : <<include>>
 UC11 ..> Auth : <<include>>
 UC12 ..> Auth : <<include>>
 UC13 ..> Auth : <<include>>
+UC14 ..> Auth : <<include>>
+UC15 ..> Auth : <<include>>
+UC16 ..> Auth : <<include>>
 
 @enduml

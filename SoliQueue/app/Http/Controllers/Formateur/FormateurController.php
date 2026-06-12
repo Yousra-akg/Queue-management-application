@@ -47,7 +47,7 @@ class FormateurController extends Controller
 
             // Allow access to both 'formateur' and 'admin' roles
             if ($user->hasRole('formateur') || $user->hasRole('admin')) {
-                $request->entretien()->regenerate();
+                $request->session()->regenerate();
                 return redirect()->route('formateur.entretiens');
             }
 
@@ -62,8 +62,8 @@ class FormateurController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
-        $request->entretien()->invalidate();
-        $request->entretien()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('formateur.login');
     }
 

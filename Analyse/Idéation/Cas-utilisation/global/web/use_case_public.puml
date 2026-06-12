@@ -20,9 +20,9 @@ actor "Mobile" as Mob
 '=====================
 
 usecase "Obtenir place dans la file (Ticket)" as UC1
-usecase "Consulter position et timer en temps réel" as UC2
+usecase "Consulter position" as UC2
 usecase "Valider présence physique (Code Secret)" as UC4
-usecase "Suivre l'état de la session active" as UC16
+usecase "Suivre l'état de l'entretien active" as UC16
 usecase "Recevoir notification lors de l'appel de son numéro" as UC17
 
 '=====================
@@ -62,5 +62,9 @@ UC2 ..> Auth : <<include>>
 UC4 ..> Auth : <<include>>
 UC16 ..> Auth : <<include>>
 UC17 ..> Auth : <<include>>
+
+usecase "Poser des questions au chatbot" as UC18
+C -- UC18
+UC18 ..> Auth : <<include>>
 
 @enduml
