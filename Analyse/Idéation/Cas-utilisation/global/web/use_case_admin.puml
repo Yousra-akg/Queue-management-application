@@ -98,4 +98,13 @@ UC11 ..> Auth2 : <<include>>
 UC12 ..> Auth2 : <<include>>
 UC13 ..> Auth2 : <<include>>
 
+usecase "Interagir avec l'assistant IA " as UC14
+Admin -- UC14
+UC14 ..> Auth : <<include>>
+
+usecase "Interagir avec l'assistant IA (Actions)" as UC15
+Formateur -- UC15
+UC15 ..> Auth2 : <<include>>
+
+
 @enduml

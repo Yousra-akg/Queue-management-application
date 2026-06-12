@@ -63,4 +63,8 @@ UC4 ..> Auth : <<include>>
 UC16 ..> Auth : <<include>>
 UC17 ..> Auth : <<include>>
 
+usecase "Poser des questions au chatbot" as UC18
+C -- UC18
+UC18 ..> Auth : <<include>>
+
 @enduml

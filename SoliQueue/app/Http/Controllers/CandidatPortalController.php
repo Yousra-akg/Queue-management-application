@@ -38,7 +38,7 @@ class CandidatPortalController extends Controller
     }
 
     /**
-     * Étape 3 : Détails du ticket et compte à rebours.
+     * Étape 3 : Détails du ticket 
      */
     public function ticketDetails()
     {
